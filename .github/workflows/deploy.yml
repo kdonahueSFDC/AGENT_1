@@ -35,7 +35,7 @@ jobs:
       - name: Authenticate to Salesforce
         run: |
           echo "${{ secrets.SF_AUTH_URL }}" > auth.txt
-          sf org login sfdx-url --sfdx-url-file auth.txt --alias target-org --set-default-username
+          sf org login sfdx-url --sfdx-url-file auth.txt --alias target-org --set-default
           rm auth.txt
 
       - name: Run Code Analyzer
@@ -98,7 +98,7 @@ jobs:
       - name: Authenticate to Salesforce
         run: |
           echo "${{ secrets.SF_AUTH_URL }}" > auth.txt
-          sf org login sfdx-url --sfdx-url-file auth.txt --alias target-org --set-default-username
+          sf org login sfdx-url --sfdx-url-file auth.txt --alias target-org --set-default
           rm auth.txt
 
       - name: Validate Deployment
@@ -154,7 +154,7 @@ jobs:
       - name: Authenticate to Salesforce
         run: |
           echo "${{ secrets.SF_AUTH_URL }}" > auth.txt
-          sf org login sfdx-url --sfdx-url-file auth.txt --alias target-org --set-default-username
+          sf org login sfdx-url --sfdx-url-file auth.txt --alias target-org --set-default
           rm auth.txt
 
       - name: Deploy to Salesforce
