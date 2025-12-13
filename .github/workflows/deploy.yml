@@ -107,18 +107,51 @@ jobs:
           sf org login sfdx-url --sfdx-url-file auth.txt --alias target-org --set-default
           rm auth.txt
 
+      - name: Detect Test Classes in Deployment
+        id: detect-tests
+        run: |
+          # Find all test classes in the force-app directory being deployed
+          TEST_CLASSES=$(find force-app -name "*Test.cls" -type f | \
+            sed 's|.*/classes/||' | \
+            sed 's|\.cls$||' | \
+            sort -u | \
+            tr '\n' ' ' | \
+            sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+          
+          if [ -z "$TEST_CLASSES" ]; then
+            echo "No test classes found in deployment. Using RunLocalTests."
+            echo "use-specified=false" >> $GITHUB_OUTPUT
+          else
+            echo "Found test classes in deployment: $TEST_CLASSES"
+            echo "use-specified=true" >> $GITHUB_OUTPUT
+            echo "test-classes=$TEST_CLASSES" >> $GITHUB_OUTPUT
+          fi
+
       - name: Validate Deployment
         id: validate
         run: |
-          # Use RunRelevantTests - automatically runs tests for classes being deployed
-          # and their dependencies. This is simpler and more reliable than manual detection.
-          echo "Running relevant tests (tests for deployed classes and dependencies)"
-          sf project deploy validate \
-            --source-dir force-app \
-            --target-org target-org \
-            --test-level RunRelevantTests \
-            --wait 10 \
-            --json > validate-results.json || VALIDATE_EXIT_CODE=$?
+          if [ "${{ steps.detect-tests.outputs.use-specified }}" == "true" ]; then
+            # Build test arguments dynamically
+            TEST_CLASSES="${{ steps.detect-tests.outputs.test-classes }}"
+            echo "Running specified tests: $TEST_CLASSES"
+            
+            # Build the command with test arguments
+            CMD="sf project deploy validate --source-dir force-app --target-org target-org --test-level RunSpecifiedTests"
+            for test in $TEST_CLASSES; do
+              CMD="$CMD --tests $test"
+            done
+            CMD="$CMD --wait 10 --json > validate-results.json"
+            
+            eval $CMD || VALIDATE_EXIT_CODE=$?
+          else
+            echo "No test classes in deployment. Using RunLocalTests."
+            sf project deploy validate \
+              --source-dir force-app \
+              --target-org target-org \
+              --test-level RunLocalTests \
+              --wait 10 \
+              --json > validate-results.json || VALIDATE_EXIT_CODE=$?
+          fi
           
           if [ "${VALIDATE_EXIT_CODE:-0}" -ne 0 ]; then
             echo "Validation failed"
