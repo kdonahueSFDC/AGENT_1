@@ -118,22 +118,45 @@ jobs:
             CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD 2>/dev/null || echo "")
           fi
           
-          # Extract test class names from changed files
-          TEST_CLASSES=$(echo "$CHANGED_FILES" | \
+          # Extract test class names from changed files (direct test class changes)
+          DIRECT_TEST_CLASSES=$(echo "$CHANGED_FILES" | \
             grep -E 'force-app/.*/classes/.*Test\.cls$' | \
             sed 's|.*/classes/||' | \
             sed 's|\.cls$||' | \
+            sort -u)
+          
+          # Extract non-test Apex class names from changed files
+          APEX_CLASSES=$(echo "$CHANGED_FILES" | \
+            grep -E 'force-app/.*/classes/.*\.cls$' | \
+            grep -v 'Test\.cls$' | \
+            sed 's|.*/classes/||' | \
+            sed 's|\.cls$||' | \
+            sort -u)
+          
+          # Find corresponding test classes (e.g., ExperienceController -> ExperienceControllerTest)
+          CORRESPONDING_TESTS=""
+          for class in $APEX_CLASSES; do
+            TEST_CLASS="${class}Test"
+            # Check if test class exists in the repository
+            if find force-app -name "${TEST_CLASS}.cls" -type f | grep -q .; then
+              CORRESPONDING_TESTS="$CORRESPONDING_TESTS $TEST_CLASS"
+            fi
+          done
+          
+          # Combine direct test classes and corresponding test classes
+          ALL_TEST_CLASSES=$(echo "$DIRECT_TEST_CLASSES $CORRESPONDING_TESTS" | \
+            tr ' ' '\n' | \
             sort -u | \
             tr '\n' ' ' | \
             sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
           
-          if [ -z "$TEST_CLASSES" ]; then
-            echo "No test classes found in changes. Using RunLocalTests."
+          if [ -z "$ALL_TEST_CLASSES" ]; then
+            echo "No test classes found. This deployment may not have adequate test coverage."
             echo "use-specified=false" >> $GITHUB_OUTPUT
           else
-            echo "Found test classes: $TEST_CLASSES"
+            echo "Found test classes: $ALL_TEST_CLASSES"
             echo "use-specified=true" >> $GITHUB_OUTPUT
-            echo "test-classes=$TEST_CLASSES" >> $GITHUB_OUTPUT
+            echo "test-classes=$ALL_TEST_CLASSES" >> $GITHUB_OUTPUT
           fi
 
       - name: Validate Deployment
@@ -153,13 +176,10 @@ jobs:
             
             eval $CMD || VALIDATE_EXIT_CODE=$?
           else
-            echo "Running all local tests"
-            sf project deploy validate \
-              --source-dir force-app \
-              --target-org target-org \
-              --test-level RunLocalTests \
-              --wait 10 \
-              --json > validate-results.json || VALIDATE_EXIT_CODE=$?
+            echo "ERROR: No test classes detected for this deployment."
+            echo "Please ensure test classes exist for the Apex classes being deployed."
+            echo "Expected test class naming: <ClassName>Test (e.g., ExperienceControllerTest)"
+            exit 1
           fi
           
           if [ "${VALIDATE_EXIT_CODE:-0}" -ne 0 ]; then
