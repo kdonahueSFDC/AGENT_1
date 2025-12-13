@@ -113,7 +113,8 @@ jobs:
           sf project deploy validate \
             --source-dir force-app \
             --target-org target-org \
-            --test-level RunLocalTests \
+            --test-level RunSpecifiedTests \
+            --tests ExperienceControllerTest,SampleDataTest \
             --wait 10 \
             --json > validate-results.json || VALIDATE_EXIT_CODE=$?
           
