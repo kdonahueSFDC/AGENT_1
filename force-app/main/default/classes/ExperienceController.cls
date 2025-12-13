@@ -1,6 +1,6 @@
 /**
  * @description Controller class for Experience__c object queries
- * @author Salesforce
+ * @author Salesforce (Cursor)
  * @date 2025-12-08
  */
 public with sharing class ExperienceController {
