@@ -21,10 +21,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Salesforce CLI
-        uses: salesforce/setup-sfdx@v1
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          sfdx-version: ${{ env.SF_CLI_VERSION }}
+          node-version: '20'
+
+      - name: Setup Salesforce CLI
+        run: |
+          npm install -g @salesforce/cli@${{ env.SF_CLI_VERSION }}
+          sf --version
 
       - name: Authenticate to Salesforce
         run: |
@@ -79,10 +84,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Salesforce CLI
-        uses: salesforce/setup-sfdx@v1
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          sfdx-version: ${{ env.SF_CLI_VERSION }}
+          node-version: '20'
+
+      - name: Setup Salesforce CLI
+        run: |
+          npm install -g @salesforce/cli@${{ env.SF_CLI_VERSION }}
+          sf --version
 
       - name: Authenticate to Salesforce
         run: |
@@ -130,10 +140,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Salesforce CLI
-        uses: salesforce/setup-sfdx@v1
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          sfdx-version: ${{ env.SF_CLI_VERSION }}
+          node-version: '20'
+
+      - name: Setup Salesforce CLI
+        run: |
+          npm install -g @salesforce/cli@${{ env.SF_CLI_VERSION }}
+          sf --version
 
       - name: Authenticate to Salesforce
         run: |
