@@ -27,6 +27,17 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Setup Java (required for PMD and CPD engines)
+        uses: actions/setup-java@v4
+        with:
+          java-version: '11'
+          distribution: 'zulu'
+
+      - name: Setup Python (required for some engines)
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
       - name: Setup Salesforce CLI
         run: |
           npm install -g @salesforce/cli@${{ env.SF_CLI_VERSION }}
