@@ -1,0 +1,186 @@
+name: Salesforce Deployment Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  SF_CLI_VERSION: 'latest'
+
+jobs:
+  code-quality:
+    name: Code Quality Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Salesforce CLI
+        uses: salesforce/setup-sfdx@v1
+        with:
+          sfdx-version: ${{ env.SF_CLI_VERSION }}
+
+      - name: Authenticate to Salesforce
+        run: |
+          echo "${{ secrets.SF_AUTH_URL }}" > auth.txt
+          sf org login sfdx-url --sfdx-url-file auth.txt --alias target-org --set-default-username
+          rm auth.txt
+
+      - name: Run Code Analyzer
+        id: scanner
+        continue-on-error: false
+        run: |
+          # Run scanner with CSV and JSON output
+          sf scanner run \
+            --target "force-app" \
+            --format "csv" \
+            --outfile "scanner-results.csv" \
+            --severity-threshold 1 \
+            --engine "eslint-typescript,eslint-lwc,pmd,retire-js,eslint,cpd" || SCANNER_EXIT_CODE=$?
+          
+          # Also generate JSON output for better artifact handling
+          sf scanner run \
+            --target "force-app" \
+            --format "json" \
+            --outfile "scanner-results.json" \
+            --severity-threshold 1 \
+            --engine "eslint-typescript,eslint-lwc,pmd,retire-js,eslint,cpd" || true
+          
+          if [ "${SCANNER_EXIT_CODE:-0}" -ne 0 ]; then
+            echo "Code quality check failed with severity 1 issues"
+            echo "::error::Code quality validation failed. Check scanner-results.csv for details."
+            exit 1
+          fi
+          
+          echo "Code quality check passed"
+
+      - name: Upload Scanner Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scanner-results
+          path: |
+            scanner-results.csv
+            scanner-results.json
+          retention-days: 30
+          if-no-files-found: warn
+
+  validate:
+    name: Validate Deployment
+    runs-on: ubuntu-latest
+    needs: code-quality
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Salesforce CLI
+        uses: salesforce/setup-sfdx@v1
+        with:
+          sfdx-version: ${{ env.SF_CLI_VERSION }}
+
+      - name: Authenticate to Salesforce
+        run: |
+          echo "${{ secrets.SF_AUTH_URL }}" > auth.txt
+          sf org login sfdx-url --sfdx-url-file auth.txt --alias target-org --set-default-username
+          rm auth.txt
+
+      - name: Validate Deployment
+        id: validate
+        run: |
+          sf project deploy validate \
+            --source-dir force-app \
+            --target-org target-org \
+            --test-level RunLocalTests \
+            --wait 10 \
+            --json > validate-results.json || VALIDATE_EXIT_CODE=$?
+          
+          if [ "${VALIDATE_EXIT_CODE:-0}" -ne 0 ]; then
+            echo "Validation failed"
+            cat validate-results.json
+            exit 1
+          fi
+          
+          # Extract deployment ID for use in deploy job
+          DEPLOYMENT_ID=$(cat validate-results.json | jq -r '.result.id // empty')
+          echo "deployment-id=$DEPLOYMENT_ID" >> $GITHUB_OUTPUT
+          echo "Deployment ID: $DEPLOYMENT_ID"
+
+      - name: Upload Validation Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: validate-results
+          path: |
+            validate-results.json
+          retention-days: 30
+          if-no-files-found: warn
+
+  deploy:
+    name: Deploy to Salesforce
+    runs-on: ubuntu-latest
+    needs: validate
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Salesforce CLI
+        uses: salesforce/setup-sfdx@v1
+        with:
+          sfdx-version: ${{ env.SF_CLI_VERSION }}
+
+      - name: Authenticate to Salesforce
+        run: |
+          echo "${{ secrets.SF_AUTH_URL }}" > auth.txt
+          sf org login sfdx-url --sfdx-url-file auth.txt --alias target-org --set-default-username
+          rm auth.txt
+
+      - name: Deploy to Salesforce
+        id: deploy
+        run: |
+          sf project deploy start \
+            --source-dir force-app \
+            --target-org target-org \
+            --wait 10 \
+            --json > deploy-results.json || DEPLOY_EXIT_CODE=$?
+          
+          if [ "${DEPLOY_EXIT_CODE:-0}" -ne 0 ]; then
+            echo "Deployment failed"
+            cat deploy-results.json
+            exit 1
+          fi
+          
+          echo "Deployment completed successfully"
+          cat deploy-results.json | jq -r '.result.id // empty' > deployment-id.txt
+
+      - name: Upload Deployment Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: deploy-results
+          path: |
+            deploy-results.json
+            deployment-id.txt
+          retention-days: 30
+          if-no-files-found: warn
+
+      - name: Deployment Summary
+        if: success()
+        run: |
+          echo "## ✅ Deployment Successful" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Deployment completed to Salesforce org." >> $GITHUB_STEP_SUMMARY
+          if [ -f deploy-results.json ]; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Deployment Details" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
+            cat deploy-results.json | jq '.' >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
+
