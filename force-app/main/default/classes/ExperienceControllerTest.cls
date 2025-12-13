@@ -1,5 +1,5 @@
 @isTest
-private class ExperienceControllerTest {
+public class ExperienceControllerTest {
     
     @testSetup
     static void setup() {
