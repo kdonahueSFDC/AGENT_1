@@ -1,5 +1,6 @@
 name: Salesforce Deployment Pipeline
 
+# Workflow triggers on push to main/develop, PRs to main, or manual dispatch
 on:
   push:
     branches:
