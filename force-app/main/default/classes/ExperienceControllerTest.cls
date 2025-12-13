@@ -9,24 +9,21 @@ private class ExperienceControllerTest {
                 Type__c = 'Cultural Tours & Workshops',
                 Location__c = 'Test Location 1',
                 Price__c = 100.00,
-                Capacity__c = 20,
-                Rating__c = 4.5
+                Capacity__c = 20
             ),
             new Experience__c(
                 Name = 'Test Experience 2',
                 Type__c = 'Nightlife & Entertainment',
                 Location__c = 'Test Location 2',
                 Price__c = 150.00,
-                Capacity__c = 30,
-                Rating__c = 4.8
+                Capacity__c = 30
             ),
             new Experience__c(
                 Name = 'Test Experience 3',
                 Type__c = 'Adventure',
                 Location__c = 'Test Location 3',
                 Price__c = 200.00,
-                Capacity__c = 15,
-                Rating__c = 5.0
+                Capacity__c = 15
             )
         };
         insert experiences;
