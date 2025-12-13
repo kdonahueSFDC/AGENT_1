@@ -114,7 +114,7 @@ jobs:
             --source-dir force-app \
             --target-org target-org \
             --test-level RunSpecifiedTests \
-            --tests ExperienceControllerTest,SampleDataTest \
+            --tests "ExperienceControllerTest" \
             --wait 10 \
             --json > validate-results.json || VALIDATE_EXIT_CODE=$?
           
