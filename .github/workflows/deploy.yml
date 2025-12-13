@@ -1,5 +1,10 @@
 name: Salesforce Deployment Pipeline
 
+# IMPORTANT: For pushes to main/develop, code is already committed before validation runs.
+# If validation fails, the workflow fails and deploy is skipped, but code remains in the branch.
+# RECOMMENDED: Use branch protection rules to require PRs and require this workflow to pass before merging.
+# This ensures validation happens BEFORE code reaches main/develop.
+
 # Workflow triggers on push to main/develop, PRs to main, or manual dispatch
 on:
   push:
