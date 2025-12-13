@@ -52,7 +52,7 @@ public class ExperienceControllerTest {
         Test.stopTest();
 
         Assert.areEqual(2, page1.records.size(), 'Page 1 should have 2 records');
-        Assert.areEqual(1, page2.records.size(), 'Page 2 should have 1 record');
+        Assert.areEqual(1, page2.records.size(), 'Page 2 should have 1 record(s)');
         Assert.areEqual(2, page1.totalPages, 'Should have 2 total pages');
         Assert.areEqual(2, page2.totalPages, 'Should have 2 total pages');
     }
