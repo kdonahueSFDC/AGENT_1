@@ -1,0 +1,66 @@
+<template>
+     <lightning-datatable 
+          data={displayedRecords} 
+          columns={columns} 
+          key-field={keyField} 
+          hide-checkbox-column
+          min-column-width="100"
+          class="slds-m-bottom_xx-small"
+          onsort={handleSort}
+          sorted-direction={sortDirection}
+          sorted-by={sortedBy}>
+               <c-l-c-c-_-custom-data-table-types-provider slot="customdatatypes"></c-l-c-c-_-custom-data-table-types-provider>
+     </lightning-datatable>
+
+     <template if:true={isRecordsEmpty}> 
+          <div class="no-records-container">
+               <div class="no-records-banner">
+                    No records to display
+               </div>
+          </div>
+     </template>
+     <div class="footer-section">
+          <div class="total-entries">
+               <template if:true={hasNoFilters}>
+                    <p>{totalResultsSize} Total Entries</p>
+               </template>
+               <template if:false={hasNoFilters}>
+                    <p>{filteredResultsSize} Entries (filtered from {totalResultsSize} Total Entries)</p>
+               </template>
+          </div>
+          <!-- Pagination -->
+          <nav class="slds-m-top_small pagination-nav" aria-label="Pagination">
+               <ul class="slds-pagination slds-list_horizontal slds-has-dividers_right slds-p-around_xx-small">
+                    <!-- Prev -->
+                    <li class="slds-pagination__item">
+                         <lightning-button-icon icon-name="utility:chevronleft" alternative-text="Previous page"
+                              variant="bare" onclick={handlePrevious} disabled={isFirstPage}>
+                         </lightning-button-icon>
+                    </li>
+
+                    <!-- Numbered pages + ellipses -->
+                    <template for:each={pageItems} for:item="item">
+                         <li key={item.key} class="slds-pagination__item">
+                              <template if:true={item.isEllipsis}>
+                                   <span class="ellipsis" aria-hidden="true">…</span>
+                              </template>
+                              <template if:false={item.isEllipsis}>
+                                   <button class={item.buttonClass} data-page={item.value} aria-current={item.ariaCurrent}
+                                        onclick={handleGoToPage}>
+                                        {item.label}
+                                   </button>
+                              </template>
+                         </li>
+                    </template>
+
+                    <!-- Next -->
+                    <li class="slds-pagination__item">
+                         <lightning-button-icon icon-name="utility:chevronright" alternative-text="Next page" variant="bare"
+                              onclick={handleNext} disabled={isLastPage}>
+                         </lightning-button-icon>
+                    </li>
+               </ul>
+          </nav>
+     </div>
+
+</template>

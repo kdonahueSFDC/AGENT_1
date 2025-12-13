@@ -1,0 +1,28 @@
+<template>
+     <!-- <template if:true={isLoading}> -->
+     <template lwc:if={isLoading}>
+          <lightning-spinner 
+               alternative-text="Loading" 
+               size="medium" 
+               variant="base">
+          </lightning-spinner>
+     </template>
+     <template lwc:if={showExport}>
+          <div class="export-div">
+               <c-l-c-c-_-custom-c-s-v-export 
+                    class="export-btn" 
+                    data={records}
+                    search-type={SEARCHTYPE}>
+               </c-l-c-c-_-custom-c-s-v-export>
+          </div>
+     </template>
+     <c-l-c-c-_-custom-data-table 
+          id="customDataTable" 
+          records={records}
+          columns={columns}
+          page-size={pageSize}
+          key-field={keyField}
+          total-results-size={totalResultsSize}
+          filtered-results-size={filteredResultsSize}>
+     </c-l-c-c-_-custom-data-table>
+</template>

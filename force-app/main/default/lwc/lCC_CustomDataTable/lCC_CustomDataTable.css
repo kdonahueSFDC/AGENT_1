@@ -1,0 +1,50 @@
+.ellipsis {
+     display: inline-block;
+     padding: 0 .5rem;
+     line-height: 2rem;
+}
+
+.paginator__page {
+     min-width: 2rem;
+     padding: 0 .5rem;
+     border-radius: 0;
+}
+.paginator__page--current {
+     background: var(--lwc-brandAccessible, #0176d3);
+     color: white;
+     border-color: transparent;
+     border-radius: 0;
+}
+
+.slds-pagination {
+    display: flex;
+    justify-content: flex-end;  /* pushes everything to the right */
+    align-items: center;        /* vertically centers the chevrons + numbers */
+}
+
+.no-records-container {
+     display: flex;
+     justify-content: center;   /* horizontal centering */
+     margin-top: 8px;
+}
+
+.no-records-banner {
+     color: #000;
+     font-weight: bold;
+     text-align: center;
+     padding: 4px 8px 8px 8px;
+     display: inline-block;
+     font-size: 0.85rem; 
+     letter-spacing: 0.5px;
+     text-transform: uppercase;
+}
+
+.footer-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.total-entries {
+    display: inline-block;
+}

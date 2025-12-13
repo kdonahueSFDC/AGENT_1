@@ -1,0 +1,62 @@
+<template>
+    <lightning-card title="Recent Experiences" icon-name="standard:experience">
+        <div class="slds-m-around_medium">
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading experiences" size="medium"></lightning-spinner>
+            </template>
+
+            <template if:false={isLoading}>
+                <template if:true={error}>
+                    <div class="slds-text-color_error">
+                        <p>Error loading experiences. Please contact your administrator.</p>
+                    </div>
+                </template>
+
+                <template if:false={error}>
+                    <template if:true={experiences.length}>
+                        <lightning-datatable
+                            key-field="Id"
+                            data={experiences}
+                            columns={columns}
+                            hide-checkbox-column
+                            show-row-number-column
+                        ></lightning-datatable>
+
+                        <div class="slds-m-top_medium slds-grid slds-grid_align-spread">
+                            <div class="slds-col slds-align-middle">
+                                <span class="slds-text-body_small">{pageInfo}</span>
+                            </div>
+                            <div class="slds-col">
+                                <lightning-layout>
+                                    <lightning-layout-item>
+                                        <lightning-button
+                                            label="Previous"
+                                            onclick={handlePrevious}
+                                            disabled={isPreviousDisabled}
+                                            variant="neutral"
+                                        ></lightning-button>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item class="slds-m-left_small">
+                                        <lightning-button
+                                            label="Next"
+                                            onclick={handleNext}
+                                            disabled={isNextDisabled}
+                                            variant="brand"
+                                        ></lightning-button>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                            </div>
+                        </div>
+                    </template>
+
+                    <template if:false={experiences.length}>
+                        <div class="slds-text-align_center slds-m-vertical_medium">
+                            <p class="slds-text-body_regular">No experiences found.</p>
+                        </div>
+                    </template>
+                </template>
+            </template>
+        </div>
+    </lightning-card>
+</template>
+

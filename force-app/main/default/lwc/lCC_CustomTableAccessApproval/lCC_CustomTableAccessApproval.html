@@ -1,0 +1,20 @@
+<template>
+     <template if:true={isLoading}>
+          <lightning-spinner 
+               alternative-text="Loading" 
+               size="medium" 
+               variant="base">
+          </lightning-spinner>
+     </template>
+     <c-l-c-c-_-custom-data-table 
+          id="customDataTable" 
+          records={records}
+          columns={columns}
+          page-size={pageSize}
+          key-field={keyField}
+          total-results-size={totalResultsSize}
+          filtered-results-size={filteredResultsSize}
+          onselectupdate={handleSelectUpdate}
+          prevent-reset={preventReset}>
+     </c-l-c-c-_-custom-data-table>
+</template>
