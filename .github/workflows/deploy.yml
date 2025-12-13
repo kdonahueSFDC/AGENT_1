@@ -32,6 +32,9 @@ jobs:
           npm install -g @salesforce/cli@${{ env.SF_CLI_VERSION }}
           sf --version
 
+      - name: Install Code Analyzer Plugin
+        run: sf plugins install code-analyzer@latest
+
       - name: Authenticate to Salesforce
         run: |
           echo "${{ secrets.SF_AUTH_URL }}" > auth.txt
@@ -42,21 +45,13 @@ jobs:
         id: scanner
         continue-on-error: false
         run: |
-          # Run scanner with CSV and JSON output
-          sf scanner run \
-            --target "force-app" \
-            --format "csv" \
-            --outfile "scanner-results.csv" \
-            --severity-threshold 1 \
-            --engine "eslint-typescript,eslint-lwc,pmd,retire-js,eslint,cpd" || SCANNER_EXIT_CODE=$?
-          
-          # Also generate JSON output for better artifact handling
-          sf scanner run \
-            --target "force-app" \
-            --format "json" \
-            --outfile "scanner-results.json" \
-            --severity-threshold 1 \
-            --engine "eslint-typescript,eslint-lwc,pmd,retire-js,eslint,cpd" || true
+          # Run code analyzer with CSV and JSON output
+          sf code-analyzer run \
+            --workspace force-app \
+            --view detail \
+            --output-file scanner-results.csv \
+            --output-file scanner-results.json \
+            --severity-threshold 1 || SCANNER_EXIT_CODE=$?
           
           if [ "${SCANNER_EXIT_CODE:-0}" -ne 0 ]; then
             echo "Code quality check failed with severity 1 issues"
