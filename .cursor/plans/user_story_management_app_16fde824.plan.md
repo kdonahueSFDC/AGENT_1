@@ -70,13 +70,13 @@ todos:
       - create-permission-set
   - id: add-apex-class-permissions
     content: Update Development_Management_Access permission set to grant access to UserStoryController Apex class.
-    status: pending
+    status: completed
     dependencies:
       - create-apex-controller
       - create-permission-set
   - id: add-lwc-component-permissions
     content: Update Development_Management_Access permission set to grant access to userStoryList and userStoryKanban LWC components.
-    status: pending
+    status: cancelled
     dependencies:
       - create-list-component
       - create-kanban-component
@@ -93,7 +93,7 @@ todos:
       - create-user-story-object
   - id: create-jest-tests-list-component
     content: Create Jest unit tests for userStoryList LWC component to test filtering, sorting, pagination, and user interactions.
-    status: pending
+    status: completed
     dependencies:
       - create-list-component
   - id: create-jest-tests-kanban-component
@@ -239,7 +239,7 @@ force-app/main/default/
 - ✅ Pagination support
 - ✅ Link to record detail pages
 - ✅ Use `lightning-datatable` base component
-- ⏳ Jest unit tests (pending)
+- ✅ Jest unit tests (completed)
 
 #### `userStoryKanban` Component
 
@@ -272,16 +272,17 @@ force-app/main/default/
 - Incrementally add permissions as objects, fields, and components are created:
   - ✅ Add Feature permissions: Full CRUD (read, create, edit, delete) for `Feature__c` object and edit access to Description__c, Status__c fields
   - ✅ Add User Story permissions: Full CRUD (read, create, edit, delete) for `User_Story__c` object and edit access to Description__c, Status__c, Priority__c, Assignee__c, Acceptance_Criteria__c fields (Note: Feature__c is Master-Detail and automatically accessible)
-  - ⏳ Add Apex class access: Grant access to `UserStoryController` Apex class (pending)
-  - ⏳ Add LWC component access: Grant access to `userStoryList` and `userStoryKanban` LWC components (pending)
+  - ✅ Add Apex class access: Grant access to `UserStoryController` Apex class (completed)
+  - ❌ Add LWC component access: Grant access to `userStoryList` and `userStoryKanban` LWC components (cancelled - access granted via Apex class permissions)
 - ⏳ Set up sharing rules if needed for team collaboration (pending - may not be needed with ControlledByParent sharing)
 
 ### 7. Testing
 
-- Apex unit tests with 80%+ code coverage
-- Test all controller methods including error cases
-- Test security enforcement
-- Jest tests for LWC components (if time permits)
+- ✅ Apex unit tests with 80%+ code coverage (completed)
+- ✅ Test all controller methods including error cases (completed)
+- ✅ Test security enforcement (completed)
+- ✅ Jest tests for userStoryList LWC component (completed)
+- ⏳ Jest tests for userStoryKanban LWC component (pending)
 
 ## Data Flow
 
@@ -319,6 +320,7 @@ flowchart TD
 - ✅ `force-app/main/default/classes/UserStoryController.cls` (completed)
 - ✅ `force-app/main/default/classes/UserStoryControllerTest.cls` (completed)
 - ✅ `force-app/main/default/lwc/userStoryList/userStoryList.*` (completed)
+- ✅ `force-app/main/default/lwc/userStoryList/__tests__/userStoryList.test.js` (completed)
 - ✅ `force-app/main/default/lwc/userStoryKanban/userStoryKanban.*` (completed)
 - ✅ `force-app/main/default/tabs/Feature__c.tab-meta.xml` (completed)
 - ✅ `force-app/main/default/tabs/User_Story__c.tab-meta.xml` (completed)
@@ -327,7 +329,7 @@ flowchart TD
 - ✅ `force-app/main/default/flexipages/User_Story_Kanban_Page.flexipage-meta.xml` (completed)
 - ⏳ `force-app/main/default/flexipages/Feature_Record_Page.flexipage-meta.xml` (pending - needs to be created)
 - ✅ `force-app/main/default/applications/Feature_Management.app-meta.xml` (completed - utility bar reference removed and homePageFlexipage configured to User_Story_List)
-- ✅ `force-app/main/default/permissionsets/Development_Management_Access.permissionset-meta.xml` (completed - needs Apex class and LWC component permissions)
+- ✅ `force-app/main/default/permissionsets/Development_Management_Access.permissionset-meta.xml` (completed - Apex class access granted, LWC access via Apex permissions)
 
 ### Files to Modify
 
