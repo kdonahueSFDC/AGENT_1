@@ -3,10 +3,10 @@ name: User Story Management App
 overview: Create a Salesforce app to manage development user stories organized by features, with both list views and Kanban board interfaces.
 todos:
   - id: create-feature-object
-    content: Create Feature__c custom object with Name, Description__c, and Status__c fields. Include object metadata, field definitions, list views, and page layouts.
+    content: Create Feature__c custom object with Name, Description__c, and Status__c fields. Include object metadata, field definitions, list views, and page layouts. Note: Update Development_Management_Access permission set to grant permissions for Feature__c object and fields (handled in add-feature-permissions item).
     status: completed
   - id: create-user-story-object
-    content: Create User_Story__c custom object with all required fields (Name, Description__c, Status__c, Priority__c, Assignee__c, Feature__c Master-Detail, Acceptance_Criteria__c). Include object metadata, field definitions, and page layouts.
+    content: Create User_Story__c custom object with all required fields (Name, Description__c, Status__c, Priority__c, Assignee__c, Feature__c Master-Detail, Acceptance_Criteria__c). Include object metadata, field definitions, and page layouts. Note: Update Development_Management_Access permission set to grant permissions for User_Story__c object and fields (handled in add-user-story-permissions item).
     status: completed
     dependencies:
       - create-feature-object
@@ -21,17 +21,17 @@ todos:
     dependencies:
       - create-user-story-object
   - id: create-apex-controller
-    content: Create UserStoryController.cls with methods for querying user stories, grouping by status, and updating status. Include proper security enforcement and error handling.
+    content: Create UserStoryController.cls with methods for querying user stories, grouping by status, and updating status. Include proper security enforcement and error handling. Note: Update Development_Management_Access permission set to grant access to UserStoryController Apex class.
     status: in_progress
     dependencies:
       - create-user-story-object
   - id: create-list-component
-    content: Create userStoryList LWC component with data table, filtering by Feature/Status/Priority/Assignee, and pagination support.
+    content: Create userStoryList LWC component with data table, filtering by Feature/Status/Priority/Assignee, and pagination support. Note: Update Development_Management_Access permission set to grant access to userStoryList LWC component.
     status: pending
     dependencies:
       - create-apex-controller
   - id: create-kanban-component
-    content: Create userStoryKanban LWC component with drag-and-drop functionality to update status, displaying cards with key information.
+    content: Create userStoryKanban LWC component with drag-and-drop functionality to update status, displaying cards with key information. Note: Update Development_Management_Access permission set to grant access to userStoryKanban LWC component.
     status: pending
     dependencies:
       - create-apex-controller
@@ -54,11 +54,33 @@ todos:
       - create-lightning-pages
       - create-tabs
   - id: create-permission-set
-    content: Create Development_Management_Access permission set with appropriate object and field-level permissions.
+    content: Create Development_Management_Access permission set without any permissions initially. This will be a base permission set that can be assigned to users, with permissions added incrementally as objects, fields, and components are created.
+    status: pending
+  - id: add-feature-permissions
+    content: Update Development_Management_Access permission set to add full CRUD permissions (read, create, edit, delete) for Feature__c object and edit access to all Feature__c custom fields (Description__c, Status__c).
+    status: pending
+    dependencies:
+      - create-feature-object
+      - create-permission-set
+  - id: add-user-story-permissions
+    content: Update Development_Management_Access permission set to add full CRUD permissions (read, create, edit, delete) for User_Story__c object and edit access to all User_Story__c custom fields (Description__c, Status__c, Priority__c, Assignee__c, Feature__c, Acceptance_Criteria__c).
     status: pending
     dependencies:
       - create-user-story-object
-      - create-feature-object
+      - create-permission-set
+  - id: add-apex-class-permissions
+    content: Update Development_Management_Access permission set to grant access to UserStoryController Apex class.
+    status: pending
+    dependencies:
+      - create-apex-controller
+      - create-permission-set
+  - id: add-lwc-component-permissions
+    content: Update Development_Management_Access permission set to grant access to userStoryList and userStoryKanban LWC components.
+    status: pending
+    dependencies:
+      - create-list-component
+      - create-kanban-component
+      - create-permission-set
   - id: create-tests
     content: Create UserStoryControllerTest.cls with comprehensive unit tests achieving 80%+ code coverage, including error cases and security enforcement.
     status: pending
@@ -193,8 +215,12 @@ force-app/main/default/
 
 ### 6. Security & Permissions
 
-- Create permission set `Development_Management_Access`
-- Configure object and field-level permissions
+- Create permission set `Development_Management_Access` initially without any permissions (can be assigned to users)
+- Incrementally add permissions as objects, fields, and components are created:
+  - Add Feature permissions: Full CRUD (read, create, edit, delete) for `Feature__c` object and edit access to Description__c, Status__c fields
+  - Add User Story permissions: Full CRUD (read, create, edit, delete) for `User_Story__c` object and edit access to Description__c, Status__c, Priority__c, Assignee__c, Feature__c, Acceptance_Criteria__c fields
+  - Add Apex class access: Grant access to `UserStoryController` Apex class
+  - Add LWC component access: Grant access to `userStoryList` and `userStoryKanban` LWC components
 - Set up sharing rules if needed for team collaboration
 
 ### 7. Testing
@@ -264,4 +290,5 @@ flowchart TD
 - Users can update User Story status via drag-and-drop in Kanban
 - All code has 80%+ test coverage
 - App is accessible via custom app launcher entry
-- Security is properly configured with permission sets
+- Security is properly configured with permission sets that grant full CRUD and edit permissions
+- Permission set can be assigned to users to grant access to all app functionality
