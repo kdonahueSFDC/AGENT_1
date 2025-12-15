@@ -153,6 +153,7 @@
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
     <externalSharingModel>Private</externalSharingModel>
+    <description>Organizes user stories by feature. Features represent high-level development initiatives that contain multiple related user stories.</description>
     <label>Feature</label>
     <nameField>
         <label>Feature Name</label>
