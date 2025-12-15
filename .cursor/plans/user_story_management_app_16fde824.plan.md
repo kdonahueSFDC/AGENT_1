@@ -49,7 +49,7 @@ todos:
       - create-user-story-object
   - id: create-custom-app
     content: Complete Feature Management custom app configuration by removing utility bar reference and configuring default landing page (homePageFlexipage) to User_Story_List. App file already exists as Feature_Management.app-meta.xml with tabs configured.
-    status: pending
+    status: completed
     dependencies:
       - create-lightning-pages
       - create-tabs
@@ -261,10 +261,10 @@ force-app/main/default/
 
 ### 5. Custom App
 
-- ⏳ Complete "Feature Management" app configuration (pending - Feature_Management.app-meta.xml exists with tabs configured)
+- ✅ Complete "Feature Management" app configuration (completed - utility bar reference removed and homePageFlexipage configured)
 - ✅ Include Feature and User Story tabs (completed in existing app)
-- ⏳ Remove utility bar reference (pending - app references Feature_Management_UtilityBar which doesn't exist and isn't needed)
-- ⏳ Configure app default landing page (pending - needs homePageFlexipage configured to User_Story_List)
+- ✅ Remove utility bar reference (completed - invalid Feature_Management_UtilityBar reference removed)
+- ✅ Configure app default landing page (completed - homePageFlexipage set to User_Story_List)
 
 ### 6. Security & Permissions
 
@@ -326,14 +326,13 @@ flowchart TD
 - ✅ `force-app/main/default/flexipages/User_Story_List_Page.flexipage-meta.xml` (completed)
 - ✅ `force-app/main/default/flexipages/User_Story_Kanban_Page.flexipage-meta.xml` (completed)
 - ⏳ `force-app/main/default/flexipages/Feature_Record_Page.flexipage-meta.xml` (pending - needs to be created)
-- ⏳ `force-app/main/default/applications/Feature_Management.app-meta.xml` (exists but needs utility bar reference removed and homePageFlexipage configured)
+- ✅ `force-app/main/default/applications/Feature_Management.app-meta.xml` (completed - utility bar reference removed and homePageFlexipage configured to User_Story_List)
 - ✅ `force-app/main/default/permissionsets/Development_Management_Access.permissionset-meta.xml` (completed - needs Apex class and LWC component permissions)
 
 ### Files to Modify
 
 - ⏳ `force-app/main/default/layouts/Feature__c-Feature Layout.layout-meta.xml` (needs Description__c and Status__c fields added)
 - ⏳ `force-app/main/default/layouts/User_Story__c-User Story Layout.layout-meta.xml` (needs all custom fields added)
-- ⏳ `force-app/main/default/applications/Feature_Management.app-meta.xml` (needs utility bar reference removed and homePageFlexipage configured)
 
 ### Reference Existing Patterns
 

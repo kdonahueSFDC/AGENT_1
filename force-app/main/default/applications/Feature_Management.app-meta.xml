@@ -15,5 +15,5 @@
     <tabs>Feature__c</tabs>
     <tabs>User_Story__c</tabs>
     <uiType>Lightning</uiType>
-    <homePageFlexipage>User_Story_List</homePageFlexipage>
+    <utilityBar>Feature_Management_UtilityBar</utilityBar>
 </CustomApplication>
