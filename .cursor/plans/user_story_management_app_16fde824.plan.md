@@ -7,7 +7,7 @@ todos:
     status: completed
   - id: create-user-story-object
     content: Create User_Story__c custom object with all required fields (Name, Description__c, Status__c, Priority__c, Assignee__c, Feature__c Master-Detail, Acceptance_Criteria__c). Include object metadata, field definitions, list views, and page layouts.
-    status: pending
+    status: completed
     dependencies:
       - create-feature-object
   - id: add-user-story-related-list

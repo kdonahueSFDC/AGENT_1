@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Acceptance_Criteria__c</fullName>
+    <description>Specific criteria that must be met for this user story to be considered complete. These criteria define the conditions of satisfaction and help ensure the user story meets its intended purpose.</description>
+    <externalId>false</externalId>
+    <label>Acceptance Criteria</label>
+    <length>32768</length>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>LongTextArea</type>
+    <visibleLines>5</visibleLines>
+    <defaultValue></defaultValue>
+</CustomField>

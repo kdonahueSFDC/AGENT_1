@@ -146,13 +146,14 @@
     <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
-    <enableHistory>false</enableHistory>
+    <enableHistory>true</enableHistory>
     <enableLicensing>false</enableLicensing>
     <enableReports>false</enableReports>
     <enableSearch>true</enableSearch>
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
     <externalSharingModel>Private</externalSharingModel>
+    <description>Individual user stories that represent specific development work items. User stories are organized under features and track progress, priority, assignment, and acceptance criteria.</description>
     <label>User Story</label>
     <nameField>
         <label>User Story Name</label>
