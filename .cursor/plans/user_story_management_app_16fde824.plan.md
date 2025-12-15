@@ -48,7 +48,7 @@ todos:
       - create-feature-object
       - create-user-story-object
   - id: create-custom-app
-    content: Create Development Management custom app with Feature and User Story tabs, navigation, and default landing page.
+    content: Complete Feature Management custom app configuration by removing utility bar reference and configuring default landing page (homePageFlexipage) to User_Story_List. App file already exists as Feature_Management.app-meta.xml with tabs configured.
     status: pending
     dependencies:
       - create-lightning-pages
@@ -124,28 +124,12 @@ todos:
     dependencies:
       - create-feature-object
       - create-user-story-object
-  - id: create-utility-bar
-    content: Create Feature_Management_UtilityBar utility bar configuration referenced by the custom app. Utility bars provide quick access to common actions and tools. If not needed, remove the reference from the app configuration.
-    status: pending
-    dependencies:
-      - create-custom-app
   - id: create-compact-layouts
     content: Create compact layouts for Feature__c and User_Story__c objects. Compact layouts define which fields appear in list views, mobile cards, and lookup search results. Should include Name, Status, and other key identifying fields.
     status: pending
     dependencies:
       - create-feature-object
       - create-user-story-object
-  - id: configure-app-landing-page
-    content: Configure the custom app's default landing page (homePageFlexipage property) to User_Story_List_Page. This determines what page users see when they first open the app.
-    status: pending
-    dependencies:
-      - create-custom-app
-      - create-lightning-pages
-  - id: resolve-app-name-discrepancy
-    content: Resolve discrepancy between plan (Development_Management) and existing app file (Feature_Management). Either rename the app file to match the plan or update the plan to match the existing app name.
-    status: pending
-    dependencies:
-      - create-custom-app
 ---
 
 # User Story Management App Development Plan
@@ -214,7 +198,7 @@ force-app/main/default/
 │   ├── User_Story_Kanban_Page.flexipage-meta.xml
 │   └── Feature_Record_Page.flexipage-meta.xml
 ├── applications/
-│   └── Development_Management.app-meta.xml
+│   └── Feature_Management.app-meta.xml
 ├── tabs/
 │   ├── Feature__c.tab-meta.xml
 │   └── User_Story__c.tab-meta.xml
@@ -277,10 +261,10 @@ force-app/main/default/
 
 ### 5. Custom App
 
-- ⏳ Create "Development Management" app (pending - note: Feature_Management.app-meta.xml exists, may need rename)
+- ⏳ Complete "Feature Management" app configuration (pending - Feature_Management.app-meta.xml exists with tabs configured)
 - ✅ Include Feature and User Story tabs (completed in existing app)
-- ⏳ Create or remove utility bar reference (pending - app references Feature_Management_UtilityBar which doesn't exist)
-- ⏳ Configure app navigation and default landing page (pending - needs homePageFlexipage configured)
+- ⏳ Remove utility bar reference (pending - app references Feature_Management_UtilityBar which doesn't exist and isn't needed)
+- ⏳ Configure app default landing page (pending - needs homePageFlexipage configured to User_Story_List)
 
 ### 6. Security & Permissions
 
@@ -303,7 +287,7 @@ force-app/main/default/
 
 ```mermaid
 flowchart TD
-    A[User opens Development Management App] --> B{Select View}
+    A[User opens Feature Management App] --> B{Select View}
     B -->|List View| C[userStoryList Component]
     B -->|Kanban View| D[userStoryKanban Component]
     C --> E[UserStoryController.getUserStories]
@@ -342,15 +326,14 @@ flowchart TD
 - ✅ `force-app/main/default/flexipages/User_Story_List_Page.flexipage-meta.xml` (completed)
 - ✅ `force-app/main/default/flexipages/User_Story_Kanban_Page.flexipage-meta.xml` (completed)
 - ⏳ `force-app/main/default/flexipages/Feature_Record_Page.flexipage-meta.xml` (pending - needs to be created)
-- ⏳ `force-app/main/default/applications/Development_Management.app-meta.xml` (pending - note: Feature_Management.app-meta.xml exists, may need rename or clarification)
-- ⏳ `force-app/main/default/utilityBars/Feature_Management_UtilityBar.utilityBar-meta.xml` (pending - referenced by app but doesn't exist)
+- ⏳ `force-app/main/default/applications/Feature_Management.app-meta.xml` (exists but needs utility bar reference removed and homePageFlexipage configured)
 - ✅ `force-app/main/default/permissionsets/Development_Management_Access.permissionset-meta.xml` (completed - needs Apex class and LWC component permissions)
 
 ### Files to Modify
 
 - ⏳ `force-app/main/default/layouts/Feature__c-Feature Layout.layout-meta.xml` (needs Description__c and Status__c fields added)
 - ⏳ `force-app/main/default/layouts/User_Story__c-User Story Layout.layout-meta.xml` (needs all custom fields added)
-- ⏳ `force-app/main/default/applications/Feature_Management.app-meta.xml` (needs default landing page configured, utility bar created or reference removed)
+- ⏳ `force-app/main/default/applications/Feature_Management.app-meta.xml` (needs utility bar reference removed and homePageFlexipage configured)
 
 ### Reference Existing Patterns
 
