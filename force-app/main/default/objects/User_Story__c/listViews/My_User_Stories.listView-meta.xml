@@ -5,6 +5,11 @@
     <columns>Status__c</columns>
     <columns>Priority__c</columns>
     <columns>Feature__c</columns>
-    <filterScope>Mine</filterScope>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Assignee__c</field>
+        <operation>equals</operation>
+        <value>$USER</value>
+    </filters>
     <label>My User Stories</label>
 </ListView>
