@@ -98,7 +98,7 @@ todos:
       - create-list-component
   - id: create-jest-tests-kanban-component
     content: Create Jest unit tests for userStoryKanban LWC component to test drag-and-drop functionality, status updates, and card rendering.
-    status: pending
+    status: completed
     dependencies:
       - create-kanban-component
   - id: enhance-user-story-layout
@@ -154,7 +154,7 @@ Build a custom Salesforce app for managing development user stories organized by
 force-app/main/default/
 ├── objects/
 │   ├── Feature__c/
-│   │   ├── Feature__c.object-meta.xml
+│   │   ├── Feature__c.objgit statusect-meta.xml
 │   │   ├── fields/
 │   │   │   ├── Description__c.field-meta.xml
 │   │   │   └── Status__c.field-meta.xml
@@ -251,7 +251,7 @@ force-app/main/default/
 - ✅ Feature filtering capability
 - ✅ Optimistic UI updates
 - ✅ Full accessibility support
-- ⏳ Jest unit tests (pending)
+- ✅ Jest unit tests (completed)
 
 ### 4. Lightning Pages
 
@@ -282,7 +282,7 @@ force-app/main/default/
 - ✅ Test all controller methods including error cases (completed)
 - ✅ Test security enforcement (completed)
 - ✅ Jest tests for userStoryList LWC component (completed)
-- ⏳ Jest tests for userStoryKanban LWC component (pending)
+- ✅ Jest tests for userStoryKanban LWC component (completed)
 
 ## Data Flow
 
@@ -322,6 +322,7 @@ flowchart TD
 - ✅ `force-app/main/default/lwc/userStoryList/userStoryList.*` (completed)
 - ✅ `force-app/main/default/lwc/userStoryList/__tests__/userStoryList.test.js` (completed)
 - ✅ `force-app/main/default/lwc/userStoryKanban/userStoryKanban.*` (completed)
+- ✅ `force-app/main/default/lwc/userStoryKanban/__tests__/userStoryKanban.test.js` (completed)
 - ✅ `force-app/main/default/tabs/Feature__c.tab-meta.xml` (completed)
 - ✅ `force-app/main/default/tabs/User_Story__c.tab-meta.xml` (completed)
 - ✅ `force-app/main/default/layouts/User_Story__c-User Story Layout.layout-meta.xml` (completed - basic layout exists, needs enhancement)
