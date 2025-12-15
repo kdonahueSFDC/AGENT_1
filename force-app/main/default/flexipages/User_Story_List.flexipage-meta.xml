@@ -7,12 +7,20 @@
                 <identifier>c_userStoryList</identifier>
             </componentInstance>
         </itemInstances>
-        <name>main</name>
+        <name>region1</name>
         <type>Region</type>
     </flexiPageRegions>
-    <masterLabel>User Story List Page</masterLabel>
+    <flexiPageRegions>
+        <name>region2</name>
+        <type>Region</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <name>region3</name>
+        <type>Region</type>
+    </flexiPageRegions>
+    <masterLabel>User Story List</masterLabel>
     <template>
-        <name>lightning:appHomeTemplateOneColumn</name>
+        <name>flexipage:appHomeTemplateHeaderTwoColumnsLeftSidebar</name>
     </template>
     <type>AppPage</type>
 </FlexiPage>
