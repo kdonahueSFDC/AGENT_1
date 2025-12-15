@@ -53,7 +53,7 @@
                                 ondragleave={handleDragLeave}
                                 ondrop={handleDrop}
                                 role="region"
-                                aria-label="{column.label} column"
+                                aria-label={column.columnAriaLabel}
                             >
                                 <!-- Column Header -->
                                 <div class="slds-card slds-card_boundary">
@@ -74,7 +74,7 @@
                                     </div>
 
                                     <!-- Column Body -->
-                                    <div class="slds-card__body slds-card__body_inner kanban-column-body" role="list" aria-label="{column.label} user stories">
+                                    <div class="slds-card__body slds-card__body_inner kanban-column-body" role="list" aria-label={column.storiesAriaLabel}>
                                         <template if:true={column.count}>
                                             <template for:each={column.stories} for:item="story">
                                                 <article
@@ -89,7 +89,7 @@
                                                     onkeydown={handleCardKeyDown}
                                                     role="listitem"
                                                     tabindex="0"
-                                                    aria-label="User story {story.name}"
+                                                    aria-label={story.ariaLabel}
                                                 >
                                                     <div class="slds-card__body slds-card__body_inner">
                                                         <!-- Story Title -->

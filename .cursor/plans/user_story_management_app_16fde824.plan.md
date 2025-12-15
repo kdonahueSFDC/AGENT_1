@@ -3,10 +3,10 @@ name: User Story Management App
 overview: Create a Salesforce app to manage development user stories organized by features, with both list views and Kanban board interfaces.
 todos:
   - id: create-feature-object
-    content: ""
+    content: "Create Feature__c custom object with Name, Description__c (Long Text Area), and Status__c (Picklist: Planning, In Progress, Completed) fields. Include list views (All, My Features) and page layout with all fields organized in logical sections."
     status: completed
   - id: create-user-story-object
-    content: ""
+    content: "Create User_Story__c custom object with Master-Detail relationship to Feature__c. Include fields: Name, Description__c (Long Text Area), Status__c (Picklist: Backlog, In Progress, In Review, Done, Blocked), Priority__c (Picklist: Low, Medium, High, Critical), Assignee__c (Lookup to User), Feature__c (Master-Detail), Acceptance_Criteria__c (Long Text Area). Configure sharing model as ControlledByParent."
     status: completed
     dependencies:
       - create-feature-object
@@ -21,18 +21,18 @@ todos:
     dependencies:
       - create-user-story-object
   - id: create-apex-controller
-    content: ""
+    content: "Create UserStoryController.cls Apex class with @AuraEnabled methods: getUserStories() for paginated list queries with filtering, getUserStoriesByStatus() for Kanban board data, updateUserStoryStatus() for drag-and-drop status updates, and getFeatures() for filter dropdowns. Implement WITH SECURITY_ENFORCED on all queries, proper error handling, and wrapper classes for data transfer."
     status: completed
     dependencies:
       - create-user-story-object
   - id: create-list-component
-    content: ""
-    status: pending
+    content: Create userStoryList LWC component with lightning-datatable displaying user stories. Include filtering by Feature, Status, Priority, and Assignee. Implement pagination, sorting, and click-to-navigate to record detail pages. Use SLDS styling and follow Salesforce best practices.
+    status: completed
     dependencies:
       - create-apex-controller
   - id: create-kanban-component
-    content: ""
-    status: pending
+    content: Create userStoryKanban LWC component with Kanban board layout showing 5 status columns (Backlog, In Progress, In Review, Done, Blocked). Implement HTML5 drag-and-drop to update user story status. Cards display title, priority badge, assignee, and feature. Include feature filtering, optimistic UI updates, error handling, and full accessibility support with ARIA labels and keyboard navigation.
+    status: completed
     dependencies:
       - create-apex-controller
   - id: create-lightning-pages
@@ -42,8 +42,8 @@ todos:
       - create-list-component
       - create-kanban-component
   - id: create-tabs
-    content: Create tabs for Feature__c and User_Story__c objects. These tabs are required for the custom app navigation.
-    status: pending
+    content: Create tabs for Feature__c and User_Story__c objects with appropriate icons and motifs. These tabs are required for the custom app navigation and allow users to access object list views and record pages.
+    status: completed
     dependencies:
       - create-feature-object
       - create-user-story-object
@@ -63,7 +63,7 @@ todos:
       - create-feature-object
       - create-permission-set
   - id: add-user-story-permissions
-    content: "Update Development_Management_Access permission set to add full CRUD permissions (read, create, edit, delete) for User_Story__c object and edit access to all User_Story__c custom fields (Description__c, Status__c, Priority__c, Assignee__c, Feature__c, Acceptance_Criteria__c). Note: Feature__c is a Master-Detail field and cannot be controlled via permission sets - it's automatically accessible with object access."
+    content: "Update Development_Management_Access permission set to add full CRUD permissions (read, create, edit, delete) for User_Story__c object and edit access to all User_Story__c custom fields (Description__c, Status__c, Priority__c, Assignee__c, Acceptance_Criteria__c). Note: Feature__c is a Master-Detail field and cannot be controlled via permission sets - it's automatically accessible with object access."
     status: completed
     dependencies:
       - create-user-story-object
@@ -87,8 +87,8 @@ todos:
     dependencies:
       - create-apex-controller
   - id: create-user-story-layout
-    content: Create User_Story__c-User Story Layout.layout-meta.xml page layout with all User_Story__c fields organized in logical sections.
-    status: pending
+    content: Create User_Story__c-User Story Layout.layout-meta.xml page layout with basic structure including Name field and system information section. This is the initial layout that can be assigned to profiles.
+    status: completed
     dependencies:
       - create-user-story-object
   - id: create-jest-tests-list-component
@@ -101,6 +101,12 @@ todos:
     status: pending
     dependencies:
       - create-kanban-component
+  - id: enhance-user-story-layout
+    content: Enhance User_Story__c-User Story Layout.layout-meta.xml to include all custom fields (Description__c, Status__c, Priority__c, Assignee__c, Feature__c, Acceptance_Criteria__c) organized in logical sections (Story Details, Assignment, Acceptance Criteria). Currently only has Name and system fields.
+    status: pending
+    dependencies:
+      - create-user-story-object
+      - create-user-story-layout
 ---
 
 # User Story Management App Development Plan
@@ -183,37 +189,43 @@ force-app/main/default/
 
 - ✅ Create `Feature__c` object with standard and custom fields
   - **Note**: User_Story__c related list was intentionally omitted from Feature__c layout during initial creation to avoid validation errors. It will be added after User_Story__c object is created.
-- Create `User_Story__c` object with Master-Detail relationship to `Feature__c`
-- Add User_Story__c related list to Feature__c layout after User_Story__c object exists
-- Configure field-level security and validation rules
-- Set up list views with filters for common use cases
+- ✅ Create `User_Story__c` object with Master-Detail relationship to `Feature__c`
+- ✅ Add User_Story__c related list to Feature__c layout after User_Story__c object exists
+- ✅ Configure field-level security and validation rules
+- ✅ Set up list views with filters for common use cases (All, My_User_Stories, Backlog)
 
 ### 2. Apex Controller (`UserStoryController.cls`)
 
-- `getUserStories(String featureId, String status)` - Query user stories with filtering
-- `getUserStoriesByStatus()` - Group user stories by status for Kanban
-- `updateUserStoryStatus(Id storyId, String newStatus)` - Update status (for Kanban drag-and-drop)
-- `getFeatures()` - Query all features for filtering
-- Implement `WITH SECURITY_ENFORCED` for all queries
-- Include proper error handling and input validation
+- ✅ `getUserStories(String featureId, String status)` - Query user stories with filtering, pagination, and sorting
+- ✅ `getUserStoriesByStatus()` - Group user stories by status for Kanban
+- ✅ `updateUserStoryStatus(Id storyId, String newStatus)` - Update status (for Kanban drag-and-drop)
+- ✅ `getFeatures()` - Query all features for filtering
+- ✅ Implement `WITH SECURITY_ENFORCED` for all queries
+- ✅ Include proper error handling and input validation
+- ✅ Create comprehensive unit tests with 80%+ code coverage
 
 ### 3. Lightning Web Components
 
 #### `userStoryList` Component
 
-- Display user stories in a data table with sorting and filtering
-- Filter by Feature, Status, Priority, Assignee
-- Pagination support
-- Link to record detail pages
-- Use `lightning-datatable` base component
+- ✅ Display user stories in a data table with sorting and filtering
+- ✅ Filter by Feature, Status, Priority, Assignee
+- ✅ Pagination support
+- ✅ Link to record detail pages
+- ✅ Use `lightning-datatable` base component
+- ⏳ Jest unit tests (pending)
 
 #### `userStoryKanban` Component
 
-- Kanban board with columns for each status
-- Drag-and-drop to change status
-- Cards show Title, Priority, Assignee, Feature
-- Click card to navigate to record detail
-- Use SLDS styling for board layout
+- ✅ Kanban board with columns for each status
+- ✅ Drag-and-drop to change status
+- ✅ Cards show Title, Priority, Assignee, Feature
+- ✅ Click card to navigate to record detail
+- ✅ Use SLDS styling for board layout
+- ✅ Feature filtering capability
+- ✅ Optimistic UI updates
+- ✅ Full accessibility support
+- ⏳ Jest unit tests (pending)
 
 ### 4. Lightning Pages
 
@@ -223,20 +235,20 @@ force-app/main/default/
 
 ### 5. Custom App
 
-- Create "Development Management" app
-- Include Feature and User Story tabs
-- Configure app navigation and utility items
-- Set default landing page to User Story List
+- ⏳ Create "Development Management" app (pending)
+- ⏳ Include Feature and User Story tabs (pending)
+- ⏳ Configure app navigation and utility items (pending)
+- ⏳ Set default landing page to User Story List (pending)
 
 ### 6. Security & Permissions
 
-- Create permission set `Development_Management_Access` initially without any permissions (can be assigned to users)
+- ✅ Create permission set `Development_Management_Access` initially without any permissions (can be assigned to users)
 - Incrementally add permissions as objects, fields, and components are created:
-  - Add Feature permissions: Full CRUD (read, create, edit, delete) for `Feature__c` object and edit access to Description__c, Status__c fields
-  - Add User Story permissions: Full CRUD (read, create, edit, delete) for `User_Story__c` object and edit access to Description__c, Status__c, Priority__c, Assignee__c, Feature__c, Acceptance_Criteria__c fields
-  - Add Apex class access: Grant access to `UserStoryController` Apex class
-  - Add LWC component access: Grant access to `userStoryList` and `userStoryKanban` LWC components
-- Set up sharing rules if needed for team collaboration
+  - ✅ Add Feature permissions: Full CRUD (read, create, edit, delete) for `Feature__c` object and edit access to Description__c, Status__c fields
+  - ✅ Add User Story permissions: Full CRUD (read, create, edit, delete) for `User_Story__c` object and edit access to Description__c, Status__c, Priority__c, Assignee__c, Acceptance_Criteria__c fields (Note: Feature__c is Master-Detail and automatically accessible)
+  - ⏳ Add Apex class access: Grant access to `UserStoryController` Apex class (pending)
+  - ⏳ Add LWC component access: Grant access to `userStoryList` and `userStoryKanban` LWC components (pending)
+- ⏳ Set up sharing rules if needed for team collaboration (pending - may not be needed with ControlledByParent sharing)
 
 ### 7. Testing
 
@@ -275,16 +287,21 @@ flowchart TD
 - ✅ `force-app/main/default/objects/Feature__c/listViews/All_Features.listView-meta.xml` (completed)
 - ✅ `force-app/main/default/objects/Feature__c/layouts/Feature__c-Feature Layout.layout-meta.xml` (completed - User_Story__c related list added)
 - ✅ `force-app/main/default/objects/User_Story__c/User_Story__c.object-meta.xml` (completed)
-- `force-app/main/default/objects/User_Story__c/listViews/All_User_Stories.listView-meta.xml`
-- `force-app/main/default/objects/User_Story__c/listViews/My_User_Stories.listView-meta.xml`
-- `force-app/main/default/objects/User_Story__c/listViews/Backlog.listView-meta.xml`
-- `force-app/main/default/classes/UserStoryController.cls`
-- `force-app/main/default/lwc/userStoryList/userStoryList.*`
-- `force-app/main/default/lwc/userStoryKanban/userStoryKanban.*`
-- `force-app/main/default/tabs/Feature__c.tab-meta.xml`
-- `force-app/main/default/tabs/User_Story__c.tab-meta.xml`
-- `force-app/main/default/applications/Development_Management.app-meta.xml`
-- ✅ `force-app/main/default/permissionsets/Development_Management_Access.permissionset-meta.xml` (completed)
+- ✅ `force-app/main/default/objects/User_Story__c/listViews/All.listView-meta.xml` (completed - note: named "All" instead of "All_User_Stories")
+- ✅ `force-app/main/default/objects/User_Story__c/listViews/My_User_Stories.listView-meta.xml` (completed)
+- ✅ `force-app/main/default/objects/User_Story__c/listViews/Backlog.listView-meta.xml` (completed)
+- ✅ `force-app/main/default/classes/UserStoryController.cls` (completed)
+- ✅ `force-app/main/default/classes/UserStoryControllerTest.cls` (completed)
+- ✅ `force-app/main/default/lwc/userStoryList/userStoryList.*` (completed)
+- ✅ `force-app/main/default/lwc/userStoryKanban/userStoryKanban.*` (completed)
+- ✅ `force-app/main/default/tabs/Feature__c.tab-meta.xml` (completed)
+- ✅ `force-app/main/default/tabs/User_Story__c.tab-meta.xml` (completed)
+- ✅ `force-app/main/default/layouts/User_Story__c-User Story Layout.layout-meta.xml` (completed - basic layout exists, needs enhancement)
+- `force-app/main/default/flexipages/User_Story_List_Page.flexipage-meta.xml` (pending)
+- `force-app/main/default/flexipages/User_Story_Kanban_Page.flexipage-meta.xml` (pending)
+- `force-app/main/default/flexipages/Feature_Record_Page.flexipage-meta.xml` (pending)
+- `force-app/main/default/applications/Development_Management.app-meta.xml` (pending)
+- ✅ `force-app/main/default/permissionsets/Development_Management_Access.permissionset-meta.xml` (completed - needs Apex class and LWC component permissions)
 
 ### Files to Modify
 

@@ -61,13 +61,16 @@ export default class UserStoryKanban extends NavigationMixin(LightningElement) {
                     priorityLabel: story.priority || 'Not Set',
                     priorityClass: this.getPriorityClass(story.priority),
                     assigneeDisplay: story.assigneeName || 'Unassigned',
-                    featureDisplay: story.featureName || 'No Feature'
+                    featureDisplay: story.featureName || 'No Feature',
+                    ariaLabel: 'User story ' + story.name
                 }));
                 this.storiesByStatus[column.value] = stories;
                 return {
                     ...column,
                     stories: stories,
-                    count: stories.length
+                    count: stories.length,
+                    columnAriaLabel: column.label + ' column',
+                    storiesAriaLabel: column.label + ' user stories'
                 };
             });
             this.error = undefined;
