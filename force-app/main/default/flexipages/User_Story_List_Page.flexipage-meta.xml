@@ -11,5 +11,8 @@
         <type>Region</type>
     </flexiPageRegions>
     <masterLabel>User Story List Page</masterLabel>
+    <template>
+        <name>flexipage:appHomeTemplateOneColumn</name>
+    </template>
     <type>AppPage</type>
 </FlexiPage>
