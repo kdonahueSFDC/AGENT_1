@@ -3,10 +3,10 @@ name: User Story Management App
 overview: Create a Salesforce app to manage development user stories organized by features, with both list views and Kanban board interfaces.
 todos:
   - id: create-feature-object
-    content: Create Feature__c custom object with Name, Description__c, and Status__c fields. Include object metadata, field definitions, list views, and page layouts. Note: Update Development_Management_Access permission set to grant permissions for Feature__c object and fields (handled in add-feature-permissions item).
+    content: "Create Feature__c custom object with Name, Description__c, and Status__c fields. Include object metadata, field definitions, list views, and page layouts. Note: Update Development_Management_Access permission set to grant permissions for Feature__c object and fields (handled in add-feature-permissions item)."
     status: completed
   - id: create-user-story-object
-    content: Create User_Story__c custom object with all required fields (Name, Description__c, Status__c, Priority__c, Assignee__c, Feature__c Master-Detail, Acceptance_Criteria__c). Include object metadata, field definitions, and page layouts. Note: Update Development_Management_Access permission set to grant permissions for User_Story__c object and fields (handled in add-user-story-permissions item).
+    content: "Create User_Story__c custom object with all required fields (Name, Description__c, Status__c, Priority__c, Assignee__c, Feature__c Master-Detail, Acceptance_Criteria__c). Include object metadata, field definitions, and page layouts. Note: Update Development_Management_Access permission set to grant permissions for User_Story__c object and fields (handled in add-user-story-permissions item)."
     status: completed
     dependencies:
       - create-feature-object
@@ -21,17 +21,17 @@ todos:
     dependencies:
       - create-user-story-object
   - id: create-apex-controller
-    content: Create UserStoryController.cls with methods for querying user stories, grouping by status, and updating status. Include proper security enforcement and error handling. Note: Update Development_Management_Access permission set to grant access to UserStoryController Apex class.
+    content: "Create UserStoryController.cls with methods for querying user stories, grouping by status, and updating status. Include proper security enforcement and error handling. Note: Update Development_Management_Access permission set to grant access to UserStoryController Apex class."
     status: in_progress
     dependencies:
       - create-user-story-object
   - id: create-list-component
-    content: Create userStoryList LWC component with data table, filtering by Feature/Status/Priority/Assignee, and pagination support. Note: Update Development_Management_Access permission set to grant access to userStoryList LWC component.
+    content: "Create userStoryList LWC component with data table, filtering by Feature/Status/Priority/Assignee, and pagination support. Note: Update Development_Management_Access permission set to grant access to userStoryList LWC component."
     status: pending
     dependencies:
       - create-apex-controller
   - id: create-kanban-component
-    content: Create userStoryKanban LWC component with drag-and-drop functionality to update status, displaying cards with key information. Note: Update Development_Management_Access permission set to grant access to userStoryKanban LWC component.
+    content: "Create userStoryKanban LWC component with drag-and-drop functionality to update status, displaying cards with key information. Note: Update Development_Management_Access permission set to grant access to userStoryKanban LWC component."
     status: pending
     dependencies:
       - create-apex-controller
@@ -55,10 +55,10 @@ todos:
       - create-tabs
   - id: create-permission-set
     content: Create Development_Management_Access permission set without any permissions initially. This will be a base permission set that can be assigned to users, with permissions added incrementally as objects, fields, and components are created.
-    status: pending
+    status: completed
   - id: add-feature-permissions
     content: Update Development_Management_Access permission set to add full CRUD permissions (read, create, edit, delete) for Feature__c object and edit access to all Feature__c custom fields (Description__c, Status__c).
-    status: pending
+    status: completed
     dependencies:
       - create-feature-object
       - create-permission-set
@@ -269,7 +269,7 @@ flowchart TD
 - `force-app/main/default/tabs/Feature__c.tab-meta.xml`
 - `force-app/main/default/tabs/User_Story__c.tab-meta.xml`
 - `force-app/main/default/applications/Development_Management.app-meta.xml`
-- `force-app/main/default/permissionsets/Development_Management_Access.permissionset-meta.xml`
+- ✅ `force-app/main/default/permissionsets/Development_Management_Access.permissionset-meta.xml` (completed)
 
 ### Files to Modify
 
