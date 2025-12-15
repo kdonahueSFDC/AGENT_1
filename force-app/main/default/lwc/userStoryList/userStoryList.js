@@ -294,4 +294,3 @@ export default class UserStoryList extends LightningElement {
         this.dispatchEvent(evt);
     }
 }
-
