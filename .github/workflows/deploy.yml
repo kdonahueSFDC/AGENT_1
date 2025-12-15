@@ -32,6 +32,35 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Run Jest Tests
+        id: jest-tests
+        continue-on-error: false
+        run: |
+          # Run Jest tests with --passWithNoTests to avoid failing when no tests exist
+          npx sfdx-lwc-jest --passWithNoTests || JEST_EXIT_CODE=$?
+          
+          if [ "${JEST_EXIT_CODE:-0}" -ne 0 ]; then
+            echo "Jest tests failed"
+            echo "::error::Jest test suite failed. Check test output above for details."
+            exit 1
+          fi
+          
+          echo "Jest tests passed (or no tests found)"
+
+      - name: Upload Jest Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jest-test-results
+          path: |
+            coverage/
+            jest-results.json
+          retention-days: 30
+          if-no-files-found: ignore
+
       - name: Setup Java (required for PMD and CPD engines)
         uses: actions/setup-java@v4
         with:
