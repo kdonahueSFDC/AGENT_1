@@ -45,16 +45,6 @@
                 <identifier>force_highlightsPanel</identifier>
             </componentInstance>
         </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>tabs</name>
-                    <value>maintabs</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:tabset</componentName>
-                <identifier>flexipage_tabset</identifier>
-            </componentInstance>
-        </itemInstances>
         <mode>Replace</mode>
         <name>header</name>
         <type>Region</type>
