@@ -80,11 +80,6 @@
         <name>main</name>
         <type>Region</type>
     </flexiPageRegions>
-    <flexiPageRegions>
-        <mode>Replace</mode>
-        <name>sidebar</name>
-        <type>Region</type>
-    </flexiPageRegions>
     <masterLabel>Feature Record Page</masterLabel>
     <sobjectType>Feature__c</sobjectType>
     <template>
