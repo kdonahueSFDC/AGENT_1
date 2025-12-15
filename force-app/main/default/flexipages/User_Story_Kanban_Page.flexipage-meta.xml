@@ -11,8 +11,5 @@
         <type>Region</type>
     </flexiPageRegions>
     <masterLabel>User Story Kanban Page</masterLabel>
-    <template>
-        <name>flexipage:appPageTemplate</name>
-    </template>
     <type>AppPage</type>
 </FlexiPage>
