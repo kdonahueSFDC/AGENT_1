@@ -1,0 +1,163 @@
+<template>
+    <lightning-card title="User Stories Kanban Board" icon-name="standard:story">
+        <div class="slds-m-around_medium">
+            <!-- Filters Section -->
+            <div class="slds-m-bottom_medium">
+                <lightning-layout multiple-rows>
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="4">
+                        <lightning-combobox
+                            label="Feature"
+                            value={selectedFeatureId}
+                            options={featureOptions}
+                            onchange={handleFeatureChange}
+                            placeholder="All Features"
+                        ></lightning-combobox>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="4" class="slds-align_absolute-center">
+                        <template if:true={hasFilters}>
+                            <lightning-button
+                                label="Clear Filters"
+                                onclick={handleClearFilters}
+                                variant="neutral"
+                                class="slds-m-top_large"
+                            ></lightning-button>
+                        </template>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </div>
+
+            <!-- Loading Spinner -->
+            <template if:true={isLoading}>
+                <div class="slds-align_absolute-center slds-m-vertical_large">
+                    <lightning-spinner alternative-text="Loading user stories" size="medium"></lightning-spinner>
+                </div>
+            </template>
+
+            <!-- Error Message -->
+            <template if:false={isLoading}>
+                <template if:true={error}>
+                    <div class="slds-text-color_error slds-m-vertical_medium">
+                        <p>Error loading user stories. Please contact your administrator.</p>
+                    </div>
+                </template>
+
+                <!-- Kanban Board -->
+                <template if:false={error}>
+                    <div class="kanban-board slds-grid slds-grid_pull-padded slds-wrap" role="region" aria-label="User Stories Kanban Board">
+                        <template for:each={columnsWithStories} for:item="column">
+                            <div
+                                key={column.value}
+                                class="kanban-column slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-5 slds-p-around_small"
+                                data-status={column.value}
+                                ondragover={handleDragOver}
+                                ondragleave={handleDragLeave}
+                                ondrop={handleDrop}
+                                role="region"
+                                aria-label="{column.label} column"
+                            >
+                                <!-- Column Header -->
+                                <div class="slds-card slds-card_boundary">
+                                    <div class="slds-card__header slds-grid slds-grid_align-spread">
+                                        <header class="slds-media slds-media_center">
+                                            <div class="slds-media__figure">
+                                                <lightning-icon icon-name={column.icon} size="small" alternative-text={column.label}></lightning-icon>
+                                            </div>
+                                            <div class="slds-media__body">
+                                                <h2 class="slds-card__header-title">
+                                                    <span>{column.label}</span>
+                                                </h2>
+                                            </div>
+                                        </header>
+                                        <div class="slds-badge slds-badge_lightest">
+                                            <span class="slds-badge__content">{column.count}</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Column Body -->
+                                    <div class="slds-card__body slds-card__body_inner kanban-column-body" role="list" aria-label="{column.label} user stories">
+                                        <template if:true={column.count}>
+                                            <template for:each={column.stories} for:item="story">
+                                                <article
+                                                    key={story.id}
+                                                    class="kanban-card slds-card slds-card_boundary slds-m-bottom_small"
+                                                    data-story-id={story.id}
+                                                    data-story-status={story.status}
+                                                    draggable="true"
+                                                    ondragstart={handleDragStart}
+                                                    ondragend={handleDragEnd}
+                                                    onclick={handleCardClick}
+                                                    onkeydown={handleCardKeyDown}
+                                                    role="listitem"
+                                                    tabindex="0"
+                                                    aria-label="User story {story.name}"
+                                                >
+                                                    <div class="slds-card__body slds-card__body_inner">
+                                                        <!-- Story Title -->
+                                                        <div class="slds-m-bottom_x-small">
+                                                            <h3 class="slds-text-heading_small slds-truncate" title={story.name}>
+                                                                {story.name}
+                                                            </h3>
+                                                        </div>
+
+                                                        <!-- Priority Badge -->
+                                                        <div class="slds-m-bottom_x-small" if:true={story.priority}>
+                                                            <span class={story.priorityClass}>
+                                                                {story.priorityLabel}
+                                                            </span>
+                                                        </div>
+
+                                                        <!-- Feature -->
+                                                        <div class="slds-m-bottom_x-small">
+                                                            <div class="slds-media">
+                                                                <div class="slds-media__figure">
+                                                                    <lightning-icon icon-name="standard:feature" size="xx-small" alternative-text="Feature"></lightning-icon>
+                                                                </div>
+                                                                <div class="slds-media__body">
+                                                                    <p class="slds-text-body_small slds-text-color_weak slds-truncate" title={story.featureDisplay}>
+                                                                        {story.featureDisplay}
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Assignee -->
+                                                        <div class="slds-m-bottom_x-small">
+                                                            <div class="slds-media">
+                                                                <div class="slds-media__figure">
+                                                                    <lightning-icon icon-name="standard:user" size="xx-small" alternative-text="Assignee"></lightning-icon>
+                                                                </div>
+                                                                <div class="slds-media__body">
+                                                                    <p class="slds-text-body_small slds-text-color_weak slds-truncate" title={story.assigneeDisplay}>
+                                                                        {story.assigneeDisplay}
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </article>
+                                            </template>
+                                        </template>
+
+                                        <template if:false={column.count}>
+                                            <div class="slds-text-align_center slds-p-vertical_medium">
+                                                <p class="slds-text-body_small slds-text-color_weak">No user stories</p>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+
+                    <!-- Updating Indicator -->
+                    <template if:true={isUpdating}>
+                        <div class="slds-align_absolute-center slds-m-top_small">
+                            <lightning-spinner alternative-text="Updating status" size="small"></lightning-spinner>
+                        </div>
+                    </template>
+                </template>
+            </template>
+        </div>
+    </lightning-card>
+</template>
+
