@@ -104,7 +104,7 @@ public with sharing class UserStoryController {
         String query = 'SELECT Id, Name, Description__c, Status__c, Priority__c, ' +
                       'Assignee__c, Assignee__r.Name, Assignee__r.Id, ' +
                       'Feature__c, Feature__r.Name, Feature__r.Id, ' +
-                      'Acceptance_Criteria__c, CreatedDate ' +
+                      'Acceptance_Criteria__c, CreatedDate, LastModifiedDate ' +
                       'FROM User_Story__c' + whereClause + 
                       ' WITH SECURITY_ENFORCED ' +
                       'ORDER BY Priority__c DESC NULLS LAST, Name ASC';
@@ -148,7 +148,7 @@ public with sharing class UserStoryController {
                 SELECT Id, Name, Description__c, Status__c, Priority__c,
                        Assignee__c, Assignee__r.Name, Assignee__r.Id,
                        Feature__c, Feature__r.Name, Feature__r.Id,
-                       Acceptance_Criteria__c, CreatedDate
+                       Acceptance_Criteria__c, CreatedDate, LastModifiedDate
                 FROM User_Story__c
                 WHERE Id = :storyId
                 WITH SECURITY_ENFORCED
@@ -165,8 +165,24 @@ public with sharing class UserStoryController {
             // Update with security enforcement
             update story;
             
+            // Re-query to get fresh data including LastModifiedDate
+            List<User_Story__c> updatedStories = [
+                SELECT Id, Name, Description__c, Status__c, Priority__c,
+                       Assignee__c, Assignee__r.Name, Assignee__r.Id,
+                       Feature__c, Feature__r.Name, Feature__r.Id,
+                       Acceptance_Criteria__c, CreatedDate, LastModifiedDate
+                FROM User_Story__c
+                WHERE Id = :storyId
+                WITH SECURITY_ENFORCED
+                LIMIT 1
+            ];
+            
+            if (updatedStories.isEmpty()) {
+                throw new AuraHandledException('User story not found after update');
+            }
+            
             // Return updated record
-            return new UserStoryWrapper(story);
+            return new UserStoryWrapper(updatedStories[0]);
             
         } catch (DmlException e) {
             throw new AuraHandledException('Failed to update user story: ' + e.getMessage());

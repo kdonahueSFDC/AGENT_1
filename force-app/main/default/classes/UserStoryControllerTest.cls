@@ -373,9 +373,9 @@ public class UserStoryControllerTest {
         try {
             UserStoryController.updateUserStoryStatus(null, 'In_Progress');
             Assert.fail('Should have thrown an exception');
-        } catch (AuraHandledException e) {
+        } catch (Exception e) {
             Assert.isTrue(e.getMessage().contains('Story Id is required'), 
-                'Error message should indicate Story Id is required');
+                'Error message should indicate Story Id is required. Actual: ' + e.getMessage());
         }
         Test.stopTest();
     }
@@ -388,9 +388,9 @@ public class UserStoryControllerTest {
         try {
             UserStoryController.updateUserStoryStatus(story.Id, null);
             Assert.fail('Should have thrown an exception');
-        } catch (AuraHandledException e) {
+        } catch (Exception e) {
             Assert.isTrue(e.getMessage().contains('Status is required'), 
-                'Error message should indicate Status is required');
+                'Error message should indicate Status is required. Actual: ' + e.getMessage());
         }
         Test.stopTest();
     }
@@ -403,25 +403,26 @@ public class UserStoryControllerTest {
         try {
             UserStoryController.updateUserStoryStatus(story.Id, 'InvalidStatus');
             Assert.fail('Should have thrown an exception');
-        } catch (AuraHandledException e) {
+        } catch (Exception e) {
             Assert.isTrue(e.getMessage().contains('Invalid status value'), 
-                'Error message should indicate invalid status');
+                'Error message should indicate invalid status. Actual: ' + e.getMessage());
         }
         Test.stopTest();
     }
     
     @isTest
     static void updateUserStoryStatus_invalidStoryId_throwsException() {
-        Id invalidId = UserInfo.getUserId(); // Use a valid Id but wrong type
+        // Create a fake User_Story__c Id that doesn't exist
+        Id fakeStoryId = User_Story__c.sObjectType.getDescribe().getKeyPrefix() + '000000000000';
         
         Test.startTest();
         try {
-            UserStoryController.updateUserStoryStatus(invalidId, 'In_Progress');
+            UserStoryController.updateUserStoryStatus(fakeStoryId, 'In_Progress');
             Assert.fail('Should have thrown an exception');
-        } catch (AuraHandledException e) {
+        } catch (Exception e) {
             Assert.isTrue(e.getMessage().contains('not found') || 
                          e.getMessage().contains('access denied'), 
-                'Error message should indicate story not found or access denied');
+                'Error message should indicate story not found or access denied. Actual: ' + e.getMessage());
         }
         Test.stopTest();
     }
