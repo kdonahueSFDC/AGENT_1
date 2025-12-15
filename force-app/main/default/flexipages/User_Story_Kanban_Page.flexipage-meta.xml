@@ -12,7 +12,7 @@
     </flexiPageRegions>
     <masterLabel>User Story Kanban Page</masterLabel>
     <template>
-        <name>one:oneColumn</name>
+        <name>flexipage:appPageTemplate</name>
     </template>
     <type>AppPage</type>
 </FlexiPage>
