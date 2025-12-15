@@ -53,24 +53,10 @@
         <style>CustomLinks</style>
     </layoutSections>
     <relatedLists>
-        <fields>TASK.SUBJECT</fields>
-        <fields>TASK.STATUS</fields>
-        <fields>TASK.PRIORITY</fields>
-        <fields>TASK.WHO_NAME</fields>
-        <relatedList>RelatedHistoryList</relatedList>
-    </relatedLists>
-    <relatedLists>
         <fields>NAME</fields>
         <fields>CREATED_DATE</fields>
         <fields>CREATED_BY</fields>
         <relatedList>RelatedNoteList</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <fields>ACTIVITY.SUBJECT</fields>
-        <fields>ACTIVITY.DUE_DATE</fields>
-        <fields>ACTIVITY.STATUS</fields>
-        <fields>ACTIVITY.PRIORITY</fields>
-        <relatedList>RelatedActivityList</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showInteractionLogPanel>false</showInteractionLogPanel>
