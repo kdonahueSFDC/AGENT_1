@@ -120,7 +120,7 @@ todos:
       - enhance-feature-layout
   - id: create-feature-record-page
     content: Create Feature_Record_Page.flexipage-meta.xml record page for Feature__c object. This should use the standard record page template and include the related list of User Stories. Currently referenced in plan but file does not exist.
-    status: pending
+    status: completed
     dependencies:
       - create-feature-object
       - create-user-story-object
