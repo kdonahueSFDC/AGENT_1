@@ -3,10 +3,10 @@ name: User Story Management App
 overview: Create a Salesforce app to manage development user stories organized by features, with both list views and Kanban board interfaces.
 todos:
   - id: create-feature-object
-    content: "Create Feature__c custom object with Name, Description__c, and Status__c fields. Include object metadata, field definitions, list views, and page layouts. Note: Update Development_Management_Access permission set to grant permissions for Feature__c object and fields (handled in add-feature-permissions item)."
+    content: ""
     status: completed
   - id: create-user-story-object
-    content: "Create User_Story__c custom object with all required fields (Name, Description__c, Status__c, Priority__c, Assignee__c, Feature__c Master-Detail, Acceptance_Criteria__c). Include object metadata, field definitions, and page layouts. Note: Update Development_Management_Access permission set to grant permissions for User_Story__c object and fields (handled in add-user-story-permissions item)."
+    content: ""
     status: completed
     dependencies:
       - create-feature-object
@@ -21,17 +21,17 @@ todos:
     dependencies:
       - create-user-story-object
   - id: create-apex-controller
-    content: "Create UserStoryController.cls with methods for querying user stories, grouping by status, and updating status. Include proper security enforcement and error handling. Note: Update Development_Management_Access permission set to grant access to UserStoryController Apex class."
-    status: in_progress
+    content: ""
+    status: completed
     dependencies:
       - create-user-story-object
   - id: create-list-component
-    content: "Create userStoryList LWC component with data table, filtering by Feature/Status/Priority/Assignee, and pagination support. Note: Update Development_Management_Access permission set to grant access to userStoryList LWC component."
+    content: ""
     status: pending
     dependencies:
       - create-apex-controller
   - id: create-kanban-component
-    content: "Create userStoryKanban LWC component with drag-and-drop functionality to update status, displaying cards with key information. Note: Update Development_Management_Access permission set to grant access to userStoryKanban LWC component."
+    content: ""
     status: pending
     dependencies:
       - create-apex-controller
@@ -63,8 +63,8 @@ todos:
       - create-feature-object
       - create-permission-set
   - id: add-user-story-permissions
-    content: Update Development_Management_Access permission set to add full CRUD permissions (read, create, edit, delete) for User_Story__c object and edit access to all User_Story__c custom fields (Description__c, Status__c, Priority__c, Assignee__c, Feature__c, Acceptance_Criteria__c).
-    status: pending
+    content: "Update Development_Management_Access permission set to add full CRUD permissions (read, create, edit, delete) for User_Story__c object and edit access to all User_Story__c custom fields (Description__c, Status__c, Priority__c, Assignee__c, Feature__c, Acceptance_Criteria__c). Note: Feature__c is a Master-Detail field and cannot be controlled via permission sets - it's automatically accessible with object access."
+    status: completed
     dependencies:
       - create-user-story-object
       - create-permission-set
@@ -83,9 +83,24 @@ todos:
       - create-permission-set
   - id: create-tests
     content: Create UserStoryControllerTest.cls with comprehensive unit tests achieving 80%+ code coverage, including error cases and security enforcement.
-    status: pending
+    status: completed
     dependencies:
       - create-apex-controller
+  - id: create-user-story-layout
+    content: Create User_Story__c-User Story Layout.layout-meta.xml page layout with all User_Story__c fields organized in logical sections.
+    status: pending
+    dependencies:
+      - create-user-story-object
+  - id: create-jest-tests-list-component
+    content: Create Jest unit tests for userStoryList LWC component to test filtering, sorting, pagination, and user interactions.
+    status: pending
+    dependencies:
+      - create-list-component
+  - id: create-jest-tests-kanban-component
+    content: Create Jest unit tests for userStoryKanban LWC component to test drag-and-drop functionality, status updates, and card rendering.
+    status: pending
+    dependencies:
+      - create-kanban-component
 ---
 
 # User Story Management App Development Plan
