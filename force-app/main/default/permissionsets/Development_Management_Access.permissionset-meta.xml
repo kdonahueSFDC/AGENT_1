@@ -33,11 +33,6 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>User_Story__c.Feature__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
         <field>User_Story__c.Acceptance_Criteria__c</field>
         <readable>true</readable>
     </fieldPermissions>
