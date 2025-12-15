@@ -12,7 +12,7 @@
     </flexiPageRegions>
     <masterLabel>User Story List Page</masterLabel>
     <template>
-        <name>flexipage:appHomeTemplateOneColumn</name>
+        <name>lightning:appHomeTemplateOneColumn</name>
     </template>
     <type>AppPage</type>
 </FlexiPage>
