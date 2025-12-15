@@ -19,11 +19,6 @@
                 <identifier>detailTab</identifier>
             </componentInstance>
         </itemInstances>
-        <mode>Replace</mode>
-        <name>maintabs</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
