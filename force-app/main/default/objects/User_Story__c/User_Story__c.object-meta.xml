@@ -150,9 +150,9 @@
     <enableLicensing>false</enableLicensing>
     <enableReports>false</enableReports>
     <enableSearch>true</enableSearch>
-    <enableSharing>true</enableSharing>
+    <enableSharing>false</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
-    <externalSharingModel>Private</externalSharingModel>
+    <externalSharingModel>ControlledByParent</externalSharingModel>
     <description>Individual user stories that represent specific development work items. User stories are organized under features and track progress, priority, assignment, and acceptance criteria.</description>
     <label>User Story</label>
     <nameField>
@@ -161,6 +161,6 @@
     </nameField>
     <pluralLabel>User Stories</pluralLabel>
     <searchLayouts></searchLayouts>
-    <sharingModel>Private</sharingModel>
+    <sharingModel>ControlledByParent</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>
