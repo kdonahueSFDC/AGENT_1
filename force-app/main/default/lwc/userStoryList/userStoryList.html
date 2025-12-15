@@ -1,0 +1,111 @@
+<template>
+    <lightning-card title="User Stories" icon-name="standard:story">
+        <div class="slds-m-around_medium">
+            <!-- Filters Section -->
+            <div class="slds-m-bottom_medium">
+                <lightning-layout multiple-rows>
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="3">
+                        <lightning-combobox
+                            label="Feature"
+                            value={selectedFeatureId}
+                            options={featureOptions}
+                            onchange={handleFeatureChange}
+                            placeholder="All Features"
+                        ></lightning-combobox>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="3">
+                        <lightning-combobox
+                            label="Status"
+                            value={selectedStatus}
+                            options={statusOptions}
+                            onchange={handleStatusChange}
+                            placeholder="All Statuses"
+                        ></lightning-combobox>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="3">
+                        <lightning-combobox
+                            label="Priority"
+                            value={selectedPriority}
+                            options={priorityOptions}
+                            onchange={handlePriorityChange}
+                            placeholder="All Priorities"
+                        ></lightning-combobox>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" medium-device-size="6" large-device-size="3" class="slds-align_absolute-center">
+                        <template if:true={hasFilters}>
+                            <lightning-button
+                                label="Clear Filters"
+                                onclick={handleClearFilters}
+                                variant="neutral"
+                                class="slds-m-top_large"
+                            ></lightning-button>
+                        </template>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </div>
+
+            <!-- Loading Spinner -->
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading user stories" size="medium"></lightning-spinner>
+            </template>
+
+            <!-- Data Table -->
+            <template if:false={isLoading}>
+                <template if:true={error}>
+                    <div class="slds-text-color_error">
+                        <p>Error loading user stories. Please contact your administrator.</p>
+                    </div>
+                </template>
+
+                <template if:false={error}>
+                    <template if:true={userStories.length}>
+                        <lightning-datatable
+                            key-field="id"
+                            data={userStories}
+                            columns={columns}
+                            hide-checkbox-column
+                            show-row-number-column
+                            onsort={handleSort}
+                            sorted-by={sortBy}
+                            sorted-direction={sortDirection}
+                        ></lightning-datatable>
+
+                        <!-- Pagination Controls -->
+                        <div class="slds-m-top_medium slds-grid slds-grid_align-spread">
+                            <div class="slds-col slds-align-middle">
+                                <span class="slds-text-body_small">{pageInfo}</span>
+                            </div>
+                            <div class="slds-col">
+                                <lightning-layout>
+                                    <lightning-layout-item>
+                                        <lightning-button
+                                            label="Previous"
+                                            onclick={handlePrevious}
+                                            disabled={isPreviousDisabled}
+                                            variant="neutral"
+                                        ></lightning-button>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item class="slds-m-left_small">
+                                        <lightning-button
+                                            label="Next"
+                                            onclick={handleNext}
+                                            disabled={isNextDisabled}
+                                            variant="brand"
+                                        ></lightning-button>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                            </div>
+                        </div>
+                    </template>
+
+                    <template if:false={userStories.length}>
+                        <div class="slds-text-align_center slds-m-vertical_medium">
+                            <p class="slds-text-body_regular">No user stories found.</p>
+                        </div>
+                    </template>
+                </template>
+            </template>
+        </div>
+    </lightning-card>
+</template>
+
