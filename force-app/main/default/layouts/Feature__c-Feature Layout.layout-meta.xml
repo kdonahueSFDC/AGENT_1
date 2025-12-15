@@ -66,6 +66,15 @@
         <layoutColumns/>
         <style>CustomLinks</style>
     </layoutSections>
+    <relatedLists>
+        <relatedList>
+            <fields>NAME</fields>
+            <fields>STATUS__C</fields>
+            <fields>PRIORITY__C</fields>
+            <fields>ASSIGNEE__C</fields>
+            <relatedList>User_Stories__r</relatedList>
+        </relatedList>
+    </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>
     <showInteractionLogPanel>false</showInteractionLogPanel>
