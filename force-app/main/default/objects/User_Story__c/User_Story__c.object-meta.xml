@@ -150,7 +150,7 @@
     <enableLicensing>false</enableLicensing>
     <enableReports>false</enableReports>
     <enableSearch>true</enableSearch>
-    <enableSharing>false</enableSharing>
+    <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
     <externalSharingModel>ControlledByParent</externalSharingModel>
     <description>Individual user stories that represent specific development work items. User stories are organized under features and track progress, priority, assignment, and acceptance criteria.</description>
