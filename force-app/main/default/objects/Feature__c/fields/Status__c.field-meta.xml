@@ -18,7 +18,7 @@
                 <label>Draft</label>
             </value>
             <value>
-                <fullName>In Progress</fullName>
+                <fullName>In_Progress</fullName>
                 <default>false</default>
                 <label>In Progress</label>
             </value>
