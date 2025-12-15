@@ -4,12 +4,17 @@ overview: Create a Salesforce app to manage development user stories organized b
 todos:
   - id: create-feature-object
     content: Create Feature__c custom object with Name, Description__c, and Status__c fields. Include object metadata, field definitions, list views, and page layouts.
-    status: pending
+    status: completed
   - id: create-user-story-object
     content: Create User_Story__c custom object with all required fields (Name, Description__c, Status__c, Priority__c, Assignee__c, Feature__c Master-Detail, Acceptance_Criteria__c). Include object metadata, field definitions, list views, and page layouts.
     status: pending
     dependencies:
       - create-feature-object
+  - id: add-user-story-related-list
+    content: Add User_Story__c related list to Feature__c layout showing Name, Status, Priority, and Assignee fields. This was removed during initial Feature__c creation to avoid validation errors.
+    status: pending
+    dependencies:
+      - create-user-story-object
   - id: create-apex-controller
     content: Create UserStoryController.cls with methods for querying user stories, grouping by status, and updating status. Include proper security enforcement and error handling.
     status: pending
@@ -127,8 +132,10 @@ force-app/main/default/
 
 ### 1. Custom Objects & Fields
 
-- Create `Feature__c` object with standard and custom fields
+- ✅ Create `Feature__c` object with standard and custom fields
+  - **Note**: User_Story__c related list was intentionally omitted from Feature__c layout during initial creation to avoid validation errors. It will be added after User_Story__c object is created.
 - Create `User_Story__c` object with Master-Detail relationship to `Feature__c`
+- Add User_Story__c related list to Feature__c layout after User_Story__c object exists
 - Configure field-level security and validation rules
 - Set up list views with filters for common use cases
 
@@ -209,13 +216,21 @@ flowchart TD
 
 ### New Files
 
-- `force-app/main/default/objects/Feature__c/Feature__c.object-meta.xml`
+- ✅ `force-app/main/default/objects/Feature__c/Feature__c.object-meta.xml` (completed)
+- ✅ `force-app/main/default/objects/Feature__c/fields/Description__c.field-meta.xml` (completed)
+- ✅ `force-app/main/default/objects/Feature__c/fields/Status__c.field-meta.xml` (completed)
+- ✅ `force-app/main/default/objects/Feature__c/listViews/All_Features.listView-meta.xml` (completed)
+- ✅ `force-app/main/default/objects/Feature__c/layouts/Feature__c-Feature Layout.layout-meta.xml` (completed - User_Story__c related list to be added later)
 - `force-app/main/default/objects/User_Story__c/User_Story__c.object-meta.xml`
 - `force-app/main/default/classes/UserStoryController.cls`
 - `force-app/main/default/lwc/userStoryList/userStoryList.*`
 - `force-app/main/default/lwc/userStoryKanban/userStoryKanban.*`
 - `force-app/main/default/applications/Development_Management.app-meta.xml`
 - `force-app/main/default/permissionsets/Development_Management_Access.permissionset-meta.xml`
+
+### Files to Modify
+
+- `force-app/main/default/objects/Feature__c/layouts/Feature__c-Feature Layout.layout-meta.xml` - Add User_Story__c related list after User_Story__c object is created
 
 ### Reference Existing Patterns
 
