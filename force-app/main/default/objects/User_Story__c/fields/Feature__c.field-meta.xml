@@ -7,6 +7,5 @@
     <referenceTo>Feature__c</referenceTo>
     <relationshipLabel>User Stories</relationshipLabel>
     <relationshipName>User_Stories</relationshipName>
-    <required>true</required>
     <type>MasterDetail</type>
 </CustomField>
