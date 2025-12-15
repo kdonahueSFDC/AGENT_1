@@ -36,8 +36,8 @@ todos:
     dependencies:
       - create-apex-controller
   - id: create-lightning-pages
-    content: Create flexipages for User Story List, User Story Kanban, and Feature Record pages with appropriate component layouts.
-    status: pending
+    content: Create flexipages for User Story List and User Story Kanban pages with appropriate component layouts.
+    status: completed
     dependencies:
       - create-list-component
       - create-kanban-component
