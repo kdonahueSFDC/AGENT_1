@@ -103,7 +103,7 @@ todos:
       - create-kanban-component
   - id: enhance-user-story-layout
     content: Enhance User_Story__c-User Story Layout.layout-meta.xml to include all custom fields (Description__c, Status__c, Priority__c, Assignee__c, Feature__c, Acceptance_Criteria__c) organized in logical sections (Story Details, Assignment, Acceptance Criteria). Currently only has Name and system fields.
-    status: pending
+    status: completed
     dependencies:
       - create-user-story-object
       - create-user-story-layout
@@ -114,7 +114,7 @@ todos:
       - create-feature-object
   - id: verify-user-story-related-list
     content: Verify and add User_Story__c related list to Feature__c layout if missing. Related list should show Name, Status, Priority, and Assignee fields. The plan indicates this was completed, but verification is needed.
-    status: pending
+    status: completed
     dependencies:
       - create-user-story-object
       - enhance-feature-layout
@@ -133,68 +133,58 @@ todos:
   - id: create-user-story-record-page
     content: "[LOW PRIORITY] Create User_Story_Record_Page.flexipage-meta.xml custom record page for User_Story__c object. Currently using default record page. Custom page could provide better UX with organized sections and related information."
     status: pending
-    priority: low
     dependencies:
       - create-user-story-object
       - enhance-user-story-layout
   - id: create-validation-rules
     content: "[LOW PRIORITY] Create validation rules for data integrity: require Feature__c on User_Story__c, prevent invalid status transitions (e.g., Done back to In Progress), require Assignee__c when Status__c is In Progress, etc. These rules help maintain data quality and enforce business logic."
     status: pending
-    priority: low
     dependencies:
       - create-user-story-object
   - id: create-record-types
     content: "[LOW PRIORITY] Create record types for Feature__c and/or User_Story__c if different workflows or processes are needed. Record types allow different page layouts, picklist values, and processes for different use cases."
     status: pending
-    priority: low
     dependencies:
       - create-feature-object
       - create-user-story-object
   - id: configure-field-history-tracking
     content: "[LOW PRIORITY] Configure field history tracking for additional fields beyond Status__c. Consider tracking Priority__c, Assignee__c, and other key fields that change over time. Status__c already has trackHistory enabled."
     status: pending
-    priority: low
     dependencies:
       - create-user-story-object
   - id: create-search-layouts
     content: "[LOW PRIORITY] Create custom search layouts for Feature__c and User_Story__c objects. Search layouts customize which fields appear in search results, improving user experience when searching for records."
     status: pending
-    priority: low
     dependencies:
       - create-feature-object
       - create-user-story-object
   - id: configure-page-layout-assignments
     content: "[LOW PRIORITY] Configure page layout assignments to profiles if different profiles need different layouts. Currently layouts exist but may need explicit profile assignments for proper access control."
     status: pending
-    priority: low
     dependencies:
       - enhance-user-story-layout
       - enhance-feature-layout
   - id: configure-record-page-assignments
     content: "[LOW PRIORITY] Configure record page assignments to profiles and/or record types. Assign custom record pages (Feature_Record_Page, User_Story_Record_Page) to appropriate profiles or record types for better UX."
     status: pending
-    priority: low
     dependencies:
       - create-feature-record-page
       - create-user-story-record-page
   - id: add-field-help-text
     content: "[LOW PRIORITY] Add inline help text to fields for better user guidance. Field descriptions exist, but inline help text appears directly on the page and can improve user understanding of field purpose and usage."
     status: pending
-    priority: low
     dependencies:
       - create-feature-object
       - create-user-story-object
   - id: create-automation-flows
     content: "[LOW PRIORITY] Create Flow automation for business processes: notifications on status changes, automatic field updates, assignment rules, etc. Consider using Salesforce Flow for declarative automation instead of code-based triggers."
     status: pending
-    priority: low
     dependencies:
       - create-feature-object
       - create-user-story-object
   - id: create-reports-dashboards
     content: "[LOW PRIORITY] Create standard reports and dashboards for tracking user stories and features: velocity reports, status distribution, assignee workload, feature completion rates, etc. These help with project management and visibility."
     status: pending
-    priority: low
     dependencies:
       - create-feature-object
       - create-user-story-object
@@ -281,9 +271,9 @@ force-app/main/default/
 - ✅ Create `Feature__c` object with standard and custom fields
   - **Note**: User_Story__c related list was intentionally omitted from Feature__c layout during initial creation to avoid validation errors. It will be added after User_Story__c object is created.
 - ✅ Create `User_Story__c` object with Master-Detail relationship to `Feature__c`
-- ⏳ Add User_Story__c related list to Feature__c layout after User_Story__c object exists (pending - needs verification - related list not found in layout)
+- ✅ Add User_Story__c related list to Feature__c layout (completed - related list User_Stories__r is present in layout)
 - ✅ Enhance Feature__c layout with Description__c and Status__c fields (completed - fields are present in "Feature Details" section)
-- ⏳ Enhance User_Story__c layout with all custom fields (pending)
+- ✅ Enhance User_Story__c layout with all custom fields (completed - all fields organized in Story Details, Assignment, and Acceptance Criteria sections)
 - ⏳ Create compact layouts for Feature__c and User_Story__c (pending)
 - ✅ Configure field-level security and validation rules
 - ✅ Set up list views with filters for common use cases (All, My_User_Stories, Backlog)
@@ -325,7 +315,7 @@ force-app/main/default/
 
 - ✅ **User Story List Page**: Home page with list component and filters (completed)
 - ✅ **User Story Kanban Page**: Alternative view with Kanban component (completed)
-- ⏳ **Feature Record Page**: Shows feature details with related list of user stories (pending - needs to be created)
+- ✅ **Feature Record Page**: Shows feature details with related list of user stories (completed - includes highlights panel, tab set, and detail panel)
 
 ### 5. Custom App
 
@@ -393,17 +383,17 @@ flowchart TD
 - ✅ `force-app/main/default/lwc/userStoryKanban/__tests__/userStoryKanban.test.js` (completed)
 - ✅ `force-app/main/default/tabs/Feature__c.tab-meta.xml` (completed)
 - ✅ `force-app/main/default/tabs/User_Story__c.tab-meta.xml` (completed)
-- ✅ `force-app/main/default/layouts/User_Story__c-User Story Layout.layout-meta.xml` (completed - basic layout exists, needs enhancement)
+- ✅ `force-app/main/default/layouts/User_Story__c-User Story Layout.layout-meta.xml` (completed - all custom fields organized in logical sections)
 - ✅ `force-app/main/default/flexipages/User_Story_List_Page.flexipage-meta.xml` (completed)
 - ✅ `force-app/main/default/flexipages/User_Story_Kanban_Page.flexipage-meta.xml` (completed)
-- ⏳ `force-app/main/default/flexipages/Feature_Record_Page.flexipage-meta.xml` (pending - needs to be created)
+- ✅ `force-app/main/default/flexipages/Feature_Record_Page.flexipage-meta.xml` (completed - includes highlights panel, tab set, and detail panel)
 - ✅ `force-app/main/default/applications/Feature_Management.app-meta.xml` (completed - utility bar reference removed and homePageFlexipage configured to User_Story_List)
 - ✅ `force-app/main/default/permissionsets/Development_Management_Access.permissionset-meta.xml` (completed - Apex class access granted, LWC access via Apex permissions)
 
 ### Files to Modify
 
-- ⏳ `force-app/main/default/layouts/Feature__c-Feature Layout.layout-meta.xml` (needs Description__c and Status__c fields added)
-- ⏳ `force-app/main/default/layouts/User_Story__c-User Story Layout.layout-meta.xml` (needs all custom fields added)
+- ✅ `force-app/main/default/layouts/Feature__c-Feature Layout.layout-meta.xml` (completed - Description__c and Status__c fields added, User_Stories__r related list included)
+- ✅ `force-app/main/default/layouts/User_Story__c-User Story Layout.layout-meta.xml` (completed - all custom fields added and organized in logical sections)
 
 ### Reference Existing Patterns
 
