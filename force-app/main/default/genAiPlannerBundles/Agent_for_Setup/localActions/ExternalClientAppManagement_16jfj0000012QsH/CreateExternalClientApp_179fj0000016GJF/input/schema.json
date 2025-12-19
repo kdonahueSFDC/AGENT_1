@@ -1,0 +1,40 @@
+{
+  "required" : [ "ecaType", "ecaName", "contactEmail", "oauthCallbackUrl" ],
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "ecaType" : {
+      "title" : "{!$Label.InvocableActionCreateExternalClientApp.inputEcaTypeLabel}",
+      "description" : "{!$Label.InvocableActionCreateExternalClientApp.inputEcaTypeDescription}",
+      "lightning:type" : "lightning__textType",
+      "einstein:description" : "The type of external client app to be created.",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : true
+    },
+    "ecaName" : {
+      "title" : "{!$Label.InvocableActionCreateExternalClientApp.inputEcaNameLabel}",
+      "description" : "{!$Label.InvocableActionCreateExternalClientApp.inputEcaNameDescription}",
+      "lightning:type" : "lightning__textType",
+      "einstein:description" : "The name of the external client app to be created. The name can only contain alphanumeric characters, spaces and underscores, not including hyphens. It must be unique, begin with a letter, not end with an underscore, and not contain two consecutive underscores. The name must match the regex pattern ^[a-zA-Z](?!.*__)[\\s\\w]*[a-zA-Z0-9]$",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : true
+    },
+    "contactEmail" : {
+      "title" : "{!$Label.InvocableActionCreateExternalClientApp.inputContactEmailLabel}",
+      "description" : "{!$Label.InvocableActionCreateExternalClientApp.inputContactEmailDescription}",
+      "lightning:type" : "lightning__textType",
+      "einstein:description" : "The contact email for Salesforce to use to contact the owner of the external client app. Must be a valid email address.",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : true
+    },
+    "oauthCallbackUrl" : {
+      "title" : "{!$Label.InvocableActionCreateExternalClientApp.inputOauthCallbackUrlLabel}",
+      "description" : "{!$Label.InvocableActionCreateExternalClientApp.inputOauthCallbackUrlDescription}",
+      "lightning:type" : "lightning__textType",
+      "einstein:description" : "The URL where users are redirected after successful authentication. Must be a complete HTTPS URL. Multiple URLs can be entered, separated by commas.",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : true
+    }
+  },
+  "lightning:type" : "lightning__objectType",
+  "lightning:textIndexed" : true
+}

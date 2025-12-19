@@ -1,0 +1,15 @@
+{
+  "required" : [ "Booking_ID" ],
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "Booking_ID" : {
+      "title" : "Booking_ID",
+      "description" : "The ID of the activity booking record that the customer wants to cancel.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType",
+  "lightning:textIndexed" : true
+}

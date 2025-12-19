@@ -1,0 +1,18 @@
+{
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "privileges" : {
+      "title" : "Privileges",
+      "description" : "A list of the returned permissions or access controls, and the features that grant the privilege, if applicable.",
+      "items" : {
+        "lightning:type" : "adminCopilot__privilege"
+      },
+      "lightning:type" : "lightning__listType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    }
+  },
+  "lightning:type" : "lightning__objectType",
+  "lightning:textIndexed" : true
+}

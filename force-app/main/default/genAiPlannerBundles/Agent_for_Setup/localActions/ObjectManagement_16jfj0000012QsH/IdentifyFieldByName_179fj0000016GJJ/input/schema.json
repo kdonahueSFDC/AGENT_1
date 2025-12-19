@@ -1,0 +1,22 @@
+{
+  "required" : [ "objectAPIName", "userInput" ],
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "objectAPIName" : {
+      "title" : "Object API Name",
+      "description" : "API Name of the sObject associated with the field the user wants to find. Call IdentifyObjectByName action to get the object API name.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : true
+    },
+    "userInput" : {
+      "title" : "User Input",
+      "description" : "User request to find a field. Must contain the field label or description. Don't generate SQL or SOQL.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : true
+    }
+  },
+  "lightning:type" : "lightning__objectType",
+  "lightning:textIndexed" : true
+}

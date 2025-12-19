@@ -1,0 +1,22 @@
+{
+  "required" : [ "userId" ],
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "userId" : {
+      "title" : "User ID",
+      "description" : "The 15-character or 18-character ID beginning with \"005\" of the user whose object permissions are being queried. For example, \"005XXXXXXXXXxTh\". If the user's ID isn't specified in the customer input, the user ID must be identified by the action IdentifyMetadataRecordByName and must not be assumed.",
+      "lightning:type" : "lightning__recordIdType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "objectApiName" : {
+      "title" : "Object API Name",
+      "description" : "The API name of the Salesforce object type, such as Account or CustomObject__c. The object API name must be identified by the action IdentifyMetadataTypeByName and must not be assumed.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType",
+  "lightning:textIndexed" : true
+}

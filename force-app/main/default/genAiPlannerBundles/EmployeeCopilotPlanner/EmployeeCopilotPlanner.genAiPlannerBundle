@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiPlannerBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Planner for ReAct-based Employee copilot.</description>
+    <localActionLinks>
+        <genAiFunctionName>AnswerQuestionsWithKnowledge_16jfj000000z7qz</genAiFunctionName>
+    </localActionLinks>
+    <localTopicLinks>
+        <genAiPluginName>MigrationDefaultTopic_16jfj000000z7qz</genAiPluginName>
+    </localTopicLinks>
+    <localTopics>
+        <fullName>MigrationDefaultTopic_16jfj000000z7qz</fullName>
+        <canEscalate>false</canEscalate>
+        <description>Engages and interacts with the user about any request that could be CRM data related.  This could be tasks such as identify and summarize records, answer queries, aggregate data, find and query objects, update records, or drafting and refining emails.</description>
+        <developerName>MigrationDefaultTopic_16jfj000000z7qz</developerName>
+        <genAiPluginInstructions>
+            <description>When executing the next steps or suggesting actions that the user may take, retrieve every piece of relevant information. For example, always pull in a contact when authoring an email. Always give clear responses in a comment and state that it was LLM generated. Never draft an email without retrieving all Salesforce Record details pertaining to the Activity.</description>
+            <developerName>completeness_and_correctness</developerName>
+            <language>en_US</language>
+            <masterLabel>completeness_and_correctness</masterLabel>
+            <sortOrder>0</sortOrder>
+        </genAiPluginInstructions>
+        <genAiPluginInstructions>
+            <description>Provide direct responses, suggesting next steps based on comprehensive details gathered through functions. Change times, dates, etc. to make them easier to understand.</description>
+            <developerName>interact_and_summarize</developerName>
+            <language>en_US</language>
+            <masterLabel>interact_and_summarize</masterLabel>
+            <sortOrder>0</sortOrder>
+        </genAiPluginInstructions>
+        <genAiPluginInstructions>
+            <description>You have various actions you can utilize to answer the user. Search well for actions that can provide an answer to the request.</description>
+            <developerName>utilize_actions</developerName>
+            <language>en_US</language>
+            <masterLabel>utilize_actions</masterLabel>
+            <sortOrder>0</sortOrder>
+        </genAiPluginInstructions>
+        <genAiPluginInstructions>
+            <description>Break the request down into multiple steps. Think about which steps need to be taken to accomplish the goal. Process each step, then respond to the user.</description>
+            <developerName>step_by_step</developerName>
+            <language>en_US</language>
+            <masterLabel>step_by_step</masterLabel>
+            <sortOrder>0</sortOrder>
+        </genAiPluginInstructions>
+        <genAiPluginInstructions>
+            <description>When only the name of a record is mentioned in the user request, you MUST get the necessary IDs.</description>
+            <developerName>identify_record</developerName>
+            <language>en_US</language>
+            <masterLabel>identify_record</masterLabel>
+            <sortOrder>0</sortOrder>
+        </genAiPluginInstructions>
+        <genAiPluginInstructions>
+            <description>If you know you need to execute a function, call it instead of declaring it to the user. Do not say &quot;now I&apos;m going to run [Action]&quot; but rather invoke the action.</description>
+            <developerName>proceed_with_action</developerName>
+            <language>en_US</language>
+            <masterLabel>proceed_with_action</masterLabel>
+            <sortOrder>0</sortOrder>
+        </genAiPluginInstructions>
+        <genAiPluginInstructions>
+            <description>Look for comments, events, tasks, or other information that indicates recent activity. Use your knowledge of Salesforce to pull the relevant activity data.</description>
+            <developerName>recent_activity</developerName>
+            <language>en_US</language>
+            <masterLabel>recent_activity</masterLabel>
+            <sortOrder>0</sortOrder>
+        </genAiPluginInstructions>
+        <genAiPluginInstructions>
+            <description>Never ask the user for an ID. Instead, ask for a record that&apos;s relevant.</description>
+            <developerName>ask_for_records</developerName>
+            <language>en_US</language>
+            <masterLabel>ask_for_records</masterLabel>
+            <sortOrder>0</sortOrder>
+        </genAiPluginInstructions>
+        <genAiPluginInstructions>
+            <description>Before proposing the next steps, ensure all relevant records are fetched.</description>
+            <developerName>preparation_for_action</developerName>
+            <language>en_US</language>
+            <masterLabel>preparation_for_action</masterLabel>
+            <sortOrder>0</sortOrder>
+        </genAiPluginInstructions>
+        <genAiPluginInstructions>
+            <description>Identify the object type (e.g., leads, opportunities, accounts) the user asks about. If unclear, confirm with the user and suggest based on the query context and history.</description>
+            <developerName>identify_object_type</developerName>
+            <language>en_US</language>
+            <masterLabel>identify_object_type</masterLabel>
+            <sortOrder>0</sortOrder>
+        </genAiPluginInstructions>
+        <genAiPluginInstructions>
+            <description>When a user asks for the next steps or next actions, search and utilize all available data retrieved via functions. Only state information backed by information retrieved via a function.</description>
+            <developerName>grounded_next_steps</developerName>
+            <language>en_US</language>
+            <masterLabel>grounded_next_steps</masterLabel>
+            <sortOrder>0</sortOrder>
+        </genAiPluginInstructions>
+        <genAiPluginInstructions>
+            <description>When the user responds to a question, use that information to determine what steps to take next.</description>
+            <developerName>use_user_response</developerName>
+            <language>en_US</language>
+            <masterLabel>use_user_response</masterLabel>
+            <sortOrder>0</sortOrder>
+        </genAiPluginInstructions>
+        <language>en_US</language>
+        <localActionLinks>
+            <functionName>ExtractFieldsAndValuesFromUserInput_179fj00000138Gb</functionName>
+        </localActionLinks>
+        <localActionLinks>
+            <functionName>UpdateRecordFields_179fj00000138Gb</functionName>
+        </localActionLinks>
+        <localActionLinks>
+            <functionName>IdentifyRecordByName_179fj00000138Gb</functionName>
+        </localActionLinks>
+        <localActionLinks>
+            <functionName>AnswerQuestionsWithKnowledge_179fj00000138Gb</functionName>
+        </localActionLinks>
+        <localActionLinks>
+            <functionName>SummarizeRecord_179fj00000138Gb</functionName>
+        </localActionLinks>
+        <localActionLinks>
+            <functionName>QueryRecordsWithAggregate_179fj00000138Gb</functionName>
+        </localActionLinks>
+        <localActionLinks>
+            <functionName>DraftOrReviseEmail_179fj00000138Gb</functionName>
+        </localActionLinks>
+        <localActionLinks>
+            <functionName>IdentifyObjectByName_179fj00000138Gb</functionName>
+        </localActionLinks>
+        <localActionLinks>
+            <functionName>QueryRecords_179fj00000138Gb</functionName>
+        </localActionLinks>
+        <localActionLinks>
+            <functionName>Check_Weather_179fj00000138Gb</functionName>
+        </localActionLinks>
+        <localActions>
+            <fullName>IdentifyRecordByName_179fj00000138Gb</fullName>
+            <description>Searches for Salesforce CRM records by name and returns a list of matching Salesforce CRM record IDs.</description>
+            <developerName>IdentifyRecordByName_179fj00000138Gb</developerName>
+            <invocationTarget>identifyRecordByName</invocationTarget>
+            <invocationTargetType>standardInvocableAction</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>true</isIncludeInProgressIndicator>
+            <localDeveloperName>IdentifyRecordByName</localDeveloperName>
+            <masterLabel>Identify Record by Name</masterLabel>
+            <source>EmployeeCopilot__IdentifyRecordByName</source>
+        </localActions>
+        <localActions>
+            <fullName>UpdateRecordFields_179fj00000138Gb</fullName>
+            <description>Updates fields on a Salesforce CRM record. The action ExtractFieldsAndValuesFromUserInput must be called prior to this action to extract the record&apos;s fields and values.</description>
+            <developerName>UpdateRecordFields_179fj00000138Gb</developerName>
+            <invocationTarget>einsteinCopilotUpdateRecord</invocationTarget>
+            <invocationTargetType>standardInvocableAction</invocationTargetType>
+            <isConfirmationRequired>true</isConfirmationRequired>
+            <isIncludeInProgressIndicator>true</isIncludeInProgressIndicator>
+            <localDeveloperName>UpdateRecordFields</localDeveloperName>
+            <masterLabel>Update Record</masterLabel>
+            <progressIndicatorMessage>Making updates</progressIndicatorMessage>
+            <source>EmployeeCopilot__UpdateRecordFields</source>
+        </localActions>
+        <localActions>
+            <fullName>ExtractFieldsAndValuesFromUserInput_179fj00000138Gb</fullName>
+            <description>Extracts Salesforce CRM record fields and their corresponding field values from the user input. This action must run before updateRecord to convert user input to a Salesforce sObject.</description>
+            <developerName>ExtractFieldsAndValuesFromUserInput_179fj00000138Gb</developerName>
+            <invocationTarget>getRecordFieldsAndValues</invocationTarget>
+            <invocationTargetType>standardInvocableAction</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>true</isIncludeInProgressIndicator>
+            <localDeveloperName>ExtractFieldsAndValuesFromUserInput</localDeveloperName>
+            <masterLabel>Extract Fields And Values From User Input</masterLabel>
+            <progressIndicatorMessage>Preparing your changes</progressIndicatorMessage>
+            <source>EmployeeCopilot__ExtractFieldsAndValuesFromUserInput</source>
+        </localActions>
+        <localActions>
+            <fullName>Check_Weather_179fj00000138Gb</fullName>
+            <description>Check weather at Coral Cloud Resorts at a specific date</description>
+            <developerName>Check_Weather_179fj00000138Gb</developerName>
+            <invocationTarget>CheckWeather</invocationTarget>
+            <invocationTargetType>apex</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+            <localDeveloperName>Check_Weather</localDeveloperName>
+            <masterLabel>Check Weather</masterLabel>
+            <source>Check_Weather_179fj0000012I3V</source>
+        </localActions>
+        <localActions>
+            <fullName>QueryRecords_179fj00000138Gb</fullName>
+            <description>Finds and retrieves Salesforce CRM records based on user input and specific conditions, such as field values. This action automatically identifies the correct records and object type. e.g. &apos;Find all open opportunities created in the last 5 days sorted by created date.&apos;</description>
+            <developerName>QueryRecords_179fj00000138Gb</developerName>
+            <invocationTarget>queryRecords</invocationTarget>
+            <invocationTargetType>standardInvocableAction</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>true</isIncludeInProgressIndicator>
+            <localDeveloperName>QueryRecords</localDeveloperName>
+            <masterLabel>Query Records</masterLabel>
+            <source>EmployeeCopilot__QueryRecords</source>
+        </localActions>
+        <localActions>
+            <fullName>IdentifyObjectByName_179fj00000138Gb</fullName>
+            <description>Finds the Salesforce object API name by extracting an object name from the user input.</description>
+            <developerName>IdentifyObjectByName_179fj00000138Gb</developerName>
+            <invocationTarget>identifyObject</invocationTarget>
+            <invocationTargetType>standardInvocableAction</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>true</isIncludeInProgressIndicator>
+            <localDeveloperName>IdentifyObjectByName</localDeveloperName>
+            <masterLabel>Identify Object by Name</masterLabel>
+            <source>EmployeeCopilot__IdentifyObjectByName</source>
+        </localActions>
+        <localActions>
+            <fullName>DraftOrReviseEmail_179fj00000138Gb</fullName>
+            <description>Creates an email draft or revises the latest generated email based on user input.</description>
+            <developerName>DraftOrReviseEmail_179fj00000138Gb</developerName>
+            <invocationTarget>getDraftOrReviseEmailPrompt</invocationTarget>
+            <invocationTargetType>standardInvocableAction</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>true</isIncludeInProgressIndicator>
+            <localDeveloperName>DraftOrReviseEmail</localDeveloperName>
+            <masterLabel>Draft or Revise Email</masterLabel>
+            <progressIndicatorMessage>Crafting your email</progressIndicatorMessage>
+            <source>EmployeeCopilot__DraftOrReviseEmail</source>
+        </localActions>
+        <localActions>
+            <fullName>QueryRecordsWithAggregate_179fj00000138Gb</fullName>
+            <description>Answers aggregation questions (such as count, sum, max, min, or average) about Salesforce CRM data based on the user input and specific conditions, such as field values. For example &apos;Find the number of open opportunities created in the last 5 days.&apos;</description>
+            <developerName>QueryRecordsWithAggregate_179fj00000138Gb</developerName>
+            <invocationTarget>queryRecordsWithAggregate</invocationTarget>
+            <invocationTargetType>standardInvocableAction</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>true</isIncludeInProgressIndicator>
+            <localDeveloperName>QueryRecordsWithAggregate</localDeveloperName>
+            <masterLabel>Query Records with Aggregate</masterLabel>
+            <source>EmployeeCopilot__QueryRecordsWithAggregate</source>
+        </localActions>
+        <localActions>
+            <fullName>SummarizeRecord_179fj00000138Gb</fullName>
+            <description>Summarizes a single Salesforce CRM record. You must call summarizeRecord only if the user explicitly asks for a summary (e.g: &apos;Summary&apos;, &apos;Recap&apos;, &apos;Highlights&apos;). This action should be called only when there isn&apos;t a more specific summarization action.</description>
+            <developerName>SummarizeRecord_179fj00000138Gb</developerName>
+            <invocationTarget>getRecordSummarizationPrompt</invocationTarget>
+            <invocationTargetType>standardInvocableAction</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>true</isIncludeInProgressIndicator>
+            <localDeveloperName>SummarizeRecord</localDeveloperName>
+            <masterLabel>Summarize Record</masterLabel>
+            <progressIndicatorMessage>Summarizing</progressIndicatorMessage>
+            <source>EmployeeCopilot__SummarizeRecord</source>
+        </localActions>
+        <localActions>
+            <fullName>AnswerQuestionsWithKnowledge_179fj00000138Gb</fullName>
+            <description>Answers questions about company policies and procedures, troubleshooting steps, or product information. For example: “What is your return policy?” “How do I fix an issue?” or “What features does a product have?”</description>
+            <developerName>AnswerQuestionsWithKnowledge_179fj00000138Gb</developerName>
+            <invocationTarget>streamKnowledgeSearch</invocationTarget>
+            <invocationTargetType>standardInvocableAction</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>true</isIncludeInProgressIndicator>
+            <localDeveloperName>AnswerQuestionsWithKnowledge</localDeveloperName>
+            <masterLabel>Answer Questions with Knowledge</masterLabel>
+            <progressIndicatorMessage>Getting answers</progressIndicatorMessage>
+            <source>EmployeeCopilot__AnswerQuestionsWithKnowledge</source>
+        </localActions>
+        <localDeveloperName>MigrationDefaultTopic</localDeveloperName>
+        <masterLabel>MigrationDefaultTopic</masterLabel>
+        <pluginType>Topic</pluginType>
+        <scope>Your job is to interact and answer questions for the user about anything Salesforce or CRM data related.</scope>
+    </localTopics>
+    <masterLabel>EmployeeCopilotPlanner</masterLabel>
+    <plannerActions>
+        <fullName>AnswerQuestionsWithKnowledge_16jfj000000z7qz</fullName>
+        <description>Answers questions about company policies and procedures, troubleshooting steps, or product information. For example: “What is your return policy?” “How do I fix an issue?” or “What features does a product have?”</description>
+        <developerName>AnswerQuestionsWithKnowledge_16jfj000000z7qz</developerName>
+        <invocationTarget>streamKnowledgeSearch</invocationTarget>
+        <invocationTargetType>standardInvocableAction</invocationTargetType>
+        <isConfirmationRequired>false</isConfirmationRequired>
+        <isIncludeInProgressIndicator>true</isIncludeInProgressIndicator>
+        <localDeveloperName>AnswerQuestionsWithKnowledge</localDeveloperName>
+        <masterLabel>Answer Questions with Knowledge</masterLabel>
+        <progressIndicatorMessage>Getting answers</progressIndicatorMessage>
+        <source>EmployeeCopilot__AnswerQuestionsWithKnowledge</source>
+    </plannerActions>
+    <plannerType>AiCopilot__ReAct</plannerType>
+</GenAiPlannerBundle>

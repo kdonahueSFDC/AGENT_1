@@ -1,0 +1,25 @@
+{
+  "required" : [ "userId" ],
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "userId" : {
+      "title" : "User ID",
+      "description" : "The 15-character or 18-character ID beginning with \"005\" of the user whose user permissions are being queried. For example, \"005XXXXXXXXXxTh\". If the user's ID isn't specified in the customer input, the user ID must be identified by the action IdentifyMetadataRecordByName and must not be assumed.",
+      "lightning:type" : "lightning__recordIdType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "privileges" : {
+      "title" : "Privileges",
+      "description" : "A comma-separated list of the user permissions required for a given Salesforce task or feature as identified by the IdentifyUserPermissionsByName action.",
+      "items" : {
+        "lightning:type" : "lightning__textType"
+      },
+      "lightning:type" : "lightning__listType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType",
+  "lightning:textIndexed" : true
+}
