@@ -162,8 +162,8 @@ public with sharing class UserStoryController {
             User_Story__c story = stories[0];
             story.Status__c = newStatus;
             
-            // Update with security enforcement
-            update story;
+            // Update with user-mode DML to respect FLS and sharing at DML time
+            Database.update(story, AccessLevel.USER_MODE);
             
             // Re-query to get fresh data including LastModifiedDate
             List<User_Story__c> updatedStories = [
@@ -355,4 +355,3 @@ public with sharing class UserStoryController {
         }
     }
 }
-
