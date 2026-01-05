@@ -4,8 +4,8 @@
     <active>true</active>
     <description>Prevents changing status from Done back to an earlier status (Backlog, In Progress, In Review, or Blocked). Once a user story is marked as Done, it should not be moved back to a previous status.</description>
     <errorConditionFormula>AND(
-    PRIORVALUE(Status__c) = &quot;Done&quot;,
-    Status__c != &quot;Done&quot;
+    TEXT(PRIORVALUE(Status__c)) = &quot;Done&quot;,
+    TEXT(Status__c) != &quot;Done&quot;
 )</errorConditionFormula>
     <errorDisplayField>Status__c</errorDisplayField>
     <errorMessage>Cannot change status from Done to an earlier status. Once a user story is marked as Done, it cannot be moved back to Backlog, In Progress, In Review, or Blocked.</errorMessage>

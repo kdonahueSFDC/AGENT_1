@@ -4,7 +4,7 @@
     <active>true</active>
     <description>Requires an Assignee to be specified when the Status is set to In Progress. This ensures accountability and proper assignment of work items.</description>
     <errorConditionFormula>AND(
-    Status__c = &quot;In_Progress&quot;,
+    TEXT(Status__c) = &quot;In_Progress&quot;,
     ISBLANK(Assignee__c)
 )</errorConditionFormula>
     <errorDisplayField>Assignee__c</errorDisplayField>

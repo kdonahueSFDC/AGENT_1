@@ -4,7 +4,7 @@
     <active>true</active>
     <description>Requires Acceptance Criteria to be specified when the Status is set to Done. This ensures that completion criteria are documented before marking a user story as complete.</description>
     <errorConditionFormula>AND(
-    Status__c = &quot;Done&quot;,
+    TEXT(Status__c) = &quot;Done&quot;,
     ISBLANK(Acceptance_Criteria__c)
 )</errorConditionFormula>
     <errorDisplayField>Acceptance_Criteria__c</errorDisplayField>
