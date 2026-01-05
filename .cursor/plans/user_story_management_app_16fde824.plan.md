@@ -126,7 +126,7 @@ todos:
       - create-user-story-object
   - id: create-compact-layouts
     content: Create compact layouts for Feature__c and User_Story__c objects. Compact layouts define which fields appear in list views, mobile cards, and lookup search results. Should include Name, Status, and other key identifying fields.
-    status: pending
+    status: completed
     dependencies:
       - create-feature-object
       - create-user-story-object
