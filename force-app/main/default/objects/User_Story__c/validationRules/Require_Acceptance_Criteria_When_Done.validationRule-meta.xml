@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Require_Acceptance_Criteria_When_Done</fullName>
+    <active>true</active>
+    <description>Requires Acceptance Criteria to be specified when the Status is set to Done. This ensures that completion criteria are documented before marking a user story as complete.</description>
+    <errorConditionFormula>AND(
+    Status__c = &quot;Done&quot;,
+    ISBLANK(Acceptance_Criteria__c)
+)</errorConditionFormula>
+    <errorDisplayField>Acceptance_Criteria__c</errorDisplayField>
+    <errorMessage>Acceptance Criteria is required when Status is Done. Please document the acceptance criteria before marking this user story as complete.</errorMessage>
+</ValidationRule>

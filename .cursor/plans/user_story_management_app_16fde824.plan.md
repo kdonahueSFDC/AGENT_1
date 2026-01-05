@@ -137,8 +137,8 @@ todos:
       - create-user-story-object
       - enhance-user-story-layout
   - id: create-validation-rules
-    content: "[LOW PRIORITY] Create validation rules for data integrity: require Feature__c on User_Story__c, prevent invalid status transitions (e.g., Done back to In Progress), require Assignee__c when Status__c is In Progress, etc. These rules help maintain data quality and enforce business logic."
-    status: pending
+    content: "[LOW PRIORITY] Create validation rules for data integrity: prevent invalid status transitions (e.g., Done back to In Progress), require Assignee__c when Status__c is In Progress, require Acceptance_Criteria__c when Status__c is Done, etc. Note: Feature__c is a Master-Detail field and is always required by Salesforce, so no validation rule is needed for it. These rules help maintain data quality and enforce business logic."
+    status: completed
     dependencies:
       - create-user-story-object
   - id: create-record-types
@@ -201,14 +201,13 @@ Build a custom Salesforce app for managing development user stories organized by
 ### Data Model
 
 - **Feature__c** (Custom Object): Organizes user stories by feature
-  - Fields: Name, Description__c (Long Text Area), Status__c (Picklist: Planning, In Progress, Completed)
-
+- Fields: Name, Description__c (Long Text Area), Status__c (Picklist: Planning, In Progress, Completed)
 - **User_Story__c** (Custom Object): Individual user stories
-  - Fields: Name (Title), Description__c (Long Text Area), Status__c (Picklist: Backlog, In Progress, In Review, Done, Blocked), Priority__c (Picklist: Low, Medium, High, Critical), Assignee__c (Lookup to User), Feature__c (Master-Detail to Feature__c), Acceptance_Criteria__c (Long Text Area)
+- Fields: Name (Title), Description__c (Long Text Area), Status__c (Picklist: Backlog, In Progress, In Review, Done, Blocked), Priority__c (Picklist: Low, Medium, High, Critical), Assignee__c (Lookup to User), Feature__c (Master-Detail to Feature__c), Acceptance_Criteria__c (Long Text Area)
 
 ### Components Structure
 
-```
+```javascript
 force-app/main/default/
 ├── objects/
 │   ├── Feature__c/
@@ -264,12 +263,14 @@ force-app/main/default/
     └── Development_Management_Access.permissionset-meta.xml
 ```
 
+
+
 ## Implementation Details
 
 ### 1. Custom Objects & Fields
 
 - ✅ Create `Feature__c` object with standard and custom fields
-  - **Note**: User_Story__c related list was intentionally omitted from Feature__c layout during initial creation to avoid validation errors. It will be added after User_Story__c object is created.
+- **Note**: User_Story__c related list was intentionally omitted from Feature__c layout during initial creation to avoid validation errors. It will be added after User_Story__c object is created.
 - ✅ Create `User_Story__c` object with Master-Detail relationship to `Feature__c`
 - ✅ Add User_Story__c related list to Feature__c layout (completed - related list User_Stories__r is present in layout)
 - ✅ Enhance Feature__c layout with Description__c and Status__c fields (completed - fields are present in "Feature Details" section)
@@ -328,10 +329,10 @@ force-app/main/default/
 
 - ✅ Create permission set `Development_Management_Access` initially without any permissions (can be assigned to users)
 - Incrementally add permissions as objects, fields, and components are created:
-  - ✅ Add Feature permissions: Full CRUD (read, create, edit, delete) for `Feature__c` object and edit access to Description__c, Status__c fields
-  - ✅ Add User Story permissions: Full CRUD (read, create, edit, delete) for `User_Story__c` object and edit access to Description__c, Status__c, Priority__c, Assignee__c, Acceptance_Criteria__c fields (Note: Feature__c is Master-Detail and automatically accessible)
-  - ✅ Add Apex class access: Grant access to `UserStoryController` Apex class (completed)
-  - ❌ Add LWC component access: Grant access to `userStoryList` and `userStoryKanban` LWC components (cancelled - access granted via Apex class permissions)
+- ✅ Add Feature permissions: Full CRUD (read, create, edit, delete) for `Feature__c` object and edit access to Description__c, Status__c fields
+- ✅ Add User Story permissions: Full CRUD (read, create, edit, delete) for `User_Story__c` object and edit access to Description__c, Status__c, Priority__c, Assignee__c, Acceptance_Criteria__c fields (Note: Feature__c is Master-Detail and automatically accessible)
+- ✅ Add Apex class access: Grant access to `UserStoryController` Apex class (completed)
+- ❌ Add LWC component access: Grant access to `userStoryList` and `userStoryKanban` LWC components (cancelled - access granted via Apex class permissions)
 - ⏳ Set up sharing rules if needed for team collaboration (pending - may not be needed with ControlledByParent sharing)
 
 ### 7. Testing
@@ -361,6 +362,8 @@ flowchart TD
     J --> K[Update User_Story__c.Status__c]
     K --> D
 ```
+
+
 
 ## Key Files to Create/Modify
 
@@ -411,4 +414,3 @@ flowchart TD
 - All code has 80%+ test coverage
 - App is accessible via custom app launcher entry
 - Security is properly configured with permission sets that grant full CRUD and edit permissions
-- Permission set can be assigned to users to grant access to all app functionality
