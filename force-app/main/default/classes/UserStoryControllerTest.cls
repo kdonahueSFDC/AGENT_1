@@ -58,7 +58,8 @@ public class UserStoryControllerTest {
                 Feature__c = features[0].Id,
                 Status__c = 'Done',
                 Priority__c = 'Low',
-                Description__c = 'Test story 4'
+                Description__c = 'Test story 4',
+                Acceptance_Criteria__c = 'Criteria 4 - Story is complete'
             ),
             // Feature B stories
             new User_Story__c(
@@ -354,6 +355,11 @@ public class UserStoryControllerTest {
         User_Story__c story = [SELECT Id, Status__c FROM User_Story__c WHERE Status__c = 'Backlog' LIMIT 1];
         String originalStatus = story.Status__c;
         
+        // Ensure story has Assignee__c before updating to In_Progress status
+        User currentUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
+        story.Assignee__c = currentUser.Id;
+        update story;
+        
         Test.startTest();
         UserStoryController.UserStoryWrapper result = 
             UserStoryController.updateUserStoryStatus(story.Id, 'In_Progress');
@@ -447,8 +453,16 @@ public class UserStoryControllerTest {
     @isTest
     static void updateUserStoryStatus_allValidStatuses_updateSuccessfully() {
         User_Story__c story = [SELECT Id FROM User_Story__c LIMIT 1];
+        User currentUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
+        
+        // Ensure story has required fields for status transitions
+        story.Assignee__c = currentUser.Id;
+        story.Acceptance_Criteria__c = 'Test acceptance criteria for status update test';
+        update story;
+        
+        // Test statuses in order, but Done must be last (can't move from Done to other statuses)
         List<String> validStatuses = new List<String>{
-            'Backlog', 'In_Progress', 'In_Review', 'Done', 'Blocked'
+            'Backlog', 'In_Progress', 'In_Review', 'Blocked', 'Done'
         };
         
         Test.startTest();
