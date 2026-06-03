@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomApplication xmlns="http://soap.sforce.com/2006/04/metadata">
+    <brand>
+        <headerColor>#0070D2</headerColor>
+        <shouldOverrideOrgTheme>false</shouldOverrideOrgTheme>
+    </brand>
+    <formFactors>Small</formFactors>
+    <formFactors>Large</formFactors>
+    <isNavAutoTempTabsDisabled>false</isNavAutoTempTabsDisabled>
+    <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
+    <isNavTabPersistenceDisabled>false</isNavTabPersistenceDisabled>
+    <isOmniPinnedViewEnabled>false</isOmniPinnedViewEnabled>
+    <label>Feature Management</label>
+    <navType>Standard</navType>
+    <tabs>Feature__c</tabs>
+    <tabs>User_Story__c</tabs>
+    <tabs>User_Story_Kanban</tabs>
+    <tabs>User_Story_List</tabs>
+    <uiType>Lightning</uiType>
+    <utilityBar>Feature_Management_UtilityBar</utilityBar>
+</CustomApplication>

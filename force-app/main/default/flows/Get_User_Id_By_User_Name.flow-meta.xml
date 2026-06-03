@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>65.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <description>No User was found so assign the error message for the response</description>
+        <name>Assign_Error_No_User_Found</name>
+        <label>Assign Error No User Found</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>ErrorNoUserFound</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>FormualErrorNoUserFound</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <description>Takes a User_Name and returns the User_Id</description>
+    <environments>Default</environments>
+    <formulas>
+        <description>Formula that crafts the error message that would get returned if there is no user found</description>
+        <name>FormualErrorNoUserFound</name>
+        <dataType>String</dataType>
+        <expression>{!User_Name} + &apos; Not Found&apos;</expression>
+    </formulas>
+    <interviewLabel>Get User Id By User Name {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Get User Id By User Name</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <description>Uses the User_Name to get a User_Id</description>
+        <name>Get_User_Id</name>
+        <label>Get User Id</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <faultConnector>
+            <targetReference>Assign_Error_No_User_Found</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>User_Name</elementReference>
+            </value>
+        </filters>
+        <object>User</object>
+        <outputAssignments>
+            <assignToReference>User_Id</assignToReference>
+            <field>Id</field>
+        </outputAssignments>
+    </recordLookups>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_User_Id</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <description>Error that is returned when there is no User found with that User_Name</description>
+        <name>ErrorNoUserFound</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <description>The Id of the User record that was returned when the User_Name was searched for.</description>
+        <name>User_Id</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <description>The name of a User that is going to be used for a search.</description>
+        <name>User_Name</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

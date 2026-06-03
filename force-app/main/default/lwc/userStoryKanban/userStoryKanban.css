@@ -1,0 +1,60 @@
+/* Kanban Board Layout */
+.kanban-board {
+    min-height: 400px;
+}
+
+/* Kanban Column Styling */
+.kanban-column {
+    min-height: 400px;
+}
+
+.kanban-column-body {
+    min-height: 300px;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+/* Kanban Card Styling */
+.kanban-card {
+    cursor: pointer;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.kanban-card:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+.kanban-card:focus {
+    outline: 2px solid var(--slds-g-color-brand-base-50, #0176d3);
+    outline-offset: 2px;
+}
+
+/* Drag and Drop States */
+.kanban-card.slds-is-dragging {
+    opacity: 0.5;
+    transform: rotate(2deg);
+}
+
+.kanban-column.slds-is-drag-over {
+    background-color: var(--slds-g-color-neutral-base-95, #f3f3f3);
+    border: 2px dashed var(--slds-g-color-brand-base-50, #0176d3);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .kanban-column-body {
+        max-height: 50vh;
+    }
+}
+
+/* Ensure cards are draggable but maintain accessibility */
+.kanban-card[draggable="true"] {
+    user-select: none;
+}
+
+/* Improve card readability */
+.kanban-card .slds-card__body {
+    padding: var(--slds-spacing-small, 0.75rem);
+}
+
