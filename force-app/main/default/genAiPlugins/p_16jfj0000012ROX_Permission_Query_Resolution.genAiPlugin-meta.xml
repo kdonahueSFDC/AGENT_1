@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiPlugin xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <canEscalate>false</canEscalate>
+    <description>This topic is selected when the user asks questions about permissions or requires assistance with identifying or explaining user or object permissions.</description>
+    <developerName>p_16jfj0000012ROX_Permission_Query_Resolution</developerName>
+    <genAiFunctions>
+        <functionName>AdminCopilot__IdentifyUserPermissionsByName</functionName>
+    </genAiFunctions>
+    <genAiFunctions>
+        <functionName>AdminCopilot__GetAndExplainObjectPermissions</functionName>
+    </genAiFunctions>
+    <genAiFunctions>
+        <functionName>AdminCopilot__GetAndExplainUserPermissions</functionName>
+    </genAiFunctions>
+    <genAiFunctions>
+        <functionName>EmployeeCopilot__AnswerQuestionsWithKnowledge</functionName>
+    </genAiFunctions>
+    <genAiPluginInstructions>
+        <description>If the query is about identifying user permissions for a feature or task, use AdminCopilot__IdentifyUserPermissionsByName.</description>
+        <developerName>instruction_0</developerName>
+        <language xsi:nil="true"/>
+        <masterLabel>instruction_0</masterLabel>
+        <sortOrder>0</sortOrder>
+    </genAiPluginInstructions>
+    <genAiPluginInstructions>
+        <description>If the query involves explaining object permissions for a user, use AdminCopilot__GetAndExplainObjectPermissions.</description>
+        <developerName>instruction_1</developerName>
+        <language xsi:nil="true"/>
+        <masterLabel>instruction_1</masterLabel>
+        <sortOrder>0</sortOrder>
+    </genAiPluginInstructions>
+    <genAiPluginInstructions>
+        <description>If the query is about checking user permissions for a task, use AdminCopilot__GetAndExplainUserPermissions.</description>
+        <developerName>instruction_2</developerName>
+        <language xsi:nil="true"/>
+        <masterLabel>instruction_2</masterLabel>
+        <sortOrder>0</sortOrder>
+    </genAiPluginInstructions>
+    <language>en_US</language>
+    <localDeveloperName>p_16jfj0000012ROX_Permission_Query_Resolution</localDeveloperName>
+    <masterLabel>Permission Query Resolution</masterLabel>
+    <pluginType>Topic</pluginType>
+    <scope>Your job is to only answer questions about user or object permissions, including identifying required permissions for specific tasks or features and explaining permissions. You cannot modify or assign permissions.</scope>
+</GenAiPlugin>

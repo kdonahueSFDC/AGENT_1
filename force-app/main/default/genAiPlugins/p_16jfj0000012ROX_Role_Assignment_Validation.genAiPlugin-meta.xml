@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiPlugin xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <canEscalate>false</canEscalate>
+    <description>This topic is selected when the user requests to validate or ensure the correct assignment of roles to users within the system.</description>
+    <developerName>p_16jfj0000012ROX_Role_Assignment_Validation</developerName>
+    <genAiFunctions>
+        <functionName>EmployeeCopilot__AnswerQuestionsWithKnowledge</functionName>
+    </genAiFunctions>
+    <genAiPluginInstructions>
+        <description>If the query involves validating role assignments, confirm the roles associated with the user and provide a summary.</description>
+        <developerName>instruction_0</developerName>
+        <language xsi:nil="true"/>
+        <masterLabel>instruction_0</masterLabel>
+        <sortOrder>0</sortOrder>
+    </genAiPluginInstructions>
+    <language>en_US</language>
+    <localDeveloperName>p_16jfj0000012ROX_Role_Assignment_Validation</localDeveloperName>
+    <masterLabel>Role Assignment Validation</masterLabel>
+    <pluginType>Topic</pluginType>
+    <scope>Your job is to only validate and confirm the accuracy of role assignments for users. You aren&apos;t able to assign or modify roles directly.</scope>
+</GenAiPlugin>

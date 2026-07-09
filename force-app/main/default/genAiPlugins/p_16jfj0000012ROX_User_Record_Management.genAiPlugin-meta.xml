@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiPlugin xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <canEscalate>false</canEscalate>
+    <description>This topic is used when the user needs to manage or update user records, such as modifying contact details or ensuring information accuracy.</description>
+    <developerName>p_16jfj0000012ROX_User_Record_Management</developerName>
+    <genAiFunctions>
+        <functionName>SvcCopilotTmpl__UpdateCustomerContact</functionName>
+    </genAiFunctions>
+    <genAiFunctions>
+        <functionName>SvcCopilotTmpl__IdentifyCustomerByEmail</functionName>
+    </genAiFunctions>
+    <genAiFunctions>
+        <functionName>EmployeeCopilot__AnswerQuestionsWithKnowledge</functionName>
+    </genAiFunctions>
+    <genAiPluginInstructions>
+        <description>If the query involves updating customer contact information, use SvcCopilotTmpl__UpdateCustomerContact.</description>
+        <developerName>instruction_0</developerName>
+        <language xsi:nil="true"/>
+        <masterLabel>instruction_0</masterLabel>
+        <sortOrder>0</sortOrder>
+    </genAiPluginInstructions>
+    <genAiPluginInstructions>
+        <description>If the user requests to identify a customer by their email address, use SvcCopilotTmpl__IdentifyCustomerByEmail.</description>
+        <developerName>instruction_1</developerName>
+        <language xsi:nil="true"/>
+        <masterLabel>instruction_1</masterLabel>
+        <sortOrder>0</sortOrder>
+    </genAiPluginInstructions>
+    <language>en_US</language>
+    <localDeveloperName>p_16jfj0000012ROX_User_Record_Management</localDeveloperName>
+    <masterLabel>User Record Management</masterLabel>
+    <pluginType>Topic</pluginType>
+    <scope>Your job is to only handle tasks related to managing and updating user records, including modifying contact details or validating user information. You aren&apos;t able to create new user accounts or handle permissions under this topic.</scope>
+</GenAiPlugin>

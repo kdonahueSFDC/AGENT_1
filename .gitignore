@@ -46,3 +46,9 @@ $RECYCLE.BIN/
 **/__pycache__/
 **/.venv/
 **/venv/
+
+# Claude Code local state
+.claude/
+
+# Ad-hoc retrieved metadata used during investigation
+retrieved_samples/

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiPlugin xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <canEscalate>false</canEscalate>
+    <description>This topic is used when the user wants to get permission set details for a User and, if needed, to add new permissions by creating a temporary permission set.</description>
+    <developerName>p_16jfj0000012ROX_Permission_Set_Tracking</developerName>
+    <genAiFunctions>
+        <functionName>Get_User_Id_By_User_Name</functionName>
+    </genAiFunctions>
+    <genAiFunctions>
+        <functionName>AdminCopilot__AnswerQuestionsWithSalesforceDocumentation</functionName>
+    </genAiFunctions>
+    <genAiFunctions>
+        <functionName>EmployeeCopilot__AnswerQuestionsWithKnowledge</functionName>
+    </genAiFunctions>
+    <genAiPluginInstructions>
+        <description>If the user asks about tracking permission set creation, use AdminCopilot__AnswerQuestionsWithSalesforceDocumentation.</description>
+        <developerName>instructions_0_1766181519829</developerName>
+        <language>en_US</language>
+        <masterLabel>instructions_0_1766181519829</masterLabel>
+        <sortOrder>0</sortOrder>
+    </genAiPluginInstructions>
+    <genAiPluginInstructions>
+        <description>If the user asks about permission set levels for another user, run Get User Id By User Name to get the User Id of the person that they are requesting details about. Then use that User Id to run Get and Explain Object Permission of User</description>
+        <developerName>instruction_0</developerName>
+        <language xsi:nil="true"/>
+        <masterLabel>instruction_0</masterLabel>
+        <sortOrder>1</sortOrder>
+    </genAiPluginInstructions>
+    <language>en_US</language>
+    <localDeveloperName>p_16jfj0000012ROX_Permission_Set_Tracking</localDeveloperName>
+    <masterLabel>Permission Set Updates</masterLabel>
+    <pluginType>Topic</pluginType>
+    <scope>Your job is to respond to questions about permission set access to objects. You also update those permission by adding new temporary permission sets.</scope>
+</GenAiPlugin>
