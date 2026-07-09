@@ -76,9 +76,8 @@ public with sharing class StringTransformUtil {
         String formatted = String.valueOf(scaled);
 
         // Pad with trailing zeros to reach exactly 6 characters
-        while (formatted.length() < ELEMENT_LENGTH) {
-            formatted += '0';
-        }
+        // Using rightPad() instead of string concatenation loop for better performance
+        formatted = formatted.rightPad(ELEMENT_LENGTH, '0');
 
         if (formatted.length() > ELEMENT_LENGTH) {
             throw new IllegalArgumentException(

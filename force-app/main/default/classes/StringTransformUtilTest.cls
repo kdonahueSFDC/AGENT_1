@@ -85,4 +85,46 @@ private class StringTransformUtilTest {
         String result = StringTransformUtil.transformListString(input);
         System.assertEquals('-10.50-0.0000', result, 'Negative numbers should format correctly');
     }
+
+    /**
+     * @description Bulk test to validate StringTransformUtil handles large payloads (200+ elements)
+     * without hitting governor limits (heap size, CPU time). This ensures the utility is
+     * bulkified and safe for high-volume scenarios.
+     * Uses Test.startTest/stopTest to reset governor limits for accurate testing.
+     */
+    @IsTest
+    static void testTransformStringWithBulkData() {
+        // Build a comma-separated string with 250 numeric values to exceed bulk threshold
+        List<String> values = new List<String>();
+        for (Integer i = 1; i <= 250; i++) {
+            values.add(String.valueOf(i));
+        }
+        String bulkInput = '[' + String.join(values, ', ') + ']';
+
+        Test.startTest();
+        String result;
+        try {
+            result = StringTransformUtil.transformListString(bulkInput);
+        } catch (Exception e) {
+            System.assert(false, 'Bulk processing should not throw exception: ' + e.getMessage());
+        }
+        Test.stopTest();
+
+        // Validate the result contains all 250 elements formatted correctly
+        List<String> resultElements = result.split('-');
+        System.assertEquals(250, resultElements.size(), 'Should contain 250 formatted elements');
+
+        // Spot check first, middle, and last elements for correct format
+        System.assertEquals('1.0000', resultElements[0], 'First element should be formatted as 1.0000');
+        System.assertEquals('125.00', resultElements[124], 'Middle element (125) should be formatted correctly');
+        System.assertEquals('250.00', resultElements[249], 'Last element should be formatted as 250.00');
+
+        // Verify each element is exactly 6 characters (fixed-width format)
+        for (String element : resultElements) {
+            System.assertEquals(6, element.length(), 'Each element must be exactly 6 characters: ' + element);
+        }
+
+        // Additional assertion: no exception indicates heap/CPU limits were not exceeded
+        System.assertNotEquals(null, result, 'Result should not be null for bulk data');
+    }
 }
