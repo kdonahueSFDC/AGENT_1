@@ -160,10 +160,20 @@ public with sharing class UserStoryController {
             }
             
             User_Story__c story = stories[0];
+
+            // Check FLS before update
+            if (!Schema.sObjectType.User_Story__c.fields.Status__c.isUpdateable()) {
+                throw new AuraHandledException('Insufficient permissions to update user story status');
+            }
+
             story.Status__c = newStatus;
-            
-            // Update with security enforcement
-            update story;
+
+            // Update with FLS enforcement using Security.stripInaccessible()
+            SObject[] storiesToUpdate = Security.stripInaccessible(
+                AccessType.UPDATABLE,
+                new List<User_Story__c>{story}
+            ).getRecords();
+            update storiesToUpdate;
             
             // Re-query to get fresh data including LastModifiedDate
             List<User_Story__c> updatedStories = [

@@ -454,26 +454,33 @@ public class UserStoryControllerTest {
     static void updateUserStoryStatus_allValidStatuses_updateSuccessfully() {
         User_Story__c story = [SELECT Id FROM User_Story__c LIMIT 1];
         User currentUser = [SELECT Id FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
-        
+
         // Ensure story has required fields for status transitions
         story.Assignee__c = currentUser.Id;
         story.Acceptance_Criteria__c = 'Test acceptance criteria for status update test';
         update story;
-        
+
         // Test statuses in order, but Done must be last (can't move from Done to other statuses)
         List<String> validStatuses = new List<String>{
             'Backlog', 'In_Progress', 'In_Review', 'Blocked', 'Done'
         };
-        
+
         Test.startTest();
         for (String status : validStatuses) {
-            UserStoryController.UserStoryWrapper result = 
+            UserStoryController.UserStoryWrapper result =
                 UserStoryController.updateUserStoryStatus(story.Id, status);
             Assert.areEqual(status, result.status, 'Status should be updated to ' + status);
         }
         Test.stopTest();
     }
-    
+
+    // NOTE: The updateUserStoryStatus method includes explicit FLS checks:
+    // 1. Schema.sObjectType.User_Story__c.fields.Status__c.isUpdateable() check
+    // 2. Security.stripInaccessible(AccessType.UPDATABLE) enforcement
+    // To test FLS denial scenarios, create a restricted user profile lacking
+    // update permissions on Status__c field and run System.runAs(restrictedUser)
+    // to verify the AuraHandledException: 'Insufficient permissions to update user story status'
+
     // ========== getFeatures() Tests ==========
     
     @isTest
