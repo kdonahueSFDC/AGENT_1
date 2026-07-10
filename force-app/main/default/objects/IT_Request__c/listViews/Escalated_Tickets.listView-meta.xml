@@ -6,7 +6,7 @@
     <columns>Priority__c</columns>
     <columns>Status__c</columns>
     <columns>Assigned_Tier__c</columns>
-    <columns>CREATEDDATE</columns>
+    <columns>CREATED_DATE</columns>
     <filterScope>Everything</filterScope>
     <filters>
         <field>Status__c</field>
