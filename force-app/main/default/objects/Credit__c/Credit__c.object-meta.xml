@@ -141,25 +141,26 @@
         <type>Default</type>
     </actionOverrides>
     <allowInChatterGroups>false</allowInChatterGroups>
-    <compactLayoutAssignment>IT_Request_Compact_Layout</compactLayoutAssignment>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <deploymentStatus>Deployed</deploymentStatus>
-    <enableActivities>true</enableActivities>
+    <description>Resort Credit&apos;s that can be granted to customers.</description>
+    <enableActivities>false</enableActivities>
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
     <enableHistory>false</enableHistory>
     <enableLicensing>false</enableLicensing>
-    <enableReports>true</enableReports>
-    <enableSearch>true</enableSearch>
+    <enableReports>false</enableReports>
+    <enableSearch>false</enableSearch>
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
     <externalSharingModel>Private</externalSharingModel>
-    <label>IT Request</label>
+    <label>Credit</label>
     <nameField>
-        <displayFormat>IT-{00000}</displayFormat>
-        <label>IT Request Number</label>
+        <displayFormat>C-{00000000}</displayFormat>
+        <label>Record Number</label>
         <type>AutoNumber</type>
     </nameField>
-    <pluralLabel>IT Requests</pluralLabel>
+    <pluralLabel>Credits</pluralLabel>
     <searchLayouts></searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>

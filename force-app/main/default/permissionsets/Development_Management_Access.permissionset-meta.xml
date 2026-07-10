@@ -62,4 +62,12 @@
         <viewAllFields>false</viewAllFields>
         <viewAllRecords>false</viewAllRecords>
     </objectPermissions>
+    <tabSettings>
+        <tab>Feature__c</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+    <tabSettings>
+        <tab>User_Story__c</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
 </PermissionSet>
