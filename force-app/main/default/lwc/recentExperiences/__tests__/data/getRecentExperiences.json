@@ -1,0 +1,28 @@
+{
+  "records": [
+    {
+      "Id": "a001234567890AAAA",
+      "Name": "Grand Canyon Adventure",
+      "Type__c": "Outdoor",
+      "Location__c": "Arizona",
+      "Price__c": 250.0,
+      "Capacity__c": 15,
+      "Rating__c": 4.5,
+      "CreatedDate": "2026-01-15T10:30:00.000Z"
+    },
+    {
+      "Id": "a001234567890BBBB",
+      "Name": "City Food Tour",
+      "Type__c": "Culinary",
+      "Location__c": "San Francisco",
+      "Price__c": 85.0,
+      "Capacity__c": 10,
+      "Rating__c": 4.8,
+      "CreatedDate": "2026-02-20T14:00:00.000Z"
+    }
+  ],
+  "totalRecords": 12,
+  "totalPages": 3,
+  "currentPage": 1,
+  "pageSize": 5
+}

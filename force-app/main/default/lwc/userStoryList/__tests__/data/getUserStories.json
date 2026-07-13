@@ -1,0 +1,26 @@
+{
+  "records": [
+    {
+      "id": "a031234567890AAAA",
+      "name": "US-101",
+      "status": "Backlog",
+      "priority": "High",
+      "assigneeName": "John Doe",
+      "featureName": "Authentication System",
+      "createdDate": "2026-05-15T10:30:00.000Z"
+    },
+    {
+      "id": "a031234567890BBBB",
+      "name": "US-102",
+      "status": "In_Progress",
+      "priority": "Critical",
+      "assigneeName": "Jane Smith",
+      "featureName": "Dashboard UI",
+      "createdDate": "2026-06-01T14:00:00.000Z"
+    }
+  ],
+  "totalRecords": 50,
+  "totalPages": 2,
+  "currentPage": 1,
+  "pageSize": 25
+}
