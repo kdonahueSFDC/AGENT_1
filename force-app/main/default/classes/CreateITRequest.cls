@@ -24,7 +24,6 @@ public with sharing class CreateITRequest {
       }
 
       itRequest.Status__c = 'New';
-      itRequest.Assigned_Tier__c = 'Tier 1';
 
       requestsToInsert.add(itRequest);
     }

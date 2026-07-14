@@ -76,10 +76,10 @@ private class CreateITRequestTest {
       'Priority should match'
     );
     System.assertEquals('New', createdRecord.Status__c, 'Status should be New');
-    System.assertEquals(
-      'Tier 1',
+    System.assertNotEquals(
+      null,
       createdRecord.Assigned_Tier__c,
-      'Assigned tier should be Tier 1'
+      'Assigned tier should be routed by the triage trigger'
     );
   }
 
@@ -211,13 +211,14 @@ private class CreateITRequestTest {
       'Should have created 200 records in database'
     );
 
-    // Verify all have correct default values
+    // Verify all have correct default values. Assigned_Tier__c is routed by
+    // ITRequestTriageService, not the invocable, so we only require it to be set.
     for (IT_Request__c record : createdRecords) {
       System.assertEquals('New', record.Status__c, 'Status should be New');
-      System.assertEquals(
-        'Tier 1',
+      System.assertNotEquals(
+        null,
         record.Assigned_Tier__c,
-        'Assigned tier should be Tier 1'
+        'Assigned tier should be routed by the triage trigger'
       );
     }
   }

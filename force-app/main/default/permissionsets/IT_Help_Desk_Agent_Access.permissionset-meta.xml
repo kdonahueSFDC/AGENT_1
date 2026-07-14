@@ -85,6 +85,10 @@
         <apexClass>EscalateRequest</apexClass>
         <enabled>true</enabled>
     </classAccesses>
+    <classAccesses>
+        <apexClass>ITRequestTriageService</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
     <tabSettings>
         <tab>IT_Request__c</tab>
         <visibility>Visible</visibility>

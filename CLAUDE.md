@@ -236,14 +236,27 @@ The IT Help Desk domain enforces priority-driven SLAs on every `IT_Request__c` r
 
 - `IT_Request_SLA_Management` — record-triggered after-save; stamps Due_By, First_Response_At, Resolved_At
 - `IT_Request_SLA_Breach_Alerts` — scheduled hourly, `runInMode=SystemModeWithoutSharing`; emails the Tier 2 queue and sets the notified flag
+- `IT_Request_Triage` (before-insert) → `ITRequestTriageService` — evaluates active `IT_Triage_Rule__mdt` rows in ascending `Evaluation_Order__c`, stamps `Assigned_Tier__c`, and assigns `OwnerId` to the matching queue. Callers that pre-populate `Assigned_Tier__c` (admins, legacy invocables) opt out of auto-triage.
+
+**Triage rules (`IT_Triage_Rule__mdt`)**
+
+- `Keyword__c` — case-insensitive substring on `Issue_Description__c`; blank matches any request
+- `Priority_Filter__c` — optional exact match on `Priority__c`
+- `Target_Tier__c` — one of Tier 1 / Tier 2 / Tier 3
+- `Target_Queue_DevName__c` — Queue DeveloperName; blank leaves OwnerId untouched
+- `Evaluation_Order__c` — ascending, first match wins; use gaps of 10
+- `Active__c` — deactivate instead of deleting to preserve history
+
+Seeded rules: Critical→Tier 2, breach/phishing→Tier 3, outage/vpn→Tier 2, password/mfa→Tier 1, catch-all fallback→Tier 1.
 
 **Email templates** live under `force-app/main/default/email/IT_Requests/`: `IT_Request_Confirmation`, `IT_Request_Escalation_Notification`, `IT_Request_SLA_Breach`.
 
 **Post-deploy ops actions (required)**
 
-- Replace placeholder `it-tier2@example.com` on `IT_Tier_2_Queue` with the real ops distribution list
+- Replace placeholder `it-tier1@example.com` / `it-tier2@example.com` / `it-tier3@example.com` on the tier queues with the real ops distribution lists
 - Update `startDate` on `IT_Request_SLA_Breach_Alerts` scheduled flow if past
-- Add queue members via Setup → Queues (metadata only creates the shell)
+- Add queue members via Setup → Queues (metadata only creates the shell); triage cannot route to a queue that doesn't exist
+- Tune `IT_Triage_Rule__mdt` records for the tenant's terminology — new keywords/queues need no code change
 
 ---
 

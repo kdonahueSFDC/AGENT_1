@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Keyword__c</fullName>
+    <description
+  >Case-insensitive substring searched in IT_Request__c.Issue_Description__c. Leave blank to match every request (useful as a catch-all with a high Evaluation Order).</description>
+    <label>Keyword</label>
+    <length>255</length>
+    <required>false</required>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

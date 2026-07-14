@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CustomMetadata
+  xmlns="http://soap.sforce.com/2006/04/metadata"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+>
+    <label>Phishing keyword</label>
+    <protected>false</protected>
+    <values>
+        <field>Active__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>Evaluation_Order__c</field>
+        <value xsi:type="xsd:double">30.0</value>
+    </values>
+    <values>
+        <field>Keyword__c</field>
+        <value xsi:type="xsd:string">phishing</value>
+    </values>
+    <values>
+        <field>Priority_Filter__c</field>
+        <value xsi:nil="true" />
+    </values>
+    <values>
+        <field>Target_Queue_DevName__c</field>
+        <value xsi:type="xsd:string">IT_Tier_3_Queue</value>
+    </values>
+    <values>
+        <field>Target_Tier__c</field>
+        <value xsi:type="xsd:string">Tier 3</value>
+    </values>
+</CustomMetadata>
