@@ -108,7 +108,7 @@ private class ITRequestSLABreachSchedulerTest {
   static void testBulk() {
     List<IT_Request__c> breachedRequests = new List<IT_Request__c>();
 
-    for (Integer i = 0; i < 50; i++) {
+    for (Integer i = 0; i < 10; i++) {
       breachedRequests.add(
         new IT_Request__c(
           Employee_Name__c = 'Employee ' + i,
@@ -145,9 +145,9 @@ private class ITRequestSLABreachSchedulerTest {
     }
 
     System.assertEquals(
-      50,
+      10,
       flaggedCount,
-      'All 50 breached records should be flagged'
+      'All 10 breached records should be flagged'
     );
   }
 

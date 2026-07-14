@@ -58,57 +58,30 @@ public with sharing class ITRequestSLABreachScheduler implements Schedulable {
       emails.add(email);
     }
 
-    // Send emails in bulk (skip in test context to avoid SINGLE_EMAIL_LIMIT_EXCEEDED)
-    if (!Test.isRunningTest()) {
-      Messaging.SendEmailResult[] results = Messaging.sendEmail(emails);
+    processBreaches(breachedRequests, emails);
+  }
 
-      // Track successfully notified records
-      List<IT_Request__c> recordsToUpdate = new List<IT_Request__c>();
+  @TestVisible
+  private static void processBreaches(
+    List<IT_Request__c> breachedRequests,
+    List<Messaging.SingleEmailMessage> emails
+  ) {
+    Messaging.SendEmailResult[] results = Messaging.sendEmail(emails, false);
 
-      for (Integer i = 0; i < results.size(); i++) {
-        if (results[i].isSuccess()) {
-          IT_Request__c record = new IT_Request__c(
+    List<IT_Request__c> recordsToUpdate = new List<IT_Request__c>();
+    for (Integer i = 0; i < results.size(); i++) {
+      if (results[i].isSuccess()) {
+        recordsToUpdate.add(
+          new IT_Request__c(
             Id = breachedRequests[i].Id,
             SLA_Breach_Notified__c = true
-          );
-          recordsToUpdate.add(record);
-        } else {
-          System.debug(
-            'Email failed for ' +
-              breachedRequests[i].Name +
-              ': ' +
-              results[i].getErrors()
-          );
-        }
-      }
-
-      // Update notified flag
-      if (!recordsToUpdate.isEmpty()) {
-        Database.SaveResult[] updateResults = Database.update(
-          recordsToUpdate,
-          false
-        );
-
-        for (Database.SaveResult sr : updateResults) {
-          if (!sr.isSuccess()) {
-            for (Database.Error err : sr.getErrors()) {
-              System.debug('Update error: ' + err.getMessage());
-            }
-          }
-        }
-      }
-    } else {
-      // In test context, flag all records to exercise the update path
-      List<IT_Request__c> recordsToUpdate = new List<IT_Request__c>();
-      for (IT_Request__c req : breachedRequests) {
-        recordsToUpdate.add(
-          new IT_Request__c(Id = req.Id, SLA_Breach_Notified__c = true)
+          )
         );
       }
+    }
 
-      if (!recordsToUpdate.isEmpty()) {
-        Database.update(recordsToUpdate, false);
-      }
+    if (!recordsToUpdate.isEmpty()) {
+      Database.update(recordsToUpdate, false);
     }
   }
 }
