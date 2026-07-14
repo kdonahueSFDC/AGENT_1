@@ -37,7 +37,7 @@ CASE(TEXT({!$Record.Priority__c}),
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Calculate_SLA_Due_Date</targetReference>
+                <targetReference>Update_Request_Due_By</targetReference>
             </connector>
             <label>Is Create And Due By Blank</label>
         </rules>
@@ -142,15 +142,6 @@ CASE(TEXT({!$Record.Priority__c}),
         </rules>
     </decisions>
     <assignments>
-        <name>Calculate_SLA_Due_Date</name>
-        <label>Calculate SLA Due Date</label>
-        <locationX>50</locationX>
-        <locationY>431</locationY>
-        <connector>
-            <targetReference>Update_Request_Due_By</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
         <name>Stamp_First_Response</name>
         <label>Stamp First Response</label>
         <locationX>446</locationX>
@@ -202,13 +193,6 @@ CASE(TEXT({!$Record.Priority__c}),
         </inputAssignments>
         <inputReference>$Record</inputReference>
     </recordUpdates>
-    <variables>
-        <name>varDueBy</name>
-        <dataType>DateTime</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
     <variables>
         <name>nullDateTime</name>
         <dataType>DateTime</dataType>
