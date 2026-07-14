@@ -1,0 +1,28 @@
+[
+  {
+    "id": "a00xx0000000001AAA",
+    "name": "IT-00001",
+    "recordLink": "/a00xx0000000001AAA",
+    "issueDescription": "Cannot connect to VPN",
+    "priority": "High",
+    "status": "New",
+    "assignedTier": "Tier 2",
+    "slaStatus": "On Track",
+    "slaStatusClass": "slds-text-color_success",
+    "dueBy": "2026-07-15T10:00:00.000Z",
+    "createdDate": "2026-07-14T02:00:00.000Z"
+  },
+  {
+    "id": "a00xx0000000002AAA",
+    "name": "IT-00002",
+    "recordLink": "/a00xx0000000002AAA",
+    "issueDescription": "Password reset",
+    "priority": "Medium",
+    "status": "Resolved",
+    "assignedTier": "Tier 1",
+    "slaStatus": "Met",
+    "slaStatusClass": "slds-text-color_success",
+    "dueBy": "2026-07-13T10:00:00.000Z",
+    "createdDate": "2026-07-12T02:00:00.000Z"
+  }
+]

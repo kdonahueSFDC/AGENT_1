@@ -1,0 +1,91 @@
+<template>
+  <lightning-card title="My IT Requests" icon-name="standard:service_request">
+    <div class="slds-m-around_medium">
+      <lightning-layout multiple-rows>
+        <lightning-layout-item
+          size="12"
+          medium-device-size="6"
+          large-device-size="6"
+          padding="around-small"
+        >
+          <lightning-input
+            type="email"
+            label="Your email"
+            value={emailInput}
+            onchange={handleEmailChange}
+            onkeydown={handleKeyDown}
+            placeholder="you@example.com"
+          ></lightning-input>
+        </lightning-layout-item>
+        <lightning-layout-item
+          size="12"
+          medium-device-size="4"
+          large-device-size="3"
+          padding="around-small"
+        >
+          <lightning-combobox
+            label="Status"
+            value={statusFilter}
+            options={statusOptions}
+            onchange={handleStatusChange}
+          ></lightning-combobox>
+        </lightning-layout-item>
+        <lightning-layout-item
+          size="12"
+          medium-device-size="2"
+          large-device-size="3"
+          padding="around-small"
+          class="slds-align_absolute-center"
+        >
+          <lightning-button
+            label="Look up"
+            variant="brand"
+            onclick={handleSearch}
+            class="slds-m-top_large"
+          ></lightning-button>
+        </lightning-layout-item>
+      </lightning-layout>
+
+      <template if:true={isLoading}>
+        <lightning-spinner
+          alternative-text="Loading requests"
+          size="small"
+        ></lightning-spinner>
+      </template>
+
+      <template if:false={isLoading}>
+        <template if:true={hasSearched}>
+          <div class="slds-m-top_medium">
+            <p class="slds-text-body_small">{resultsSummary}</p>
+          </div>
+
+          <template if:true={hasResults}>
+            <div class="slds-m-top_small">
+              <lightning-datatable
+                key-field="id"
+                data={requests}
+                columns={columns}
+                hide-checkbox-column
+              ></lightning-datatable>
+            </div>
+          </template>
+
+          <template if:false={hasResults}>
+            <template if:true={error}>
+              <p class="slds-m-top_small slds-text-color_error">
+                Something went wrong loading your requests. Please try again or
+                contact IT.
+              </p>
+            </template>
+          </template>
+        </template>
+
+        <template if:false={hasSearched}>
+          <p class="slds-m-top_medium slds-text-body_small">
+            Enter your work email above to see the status of your IT requests.
+          </p>
+        </template>
+      </template>
+    </div>
+  </lightning-card>
+</template>

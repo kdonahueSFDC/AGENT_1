@@ -251,6 +251,11 @@ Seeded rules: Critical→Tier 2, breach/phishing→Tier 3, outage/vpn→Tier 2, 
 
 **Email templates** live under `force-app/main/default/email/IT_Requests/`: `IT_Request_Confirmation`, `IT_Request_Escalation_Notification`, `IT_Request_SLA_Breach`.
 
+**Employee self-service**
+
+- `myItRequests` LWC — email + status filter, datatable of the caller's own requests with SLA color hints. Backed by `MyITRequestsController.getMyRequests` (`@AuraEnabled(cacheable=true)`, FLS via `WITH SECURITY_ENFORCED`, email lookup normalized to lowercase).
+- `My_IT_Requests.flexipage` — AppPage ready to add to any Lightning App via Setup → App Manager. No custom tab shipped; admins pick which app it belongs in.
+
 **Post-deploy ops actions (required)**
 
 - Replace placeholder `it-tier1@example.com` / `it-tier2@example.com` / `it-tier3@example.com` on the tier queues with the real ops distribution lists
