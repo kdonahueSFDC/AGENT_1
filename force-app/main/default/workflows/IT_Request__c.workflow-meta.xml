@@ -18,7 +18,7 @@
     >Notifies IT Tier 2 Queue when request is escalated</description>
         <protected>false</protected>
         <recipients>
-            <type>queue</type>
+            <type>group</type>
             <recipient>IT_Tier_2_Queue</recipient>
         </recipients>
         <senderType>CurrentUser</senderType>
@@ -30,7 +30,7 @@
     >Alerts IT Tier 2 Queue when SLA deadline is breached</description>
         <protected>false</protected>
         <recipients>
-            <type>queue</type>
+            <type>group</type>
             <recipient>IT_Tier_2_Queue</recipient>
         </recipients>
         <senderType>CurrentUser</senderType>

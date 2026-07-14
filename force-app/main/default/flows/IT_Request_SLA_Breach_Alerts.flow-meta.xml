@@ -3,6 +3,7 @@
     <apiVersion>65.0</apiVersion>
     <description
   >Hourly scheduled flow to send breach alerts for IT requests past their SLA deadline</description>
+    <label>IT Request SLA Breach Alerts</label>
     <runInMode>SystemModeWithoutSharing</runInMode>
     <start>
         <locationX>50</locationX>
