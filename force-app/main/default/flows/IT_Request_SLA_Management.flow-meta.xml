@@ -5,7 +5,8 @@
     <formulas>
         <name>formulaDueBy</name>
         <dataType>DateTime</dataType>
-        <expression>{!$Record.CreatedDate} +
+        <expression
+    >IF(ISNULL({!$Record.CreatedDate}), {!$Flow.CurrentDateTime}, {!$Record.CreatedDate}) +
 CASE(TEXT({!$Record.Priority__c}),
   &quot;Critical&quot;, 4/24,
   &quot;High&quot;, 8/24,
@@ -60,17 +61,20 @@ CASE(TEXT({!$Record.Priority__c}),
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Check_Status_Change_Type</targetReference>
+                <targetReference>Check_First_Response</targetReference>
             </connector>
             <label>Is Update Status Changed</label>
         </rules>
     </decisions>
     <decisions>
-        <name>Check_Status_Change_Type</name>
-        <label>Check Status Change Type</label>
+        <name>Check_First_Response</name>
+        <label>Check First Response</label>
         <locationX>446</locationX>
         <locationY>431</locationY>
-        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <defaultConnector>
+            <targetReference>Check_Resolved_Status</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Skip First Response</defaultConnectorLabel>
         <rules>
             <name>First_Response_Needed</name>
             <conditionLogic>and</conditionLogic>
@@ -95,6 +99,16 @@ CASE(TEXT({!$Record.Priority__c}),
             </connector>
             <label>First Response Needed</label>
         </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Resolved_Status</name>
+        <label>Check Resolved Status</label>
+        <locationX>578</locationX>
+        <locationY>647</locationY>
+        <defaultConnector>
+            <targetReference>Check_Reopened_Status</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Skip Resolved Check</defaultConnectorLabel>
         <rules>
             <name>Status_Resolved</name>
             <conditionLogic>and</conditionLogic>
@@ -117,6 +131,13 @@ CASE(TEXT({!$Record.Priority__c}),
             </connector>
             <label>Status Resolved</label>
         </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Reopened_Status</name>
+        <label>Check Reopened Status</label>
+        <locationX>710</locationX>
+        <locationY>755</locationY>
+        <defaultConnectorLabel>No Action Needed</defaultConnectorLabel>
         <rules>
             <name>Status_Reopened</name>
             <conditionLogic>and</conditionLogic>
@@ -153,12 +174,15 @@ CASE(TEXT({!$Record.Priority__c}),
                 <elementReference>$Flow.CurrentDateTime</elementReference>
             </value>
         </assignmentItems>
+        <connector>
+            <targetReference>Check_Resolved_Status</targetReference>
+        </connector>
     </assignments>
     <assignments>
         <name>Stamp_Resolved_At</name>
         <label>Stamp Resolved At</label>
         <locationX>578</locationX>
-        <locationY>539</locationY>
+        <locationY>755</locationY>
         <assignmentItems>
             <assignToReference>$Record.Resolved_At__c</assignToReference>
             <operator>Assign</operator>
@@ -166,40 +190,33 @@ CASE(TEXT({!$Record.Priority__c}),
                 <elementReference>$Flow.CurrentDateTime</elementReference>
             </value>
         </assignmentItems>
+        <connector>
+            <targetReference>Check_Reopened_Status</targetReference>
+        </connector>
     </assignments>
     <assignments>
         <name>Clear_Resolved_At</name>
         <label>Clear Resolved At</label>
         <locationX>710</locationX>
-        <locationY>539</locationY>
+        <locationY>863</locationY>
         <assignmentItems>
             <assignToReference>$Record.Resolved_At__c</assignToReference>
             <operator>Assign</operator>
-            <value>
-                <elementReference>nullDateTime</elementReference>
-            </value>
         </assignmentItems>
     </assignments>
-    <recordUpdates>
+    <assignments>
         <name>Update_Request_Due_By</name>
         <label>Update Request Due By</label>
         <locationX>182</locationX>
         <locationY>539</locationY>
-        <inputAssignments>
-            <field>Due_By__c</field>
+        <assignmentItems>
+            <assignToReference>$Record.Due_By__c</assignToReference>
+            <operator>Assign</operator>
             <value>
                 <elementReference>formulaDueBy</elementReference>
             </value>
-        </inputAssignments>
-        <inputReference>$Record</inputReference>
-    </recordUpdates>
-    <variables>
-        <name>nullDateTime</name>
-        <dataType>DateTime</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
+        </assignmentItems>
+    </assignments>
     <start>
         <locationX>56</locationX>
         <locationY>0</locationY>
@@ -208,7 +225,7 @@ CASE(TEXT({!$Record.Priority__c}),
         </connector>
         <object>IT_Request__c</object>
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
-        <triggerType>RecordAfterSave</triggerType>
+        <triggerType>RecordBeforeSave</triggerType>
     </start>
     <status>Active</status>
 </Flow>
