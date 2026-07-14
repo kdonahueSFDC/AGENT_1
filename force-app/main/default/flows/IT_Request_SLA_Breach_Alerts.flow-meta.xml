@@ -136,13 +136,35 @@ Immediate action is required to address this overdue request.</stringValue>
         <label>Update Notified Flag</label>
         <locationX>176</locationX>
         <locationY>566</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Status__c</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Resolved</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Due_By__c</field>
+            <operator>LessThan</operator>
+            <value>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>SLA_Breach_Notified__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
         <inputAssignments>
             <field>SLA_Breach_Notified__c</field>
             <value>
                 <booleanValue>true</booleanValue>
             </value>
         </inputAssignments>
-        <inputReference>Query_Breached_Requests</inputReference>
+        <object>IT_Request__c</object>
     </recordUpdates>
     <status>Active</status>
 </Flow>
