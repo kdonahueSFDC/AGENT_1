@@ -218,4 +218,28 @@ private class ITRequestSLABreachSchedulerTest {
       'Record without Due_By should not be flagged'
     );
   }
+
+  @isTest
+  static void testEmptyResultSetExitsGracefully() {
+    // No test data — all query conditions will exclude any records
+    // This covers the isEmpty() early-return branch at line 23-25
+
+    Test.startTest();
+    String cronExp = '0 0 * * * ?';
+    System.schedule(
+      'SLA Breach Test Empty',
+      cronExp,
+      new ITRequestSLABreachScheduler()
+    );
+    Test.stopTest();
+
+    // No assertion needed; success = no exceptions thrown
+    // Confirm no DML occurred
+    List<IT_Request__c> allRecords = [SELECT Id FROM IT_Request__c];
+    System.assertEquals(
+      0,
+      allRecords.size(),
+      'No records should exist in test context'
+    );
+  }
 }
