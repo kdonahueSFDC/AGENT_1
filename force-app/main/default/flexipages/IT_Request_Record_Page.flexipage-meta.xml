@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <FlexiPage xmlns="http://soap.sforce.com/2006/04/metadata">
     <flexiPageRegions>
         <itemInstances>
@@ -55,6 +55,26 @@
                 <identifier>RecordEmployeeName_cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.SLA_Status__c</fieldItem>
+                <identifier>RecordSLAStatus_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Due_By__c</fieldItem>
+                <identifier>RecordDueBy_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-b2c3d4e5-f6a7-2345-6789-bcdef0123456</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -87,7 +107,8 @@
                     <name>secondaryFields</name>
                     <value>Facet-b2c3d4e5-f6a7-2345-6789-bcdef0123456</value>
                 </componentInstanceProperties>
-                <componentName>record_flexipage:dynamicHighlights</componentName>
+                <componentName
+        >record_flexipage:dynamicHighlights</componentName>
                 <identifier>record_flexipage_dynamicHighlights</identifier>
             </componentInstance>
         </itemInstances>

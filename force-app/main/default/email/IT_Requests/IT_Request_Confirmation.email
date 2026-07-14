@@ -1,0 +1,13 @@
+Hi {!IT_Request__c.Employee_Name__c},
+
+Your IT request {!IT_Request__c.Name} has been received and assigned to our help desk team.
+
+Request Details:
+- Priority: {!IT_Request__c.Priority__c}
+- Status: {!IT_Request__c.Status__c}
+- Due By: {!IT_Request__c.Due_By__c}
+
+We will respond to your request soon. You can track its progress in the portal or contact the help desk for updates.
+
+Thank you,
+IT Help Desk Team

@@ -14,6 +14,7 @@ This is a Salesforce development project following the SFDX structure with Apex 
 ## Salesforce Best Practices - ALWAYS FOLLOW
 
 ### Apex Development
+
 - **Governor Limits**: Always be mindful of Salesforce governor limits
   - Bulkify all code - handle collections, not single records
   - Avoid SOQL/DML inside loops
@@ -43,6 +44,7 @@ This is a Salesforce development project following the SFDX structure with Apex 
   - Follow naming conventions: `*Controller`, `*Service`, `*Selector`, `*Test`
 
 ### Lightning Web Components (LWC)
+
 - **Security**:
   - Always use `@AuraEnabled(cacheable=true)` for read-only operations
   - Validate all user inputs on both client and server side
@@ -60,6 +62,7 @@ This is a Salesforce development project following the SFDX structure with Apex 
   - Follow accessibility guidelines (WCAG 2.1 AA)
 
 ### Data Model & SOQL
+
 - **Queries**:
   - Always specify field names (never `SELECT *`)
   - Use selective filters to minimize query rows
@@ -72,6 +75,7 @@ This is a Salesforce development project following the SFDX structure with Apex 
   - Consider parent-to-child vs child-to-parent relationships
 
 ### Deployment & CI/CD
+
 - **Before Deployment**:
   - Run all local tests: `sf apex test run --test-level RunLocalTests`
   - Validate code coverage
@@ -89,12 +93,14 @@ This is a Salesforce development project following the SFDX structure with Apex 
 When working on specific domains or tasks, **engage appropriate AI Experts** from the AI Expert Suite:
 
 ### Development Workflow Experts
+
 - **`/innerloop`** - For end-to-end development tasks following TDD
   - Automatically handles: plan → implement → test → review cycle
   - Use for new features or enhancements
   - Includes parallel code review across quality, security, and domain dimensions
 
 ### Code Quality & Review Experts
+
 - **`/code-review`** - Review code for bugs and quality issues
   - Use after making changes or before committing
   - Supports `--comment` flag to post inline PR comments
@@ -104,6 +110,7 @@ When working on specific domains or tasks, **engage appropriate AI Experts** fro
   - Focuses on code quality improvements
 
 ### Security Experts
+
 - **`/sf-security-review`** (via aisuite-nfr-analysis skill) - Security review for OWASP Top 10
   - SQL injection, XSS, auth issues, crypto flaws
   - Use before merging security-sensitive code
@@ -111,23 +118,27 @@ When working on specific domains or tasks, **engage appropriate AI Experts** fro
   - Use for comprehensive security analysis
 
 ### Accessibility Expert
+
 - **`/accessibility-code-review`** (via a11y_expert skill) - WCAG 2.2 compliance
   - Reviews LWC components for accessibility violations
   - Use before deploying customer-facing UI components
 
 ### Non-Functional Requirements (NFR) Experts
+
 - **`/analyze-perf`** - Performance analysis and bottleneck identification
 - **`/analyze-scale`** - Scalability evaluation
 - **`/analyze-availability`** - High availability and reliability patterns
 - **`/quality-review`** - Code quality and maintainability review
 
 ### Salesforce-Specific Experts
+
 - **`/entity-expert-code-generation`** (UDD skills) - Universal Data Dictionary entity code generation
 - **`/research-entities`** - Research Salesforce entities and relationships
 - **`/core-entity-expert`** - Core entity expertise
 - **API Expert** - API design and implementation guidance
 
 ### Testing & Debugging Experts
+
 - **`/verify`** - Run and verify that changes work as expected
   - Use to manually test changes in a real environment
 - **`/systematic-debugging`** (innerloop skill) - Debug failing tests or issues
@@ -135,12 +146,14 @@ When working on specific domains or tasks, **engage appropriate AI Experts** fro
   - Reproduction tests before fixes
 
 ### Research & Documentation
+
 - **`/deep-research`** - Multi-source, fact-checked research reports
   - Use for technical research, best practices, or architecture decisions
 - **`/diagrams`** - Generate mermaid diagrams for flows, architecture, sequences
   - Use to visualize complex logic or document architecture
 
 ### Workflow Automation
+
 - **`/loop`** - Run commands on recurring intervals
   - Use for monitoring, polling, or recurring tasks
 
@@ -149,6 +162,7 @@ When working on specific domains or tasks, **engage appropriate AI Experts** fro
 ## Development Commands
 
 ### Common Salesforce CLI Commands
+
 ```bash
 # Authorize org
 sf org login web --set-default-dev-hub --alias my-hub
@@ -170,6 +184,7 @@ sf org open
 ```
 
 ### Local Development
+
 ```bash
 # Install dependencies
 npm install
@@ -203,25 +218,55 @@ force-app/main/default/
 
 ---
 
+## IT Request SLA Domain
+
+The IT Help Desk domain enforces priority-driven SLAs on every `IT_Request__c` record.
+
+**Fields on IT_Request__c**
+
+- `Employee_Email__c` (Email) — recipient for confirmation emails; agents populate this at creation
+- `Due_By__c` (DateTime) — SLA deadline, stamped by flow on create: Critical=4h, High=8h, Medium=24h, Low=72h from CreatedDate (clock hours, 24×7)
+- `First_Response_At__c` (DateTime) — stamped when Status first changes from "New"
+- `Resolved_At__c` (DateTime) — stamped when Status becomes "Resolved"; cleared if reopened
+- `SLA_Breach_Notified__c` (Checkbox) — flow-only writable; suppresses duplicate breach alerts
+- `SLA_Status__c` (Formula Text) — On Track / At Risk (within 25% of Due_By) / Breached / Met / Missed / Not Set
+- `Time_To_Resolution_Hours__c` (Formula Number) — hours from CreatedDate to Resolved_At__c
+
+**Automation**
+
+- `IT_Request_SLA_Management` — record-triggered after-save; stamps Due_By, First_Response_At, Resolved_At
+- `IT_Request_SLA_Breach_Alerts` — scheduled hourly, `runInMode=SystemModeWithoutSharing`; emails the Tier 2 queue and sets the notified flag
+
+**Email templates** live under `force-app/main/default/email/IT_Requests/`: `IT_Request_Confirmation`, `IT_Request_Escalation_Notification`, `IT_Request_SLA_Breach`.
+
+**Post-deploy ops actions (required)**
+
+- Replace placeholder `it-tier2@example.com` on `IT_Tier_2_Queue` with the real ops distribution list
+- Update `startDate` on `IT_Request_SLA_Breach_Alerts` scheduled flow if past
+- Add queue members via Setup → Queues (metadata only creates the shell)
+
+---
+
 ## When to Engage Experts - Quick Reference
 
-| Task | Expert Skill | When to Use |
-|------|-------------|-------------|
-| New feature development | `/innerloop` | Starting any new feature or enhancement |
-| Code review | `/code-review` | Before committing or merging |
-| Security review | `/sf-security-review` | Before merging sensitive code |
-| Accessibility check | `/accessibility-code-review` | Before deploying UI changes |
-| Refactoring | `/simplify` | Cleaning up technical debt |
-| Performance issues | `/analyze-perf` | Investigating slow operations |
-| Manual testing | `/verify` | Confirming fixes work in real environment |
-| Research | `/deep-research` | Understanding complex topics |
-| Documentation | `/diagrams` | Visualizing architecture or flows |
+| Task                    | Expert Skill                 | When to Use                               |
+| ----------------------- | ---------------------------- | ----------------------------------------- |
+| New feature development | `/innerloop`                 | Starting any new feature or enhancement   |
+| Code review             | `/code-review`               | Before committing or merging              |
+| Security review         | `/sf-security-review`        | Before merging sensitive code             |
+| Accessibility check     | `/accessibility-code-review` | Before deploying UI changes               |
+| Refactoring             | `/simplify`                  | Cleaning up technical debt                |
+| Performance issues      | `/analyze-perf`              | Investigating slow operations             |
+| Manual testing          | `/verify`                    | Confirming fixes work in real environment |
+| Research                | `/deep-research`             | Understanding complex topics              |
+| Documentation           | `/diagrams`                  | Visualizing architecture or flows         |
 
 ---
 
 ## Code Review Checklist
 
 Before committing code, ensure:
+
 - [ ] All Apex code is bulkified (handles 200+ records)
 - [ ] No SOQL/DML inside loops
 - [ ] Security enforced (`WITH SECURITY_ENFORCED` or proper FLS checks)
@@ -240,6 +285,7 @@ Before committing code, ensure:
 ## Testing Strategy
 
 ### Apex Tests
+
 1. **Setup Phase**: Use `@testSetup` for common test data
 2. **Test Bulk**: Always test with 200+ records
 3. **Test Scenarios**:
@@ -251,6 +297,7 @@ Before committing code, ensure:
 5. **Isolation**: Each test method should be independent
 
 ### LWC Tests
+
 1. Use Jest for unit testing LWC components
 2. Mock Apex method calls
 3. Test user interactions (button clicks, input changes)
@@ -262,18 +309,21 @@ Before committing code, ensure:
 ## Security Guidelines
 
 ### Input Validation
+
 - Validate all user inputs on server-side
 - Sanitize dynamic SOQL queries
 - Use bind variables when possible
 - Escape special characters
 
 ### Access Control
+
 - Check object and field-level security
 - Use `WITH SECURITY_ENFORCED` in SOQL queries
 - Implement sharing rules appropriately
 - Test with different user profiles
 
 ### Sensitive Data
+
 - Never log sensitive information
 - Encrypt sensitive fields
 - Use Platform Encryption when needed

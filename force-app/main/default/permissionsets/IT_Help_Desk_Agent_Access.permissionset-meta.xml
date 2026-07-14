@@ -1,6 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
-    <description>Grants CRUD + FLS on IT_Request__c and access to the three IT Help Desk invocable Apex classes. Assigned to both the Agentforce Agent User and the admin so the object is visible at runtime.</description>
+    <description
+  >Grants CRUD + FLS on IT_Request__c and access to the three IT Help Desk invocable Apex classes. Assigned to both the Agentforce Agent User and the admin so the object is visible at runtime.</description>
     <hasActivationRequired>false</hasActivationRequired>
     <label>IT Help Desk Agent Access</label>
     <objectPermissions>
@@ -35,6 +36,41 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>IT_Request__c.Assigned_Tier__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>IT_Request__c.Employee_Email__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>IT_Request__c.Due_By__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>IT_Request__c.First_Response_At__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>IT_Request__c.Resolved_At__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>IT_Request__c.SLA_Status__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>IT_Request__c.Time_To_Resolution_Hours__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>IT_Request__c.SLA_Breach_Notified__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <classAccesses>

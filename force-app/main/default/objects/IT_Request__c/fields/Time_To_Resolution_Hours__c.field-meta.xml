@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Time_To_Resolution_Hours__c</fullName>
+    <label>Time To Resolution (Hours)</label>
+    <formula
+  >IF(NOT(ISBLANK(Resolved_At__c)), (Resolved_At__c - CreatedDate) * 24, NULL)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <precision>18</precision>
+    <scale>2</scale>
+    <type>Number</type>
+</CustomField>

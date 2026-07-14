@@ -1,0 +1,12 @@
+IT Request {!IT_Request__c.Name} has been escalated to Tier 2.
+
+Request Details:
+- Employee: {!IT_Request__c.Employee_Name__c}
+- Priority: {!IT_Request__c.Priority__c}
+- Status: {!IT_Request__c.Status__c}
+- Due By: {!IT_Request__c.Due_By__c}
+- Issue: {!IT_Request__c.Issue_Description__c}
+
+Please review and assign to a Tier 2 specialist.
+
+IT Help Desk System

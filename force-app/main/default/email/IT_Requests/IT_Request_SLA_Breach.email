@@ -1,0 +1,13 @@
+ALERT: IT Request {!IT_Request__c.Name} has breached its SLA deadline.
+
+Request Details:
+- Employee: {!IT_Request__c.Employee_Name__c}
+- Priority: {!IT_Request__c.Priority__c}
+- Status: {!IT_Request__c.Status__c}
+- Due By: {!IT_Request__c.Due_By__c}
+- SLA Status: {!IT_Request__c.SLA_Status__c}
+- Issue: {!IT_Request__c.Issue_Description__c}
+
+Immediate action is required to address this overdue request.
+
+IT Help Desk System

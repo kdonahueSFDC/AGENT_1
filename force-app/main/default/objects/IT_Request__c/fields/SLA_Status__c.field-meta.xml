@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SLA_Status__c</fullName>
+    <label>SLA Status</label>
+    <formula>IF(ISBLANK(Due_By__c), "Not Set",
+  IF(NOT(ISBLANK(Resolved_At__c)),
+    IF(Resolved_At__c &lt;= Due_By__c, "Met", "Missed"),
+    IF(NOW() &gt; Due_By__c, "Breached",
+      IF((Due_By__c - NOW()) / (Due_By__c - CreatedDate) &lt; 0.25, "At Risk", "On Track")
+    )
+  )
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <type>Text</type>
+</CustomField>
