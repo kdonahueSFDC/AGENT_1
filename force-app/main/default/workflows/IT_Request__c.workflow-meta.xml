@@ -14,25 +14,18 @@
     </alerts>
     <alerts>
         <fullName>IT_Request_Escalation_Alert</fullName>
-        <description
-    >Notifies IT Tier 2 Queue when request is escalated</description>
+        <ccEmails>it-tier2@example.com</ccEmails>
+        <description>Notifies IT Tier 2 when request is escalated</description>
         <protected>false</protected>
-        <recipients>
-            <type>group</type>
-            <recipient>IT_Tier_2_Queue</recipient>
-        </recipients>
         <senderType>CurrentUser</senderType>
         <template>IT_Requests/IT_Request_Escalation_Notification</template>
     </alerts>
     <alerts>
         <fullName>IT_Request_SLA_Breach_Alert</fullName>
+        <ccEmails>it-tier2@example.com</ccEmails>
         <description
-    >Alerts IT Tier 2 Queue when SLA deadline is breached</description>
+    >Alerts IT Tier 2 when SLA deadline is breached</description>
         <protected>false</protected>
-        <recipients>
-            <type>group</type>
-            <recipient>IT_Tier_2_Queue</recipient>
-        </recipients>
         <senderType>CurrentUser</senderType>
         <template>IT_Requests/IT_Request_SLA_Breach</template>
     </alerts>
