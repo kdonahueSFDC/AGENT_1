@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>My IT Requests Access</label>
+    <description
+  >Grants access to the My IT Requests employee self-service tab</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <tabSettings>
+        <tab>My_IT_Requests</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+</PermissionSet>
