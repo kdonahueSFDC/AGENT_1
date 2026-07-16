@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Tier__c</fullName>
+    <description>Support tier (Tier 1, Tier 2, Tier 3)</description>
+    <externalId>true</externalId>
+    <label>Tier</label>
+    <length>50</length>
+    <required>true</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>
