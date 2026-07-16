@@ -6,7 +6,9 @@
   IF(NOT(ISBLANK(Resolved_At__c)),
     IF(Resolved_At__c &lt;= Due_By__c, "Met", "Missed"),
     IF(NOW() &gt; Due_By__c, "Breached",
-      IF((Due_By__c - NOW()) / (Due_By__c - CreatedDate) &lt; 0.25, "At Risk", "On Track")
+      IF(Due_By__c = CreatedDate, "At Risk",
+        IF((Due_By__c - NOW()) / (Due_By__c - CreatedDate) &lt; 0.25, "At Risk", "On Track")
+      )
     )
   )
 )</formula>

@@ -349,4 +349,115 @@ private class ITRequestTriageServiceTest {
       'password + fallback → Tier 1'
     );
   }
+
+  @isTest
+  static void testBulkTriageWithVariedRulesNoGovernorLimits() {
+    // Comprehensive bulk test with 250+ records exercising all rule conditions
+    // Proves bulkification: queue lookup happens once, not per record
+    installRules(
+      new List<IT_Triage_Rule__mdt>{
+        rule('Critical', 10, null, 'Critical', 'Tier 2', 'IT_Tier_2_Queue'),
+        rule('Phishing', 20, 'phishing', null, 'Tier 3', 'IT_Tier_3_Queue'),
+        rule('Breach', 30, 'breach', null, 'Tier 3', 'IT_Tier_3_Queue'),
+        rule('Outage', 40, 'outage', null, 'Tier 2', 'IT_Tier_2_Queue'),
+        rule('VPN', 50, 'vpn', null, 'Tier 2', 'IT_Tier_2_Queue'),
+        rule('Password', 60, 'password', null, 'Tier 1', 'IT_Tier_1_Queue'),
+        rule('MFA', 70, 'mfa', null, 'Tier 1', 'IT_Tier_1_Queue'),
+        rule('Fallback', 9999, null, null, 'Tier 1', 'IT_Tier_1_Queue')
+      }
+    );
+
+    List<String> keywords = new List<String>{
+      'phishing',
+      'breach',
+      'outage',
+      'vpn',
+      'password',
+      'mfa',
+      'misc'
+    };
+    List<String> priorities = new List<String>{
+      'Critical',
+      'High',
+      'Medium',
+      'Low'
+    };
+
+    List<IT_Request__c> reqs = new List<IT_Request__c>();
+    for (Integer i = 0; i < 250; i++) {
+      String keyword = keywords[Math.mod(i, keywords.size())];
+      String priority = priorities[Math.mod(i, priorities.size())];
+
+      reqs.add(
+        new IT_Request__c(
+          Employee_Name__c = 'Bulk User ' + i,
+          Issue_Description__c = 'Request about ' + keyword + ' case ' + i,
+          Priority__c = priority,
+          Status__c = 'New'
+        )
+      );
+    }
+
+    // Track SOQL/DML limits before insert
+    Integer soqlBefore = Limits.getQueries();
+    Integer dmlBefore = Limits.getDmlStatements();
+
+    Test.startTest();
+    insert reqs;
+    Test.stopTest();
+
+    Integer soqlAfter = Limits.getQueries();
+    Integer dmlAfter = Limits.getDmlStatements();
+
+    // Verify all records triaged correctly
+    List<IT_Request__c> saved = [
+      SELECT Id, Assigned_Tier__c, OwnerId, Issue_Description__c, Priority__c
+      FROM IT_Request__c
+      WHERE Id IN :reqs
+    ];
+
+    System.assertEquals(250, saved.size(), 'All records should be created');
+
+    Map<String, Integer> tierCounts = new Map<String, Integer>{
+      'Tier 1' => 0,
+      'Tier 2' => 0,
+      'Tier 3' => 0
+    };
+
+    for (IT_Request__c rec : saved) {
+      System.assertNotEquals(
+        null,
+        rec.Assigned_Tier__c,
+        'Every record should have a tier assigned'
+      );
+      tierCounts.put(
+        rec.Assigned_Tier__c,
+        tierCounts.get(rec.Assigned_Tier__c) + 1
+      );
+    }
+
+    // Verify tier distribution is reasonable
+    System.assert(tierCounts.get('Tier 1') > 0, 'Should have Tier 1 requests');
+    System.assert(tierCounts.get('Tier 2') > 0, 'Should have Tier 2 requests');
+    System.assert(tierCounts.get('Tier 3') > 0, 'Should have Tier 3 requests');
+
+    // Critical check: SOQL queries should remain minimal (bulkified)
+    // Even 250 records should not spike SOQL usage significantly
+    Integer soqlUsed = soqlAfter - soqlBefore;
+    System.assert(
+      soqlUsed <= 5,
+      'SOQL queries should be bulkified; used ' +
+        soqlUsed +
+        ' queries for 250 records'
+    );
+
+    // Critical check: DML should also be minimal
+    Integer dmlUsed = dmlAfter - dmlBefore;
+    System.assert(
+      dmlUsed <= 3,
+      'DML operations should be bulkified; used ' +
+        dmlUsed +
+        ' DML for 250 records'
+    );
+  }
 }

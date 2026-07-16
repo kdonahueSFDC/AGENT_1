@@ -473,4 +473,353 @@ private class CreateITRequestTest {
       );
     }
   }
+
+  @isTest
+  static void testCreateRequestWithEmployeeEmail() {
+    // Test #1: employeeEmail parameter populates Employee_Email__c
+    User testUser = [
+      SELECT Id, Email
+      FROM User
+      WHERE Id = :UserInfo.getUserId()
+    ];
+
+    CreateITRequest.RequestWrapper request = new CreateITRequest.RequestWrapper();
+    request.employeeName = 'Jane Doe';
+    request.issueDescription = 'Need new monitor';
+    request.priority = 'Medium';
+    request.employeeEmail = testUser.Email;
+
+    Test.startTest();
+    List<CreateITRequest.ResponseWrapper> responses = CreateITRequest.createRequests(
+      new List<CreateITRequest.RequestWrapper>{ request }
+    );
+    Test.stopTest();
+
+    System.assertEquals(1, responses.size(), 'Should return 1 response');
+    System.assertNotEquals(
+      null,
+      responses[0].recordId,
+      'Record should be created successfully'
+    );
+
+    IT_Request__c createdRecord = [
+      SELECT Id, Employee_Email__c
+      FROM IT_Request__c
+      WHERE Id = :responses[0].recordId
+    ];
+
+    System.assertEquals(
+      testUser.Email.toLowerCase(),
+      createdRecord.Employee_Email__c,
+      'Employee_Email__c should be populated and normalized to lowercase'
+    );
+  }
+
+  @isTest
+  static void testCreateRequestWithoutEmployeeEmail() {
+    // Test backward compatibility: null employeeEmail should work
+    CreateITRequest.RequestWrapper request = new CreateITRequest.RequestWrapper();
+    request.employeeName = 'Bob Smith';
+    request.issueDescription = 'Keyboard issue';
+    request.priority = 'Low';
+    request.employeeEmail = null;
+
+    Test.startTest();
+    List<CreateITRequest.ResponseWrapper> responses = CreateITRequest.createRequests(
+      new List<CreateITRequest.RequestWrapper>{ request }
+    );
+    Test.stopTest();
+
+    System.assertEquals(1, responses.size(), 'Should return 1 response');
+    System.assertNotEquals(
+      null,
+      responses[0].recordId,
+      'Record should be created successfully'
+    );
+
+    IT_Request__c createdRecord = [
+      SELECT Id, Employee_Email__c
+      FROM IT_Request__c
+      WHERE Id = :responses[0].recordId
+    ];
+
+    System.assertEquals(
+      null,
+      createdRecord.Employee_Email__c,
+      'Employee_Email__c should be null when not provided'
+    );
+  }
+
+  @isTest
+  static void testValidateEmployeeEmailAgainstActiveUser() {
+    // Test #5: Valid email matching active user should succeed
+    User testUser = [
+      SELECT Id, Email
+      FROM User
+      WHERE Id = :UserInfo.getUserId()
+    ];
+
+    CreateITRequest.RequestWrapper request = new CreateITRequest.RequestWrapper();
+    request.employeeName = 'Valid User';
+    request.issueDescription = 'Test issue';
+    request.priority = 'Medium';
+    request.employeeEmail = testUser.Email;
+
+    Test.startTest();
+    List<CreateITRequest.ResponseWrapper> responses = CreateITRequest.createRequests(
+      new List<CreateITRequest.RequestWrapper>{ request }
+    );
+    Test.stopTest();
+
+    System.assertEquals(1, responses.size(), 'Should return 1 response');
+    System.assertNotEquals(
+      null,
+      responses[0].recordId,
+      'Valid email should create record successfully'
+    );
+  }
+
+  @isTest
+  static void testValidateEmployeeEmailInvalid() {
+    // Test #5: Invalid email should fail with clear error
+    CreateITRequest.RequestWrapper request = new CreateITRequest.RequestWrapper();
+    request.employeeName = 'Invalid User';
+    request.issueDescription = 'Test issue';
+    request.priority = 'Medium';
+    request.employeeEmail = 'nonexistent@invalid-domain-xyz123.com';
+
+    Test.startTest();
+    List<CreateITRequest.ResponseWrapper> responses = CreateITRequest.createRequests(
+      new List<CreateITRequest.RequestWrapper>{ request }
+    );
+    Test.stopTest();
+
+    System.assertEquals(1, responses.size(), 'Should return 1 response');
+    System.assertEquals(
+      null,
+      responses[0].recordId,
+      'Invalid email should not create record'
+    );
+    System.assert(
+      responses[0].message.containsIgnoreCase('email'),
+      'Error message should mention email validation'
+    );
+  }
+
+  @isTest
+  static void testBulkValidationEmployeeEmail() {
+    // Test #5: Bulkified email validation with mixed valid/invalid
+    User testUser = [
+      SELECT Id, Email
+      FROM User
+      WHERE Id = :UserInfo.getUserId()
+    ];
+
+    List<CreateITRequest.RequestWrapper> requests = new List<CreateITRequest.RequestWrapper>();
+
+    // Add 5 valid requests
+    for (Integer i = 0; i < 5; i++) {
+      CreateITRequest.RequestWrapper request = new CreateITRequest.RequestWrapper();
+      request.employeeName = 'Valid User ' + i;
+      request.issueDescription = 'Issue ' + i;
+      request.priority = 'Medium';
+      request.employeeEmail = testUser.Email;
+      requests.add(request);
+    }
+
+    // Add 3 invalid requests
+    for (Integer i = 0; i < 3; i++) {
+      CreateITRequest.RequestWrapper request = new CreateITRequest.RequestWrapper();
+      request.employeeName = 'Invalid User ' + i;
+      request.issueDescription = 'Issue ' + i;
+      request.priority = 'Medium';
+      request.employeeEmail = 'invalid' + i + '@bad-domain-xyz.com';
+      requests.add(request);
+    }
+
+    // Add 2 with no email (should succeed)
+    for (Integer i = 0; i < 2; i++) {
+      CreateITRequest.RequestWrapper request = new CreateITRequest.RequestWrapper();
+      request.employeeName = 'No Email User ' + i;
+      request.issueDescription = 'Issue ' + i;
+      request.priority = 'Medium';
+      request.employeeEmail = null;
+      requests.add(request);
+    }
+
+    Test.startTest();
+    List<CreateITRequest.ResponseWrapper> responses = CreateITRequest.createRequests(
+      requests
+    );
+    Test.stopTest();
+
+    System.assertEquals(10, responses.size(), 'Should return 10 responses');
+
+    Integer successCount = 0;
+    Integer failureCount = 0;
+    for (CreateITRequest.ResponseWrapper resp : responses) {
+      if (resp.recordId != null) {
+        successCount++;
+      } else {
+        failureCount++;
+      }
+    }
+
+    System.assertEquals(
+      7,
+      successCount,
+      'Should have 7 successful creations (5 valid + 2 no email)'
+    );
+    System.assertEquals(
+      3,
+      failureCount,
+      'Should have 3 failures (invalid emails)'
+    );
+  }
+
+  @isTest
+  static void testConfirmationEmailSent() {
+    // Test #3: Confirmation email sent when Employee_Email__c is populated
+    User testUser = [
+      SELECT Id, Email
+      FROM User
+      WHERE Id = :UserInfo.getUserId()
+    ];
+
+    CreateITRequest.RequestWrapper request = new CreateITRequest.RequestWrapper();
+    request.employeeName = 'Email Test User';
+    request.issueDescription = 'Confirmation email test';
+    request.priority = 'High';
+    request.employeeEmail = testUser.Email;
+
+    Test.startTest();
+    List<CreateITRequest.ResponseWrapper> responses = CreateITRequest.createRequests(
+      new List<CreateITRequest.RequestWrapper>{ request }
+    );
+    Test.stopTest();
+
+    System.assertEquals(1, responses.size(), 'Should return 1 response');
+    System.assertNotEquals(
+      null,
+      responses[0].recordId,
+      'Record should be created'
+    );
+
+    // Verify record has email populated (email sending is tested separately)
+    IT_Request__c createdRecord = [
+      SELECT Id, Employee_Email__c
+      FROM IT_Request__c
+      WHERE Id = :responses[0].recordId
+    ];
+    System.assertNotEquals(
+      null,
+      createdRecord.Employee_Email__c,
+      'Employee_Email__c should be populated for email sending'
+    );
+  }
+
+  @isTest
+  static void testNoConfirmationEmailWhenNoEmail() {
+    // Test #3: No email sent when Employee_Email__c is blank
+    CreateITRequest.RequestWrapper request = new CreateITRequest.RequestWrapper();
+    request.employeeName = 'No Email User';
+    request.issueDescription = 'No email test';
+    request.priority = 'Medium';
+    request.employeeEmail = null;
+
+    Integer emailsBeforeTest = Limits.getEmailInvocations();
+
+    Test.startTest();
+    List<CreateITRequest.ResponseWrapper> responses = CreateITRequest.createRequests(
+      new List<CreateITRequest.RequestWrapper>{ request }
+    );
+    Test.stopTest();
+
+    Integer emailsAfterTest = Limits.getEmailInvocations();
+
+    System.assertEquals(1, responses.size(), 'Should return 1 response');
+    System.assertNotEquals(
+      null,
+      responses[0].recordId,
+      'Record should be created'
+    );
+
+    // Verify no email was sent
+    System.assertEquals(
+      emailsBeforeTest,
+      emailsAfterTest,
+      'No email should be sent when Employee_Email__c is blank'
+    );
+  }
+
+  @isTest
+  static void testBulkConfirmationEmails() {
+    // Test #3: Bulk email sending with multiple recipients
+    User testUser = [
+      SELECT Id, Email
+      FROM User
+      WHERE Id = :UserInfo.getUserId()
+    ];
+
+    List<CreateITRequest.RequestWrapper> requests = new List<CreateITRequest.RequestWrapper>();
+
+    // Create 10 requests with emails
+    for (Integer i = 0; i < 10; i++) {
+      CreateITRequest.RequestWrapper request = new CreateITRequest.RequestWrapper();
+      request.employeeName = 'Bulk Email User ' + i;
+      request.issueDescription = 'Bulk issue ' + i;
+      request.priority = 'Medium';
+      request.employeeEmail = testUser.Email;
+      requests.add(request);
+    }
+
+    // Create 5 requests without emails
+    for (Integer i = 0; i < 5; i++) {
+      CreateITRequest.RequestWrapper request = new CreateITRequest.RequestWrapper();
+      request.employeeName = 'No Email User ' + i;
+      request.issueDescription = 'No email issue ' + i;
+      request.priority = 'Low';
+      request.employeeEmail = null;
+      requests.add(request);
+    }
+
+    Test.startTest();
+    List<CreateITRequest.ResponseWrapper> responses = CreateITRequest.createRequests(
+      requests
+    );
+    Test.stopTest();
+
+    System.assertEquals(15, responses.size(), 'Should return 15 responses');
+
+    // Verify records with emails have Employee_Email__c populated
+    List<IT_Request__c> recordsWithEmail = [
+      SELECT Id, Employee_Email__c
+      FROM IT_Request__c
+      WHERE
+        Id IN :new List<Id>{
+          responses[0].recordId,
+          responses[1].recordId,
+          responses[2].recordId,
+          responses[3].recordId,
+          responses[4].recordId,
+          responses[5].recordId,
+          responses[6].recordId,
+          responses[7].recordId,
+          responses[8].recordId,
+          responses[9].recordId
+        }
+    ];
+    System.assertEquals(
+      10,
+      recordsWithEmail.size(),
+      'Should have 10 records with emails'
+    );
+    for (IT_Request__c rec : recordsWithEmail) {
+      System.assertNotEquals(
+        null,
+        rec.Employee_Email__c,
+        'Employee_Email__c should be populated'
+      );
+    }
+  }
 }

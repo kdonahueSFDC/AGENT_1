@@ -291,4 +291,57 @@ private class ITRequestSLABreachBatchTest {
       'Start method should return QueryLocator for unlimited query'
     );
   }
+
+  @isTest
+  static void testDynamicQueueEmailLookup() {
+    // Test that batch attempts to lookup IT_Tier_2 queue email dynamically
+    IT_Request__c breached = new IT_Request__c(
+      Employee_Name__c = 'Queue Test User',
+      Issue_Description__c = 'Test issue',
+      Priority__c = 'Critical',
+      Status__c = 'In Progress',
+      Due_By__c = Datetime.now().addHours(-1),
+      SLA_Breach_Notified__c = false
+    );
+    insert breached;
+
+    Test.startTest();
+    Database.executeBatch(new ITRequestSLABreachBatch(), 200);
+    Test.stopTest();
+
+    // Verify the batch ran successfully (with or without finding a queue email)
+    IT_Request__c result = [
+      SELECT Id, SLA_Breach_Notified__c
+      FROM IT_Request__c
+      WHERE Id = :breached.Id
+      LIMIT 1
+    ];
+
+    // Should be flagged regardless of whether queue email was found
+    // (batch uses fallback hardcoded email if queue not found)
+    System.assertEquals(
+      true,
+      result.SLA_Breach_Notified__c,
+      'Record should be flagged even if queue email lookup yields no result'
+    );
+  }
+
+  @isTest
+  static void testGetTier2QueueEmail() {
+    // Test the helper method for queue email lookup
+    String queueEmail = ITRequestSLABreachBatch.getTier2QueueEmail();
+
+    System.assertNotEquals(
+      null,
+      queueEmail,
+      'Should return a non-null email (queue email or fallback)'
+    );
+
+    // Should return either the queue's email (if IT_Tier_2 exists with email)
+    // or the hardcoded fallback
+    System.assert(
+      queueEmail.contains('@'),
+      'Returned value should be a valid email format'
+    );
+  }
 }

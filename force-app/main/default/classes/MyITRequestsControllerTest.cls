@@ -178,4 +178,211 @@ private class MyITRequestsControllerTest {
       MyITRequestsController.classifySlaStatus(null)
     );
   }
+
+  @isTest
+  static void testPaginationFirstPage() {
+    // Create 250 records for pagination testing
+    List<IT_Request__c> reqs = new List<IT_Request__c>();
+    for (Integer i = 0; i < 250; i++) {
+      reqs.add(
+        new IT_Request__c(
+          Employee_Name__c = 'Pagination User',
+          Employee_Email__c = 'paginate@example.com',
+          Issue_Description__c = 'Issue ' + i,
+          Priority__c = 'Medium',
+          Status__c = 'New',
+          Assigned_Tier__c = 'Tier 1'
+        )
+      );
+    }
+    insert reqs;
+
+    Test.startTest();
+    MyITRequestsController.PaginatedResult result = MyITRequestsController.getMyRequestsPaginated(
+      'paginate@example.com',
+      null,
+      0,
+      50
+    );
+    Test.stopTest();
+
+    System.assertNotEquals(null, result, 'Result should not be null');
+    System.assertEquals(
+      50,
+      result.records.size(),
+      'First page should return 50 records'
+    );
+    System.assertEquals(
+      true,
+      result.hasMore,
+      'Should have more records available'
+    );
+  }
+
+  @isTest
+  static void testPaginationSecondPage() {
+    // Create 250 records for pagination testing
+    List<IT_Request__c> reqs = new List<IT_Request__c>();
+    for (Integer i = 0; i < 250; i++) {
+      reqs.add(
+        new IT_Request__c(
+          Employee_Name__c = 'Pagination User',
+          Employee_Email__c = 'paginate@example.com',
+          Issue_Description__c = 'Issue ' + i,
+          Priority__c = 'Medium',
+          Status__c = 'New',
+          Assigned_Tier__c = 'Tier 1'
+        )
+      );
+    }
+    insert reqs;
+
+    Test.startTest();
+    MyITRequestsController.PaginatedResult result = MyITRequestsController.getMyRequestsPaginated(
+      'paginate@example.com',
+      null,
+      50,
+      50
+    );
+    Test.stopTest();
+
+    System.assertNotEquals(null, result, 'Result should not be null');
+    System.assertEquals(
+      50,
+      result.records.size(),
+      'Second page should return 50 records'
+    );
+    System.assertEquals(
+      true,
+      result.hasMore,
+      'Should still have more records available'
+    );
+  }
+
+  @isTest
+  static void testPaginationLastPage() {
+    // Create 120 records (less than 3 full pages of 50)
+    List<IT_Request__c> reqs = new List<IT_Request__c>();
+    for (Integer i = 0; i < 120; i++) {
+      reqs.add(
+        new IT_Request__c(
+          Employee_Name__c = 'Pagination User',
+          Employee_Email__c = 'paginate@example.com',
+          Issue_Description__c = 'Issue ' + i,
+          Priority__c = 'Medium',
+          Status__c = 'New',
+          Assigned_Tier__c = 'Tier 1'
+        )
+      );
+    }
+    insert reqs;
+
+    Test.startTest();
+    MyITRequestsController.PaginatedResult result = MyITRequestsController.getMyRequestsPaginated(
+      'paginate@example.com',
+      null,
+      100,
+      50
+    );
+    Test.stopTest();
+
+    System.assertNotEquals(null, result, 'Result should not be null');
+    System.assertEquals(
+      20,
+      result.records.size(),
+      'Last page should return remaining 20 records'
+    );
+    System.assertEquals(
+      false,
+      result.hasMore,
+      'Should not have more records available'
+    );
+  }
+
+  @isTest
+  static void testPaginationWithFilters() {
+    // Create mix of open and resolved records
+    List<IT_Request__c> reqs = new List<IT_Request__c>();
+    for (Integer i = 0; i < 200; i++) {
+      reqs.add(
+        new IT_Request__c(
+          Employee_Name__c = 'Filter User',
+          Employee_Email__c = 'filter@example.com',
+          Issue_Description__c = 'Issue ' + i,
+          Priority__c = 'Medium',
+          Status__c = Math.mod(i, 2) == 0 ? 'New' : 'Resolved',
+          Assigned_Tier__c = 'Tier 1'
+        )
+      );
+    }
+    insert reqs;
+
+    Test.startTest();
+    MyITRequestsController.PaginatedResult result = MyITRequestsController.getMyRequestsPaginated(
+      'filter@example.com',
+      'Open',
+      0,
+      50
+    );
+    Test.stopTest();
+
+    System.assertNotEquals(null, result, 'Result should not be null');
+    System.assertEquals(
+      50,
+      result.records.size(),
+      'Should return 50 open records'
+    );
+    System.assertEquals(
+      true,
+      result.hasMore,
+      'Should have more open records available'
+    );
+
+    for (MyITRequestsController.RequestSummary r : result.records) {
+      System.assertEquals(
+        'New',
+        r.status,
+        'All returned records should be open'
+      );
+    }
+  }
+
+  @isTest
+  static void testPaginationBulkNoGovernorLimits() {
+    // Create 300 records to test bulkification
+    List<IT_Request__c> reqs = new List<IT_Request__c>();
+    for (Integer i = 0; i < 300; i++) {
+      reqs.add(
+        new IT_Request__c(
+          Employee_Name__c = 'Bulk User',
+          Employee_Email__c = 'bulk@example.com',
+          Issue_Description__c = 'Issue ' + i,
+          Priority__c = 'Medium',
+          Status__c = 'New',
+          Assigned_Tier__c = 'Tier 1'
+        )
+      );
+    }
+    insert reqs;
+
+    Test.startTest();
+    MyITRequestsController.PaginatedResult result = MyITRequestsController.getMyRequestsPaginated(
+      'bulk@example.com',
+      null,
+      0,
+      100
+    );
+    Test.stopTest();
+
+    System.assertEquals(
+      100,
+      result.records.size(),
+      'Should handle large page size'
+    );
+    System.assertEquals(
+      true,
+      result.hasMore,
+      'Should indicate more records exist'
+    );
+  }
 }

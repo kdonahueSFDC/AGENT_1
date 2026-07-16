@@ -52,6 +52,52 @@ public with sharing class MyITRequestsController {
     return results;
   }
 
+  @AuraEnabled(cacheable=true)
+  public static PaginatedResult getMyRequestsPaginated(
+    String employeeEmail,
+    String statusFilter,
+    Integer offset,
+    Integer pageSize
+  ) {
+    if (String.isBlank(employeeEmail)) {
+      return new PaginatedResult(new List<RequestSummary>(), false);
+    }
+    String normalizedEmail = employeeEmail.trim().toLowerCase();
+
+    // Query one extra record to determine if there are more
+    Integer queryLimit = pageSize + 1;
+
+    Boolean openOnly = 'Open'.equalsIgnoreCase(statusFilter);
+    Boolean resolvedOnly = 'Resolved'.equalsIgnoreCase(statusFilter);
+
+    // Build dynamic SOQL with filter applied in query
+    String soqlQuery =
+      'SELECT Id, Name, Employee_Email__c, Issue_Description__c, Priority__c, ' +
+      'Status__c, Assigned_Tier__c, Due_By__c, SLA_Status__c, ' +
+      'First_Response_At__c, Resolved_At__c, CreatedDate ' +
+      'FROM IT_Request__c ' +
+      'WHERE Employee_Email__c = :normalizedEmail';
+
+    if (openOnly) {
+      soqlQuery += ' AND Status__c IN :OPEN_STATUSES';
+    } else if (resolvedOnly) {
+      soqlQuery += ' AND (Status__c = \'Resolved\' OR Status__c NOT IN :OPEN_STATUSES)';
+    }
+
+    soqlQuery += ' WITH SECURITY_ENFORCED ORDER BY CreatedDate DESC';
+    soqlQuery += ' LIMIT :queryLimit OFFSET :offset';
+
+    List<IT_Request__c> records = Database.query(soqlQuery);
+
+    List<RequestSummary> results = new List<RequestSummary>();
+    for (Integer i = 0; i < Math.min(records.size(), pageSize); i++) {
+      results.add(new RequestSummary(records[i]));
+    }
+
+    Boolean hasMore = records.size() > pageSize;
+    return new PaginatedResult(results, hasMore);
+  }
+
   public class RequestSummary {
     @AuraEnabled
     public Id id;
@@ -112,5 +158,17 @@ public with sharing class MyITRequestsController {
       return 'slds-text-color_success';
     }
     return 'slds-text-color_default';
+  }
+
+  public class PaginatedResult {
+    @AuraEnabled
+    public List<RequestSummary> records;
+    @AuraEnabled
+    public Boolean hasMore;
+
+    public PaginatedResult(List<RequestSummary> records, Boolean hasMore) {
+      this.records = records;
+      this.hasMore = hasMore;
+    }
   }
 }

@@ -29,12 +29,15 @@ public with sharing class ITRequestSLABreachBatch implements Database.Batchable<
       return;
     }
 
+    // Lookup Tier 2 queue email dynamically
+    String tier2Email = getTier2QueueEmail();
+
     // Build email messages
     List<Messaging.SingleEmailMessage> emails = new List<Messaging.SingleEmailMessage>();
 
     for (IT_Request__c request : breachedRequests) {
       Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
-      email.setToAddresses(new List<String>{ 'it-tier2@example.com' });
+      email.setToAddresses(new List<String>{ tier2Email });
       email.setSubject('SLA BREACH: IT Request ' + request.Name);
 
       String body =
@@ -64,6 +67,25 @@ public with sharing class ITRequestSLABreachBatch implements Database.Batchable<
     }
 
     processBreaches(breachedRequests, emails);
+  }
+
+  @TestVisible
+  private static String getTier2QueueEmail() {
+    // Query the IT_Tier_2 queue for its email address
+    List<Group> tier2Queues = [
+      SELECT Email
+      FROM Group
+      WHERE Type = 'Queue' AND DeveloperName = 'IT_Tier_2_Queue'
+      WITH USER_MODE
+      LIMIT 1
+    ];
+
+    if (!tier2Queues.isEmpty() && !String.isBlank(tier2Queues[0].Email)) {
+      return tier2Queues[0].Email;
+    }
+
+    // Fallback to hardcoded email if queue not found or has no email
+    return 'it-tier2@example.com';
   }
 
   public void finish(Database.BatchableContext bc) {

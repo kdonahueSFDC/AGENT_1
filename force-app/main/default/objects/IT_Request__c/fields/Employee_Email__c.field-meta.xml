@@ -6,4 +6,5 @@
     <trackTrending>false</trackTrending>
     <type>Email</type>
     <inlineHelpText>Email address for status notifications</inlineHelpText>
+    <externalId>true</externalId>
 </CustomField>
