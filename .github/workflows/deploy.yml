@@ -17,7 +17,7 @@ on:
   workflow_dispatch:
 
 env:
-  SF_CLI_VERSION: 'latest'
+  SF_CLI_VERSION: "latest"
 
 jobs:
   code-quality:
@@ -30,18 +30,18 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: '24'
+          node-version: "24"
 
       - name: Setup Java (required for PMD and CPD engines)
         uses: actions/setup-java@v5
         with:
-          java-version: '11'
-          distribution: 'zulu'
+          java-version: "11"
+          distribution: "zulu"
 
       - name: Setup Python (required for some engines)
         uses: actions/setup-python@v6
         with:
-          python-version: '3.10'
+          python-version: "3.10"
 
       - name: Setup Salesforce CLI
         run: |
@@ -68,13 +68,13 @@ jobs:
             --output-file scanner-results.csv \
             --output-file scanner-results.json \
             --severity-threshold 1 || SCANNER_EXIT_CODE=$?
-          
+
           if [ "${SCANNER_EXIT_CODE:-0}" -ne 0 ]; then
             echo "Code quality check failed with severity 1 issues"
             echo "::error::Code quality validation failed. Check scanner-results.csv for details."
             exit 1
           fi
-          
+
           echo "Code quality check passed"
 
       - name: Upload Scanner Results
@@ -99,7 +99,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: '24'
+          node-version: "24"
 
       - name: Setup Salesforce CLI
         run: |
@@ -112,6 +112,53 @@ jobs:
           sf org login sfdx-url --sfdx-url-file auth.txt --alias target-org --set-default
           rm auth.txt
 
+      - name: Abort Scheduled Apex Jobs
+        id: abort-jobs
+        continue-on-error: false
+        run: |
+          echo "Checking for scheduled Apex jobs that may block deployment..."
+
+          # Query for all active CronTriggers
+          sf data query --query "SELECT Id, CronJobDetail.Name FROM CronTrigger WHERE State = 'WAITING' OR State = 'ACQUIRED' OR State = 'EXECUTING'" --json > cron-triggers.json || true
+
+          # Check if we have any results
+          CRON_COUNT=$(cat cron-triggers.json | jq -r '.result.records | length // 0')
+          echo "Found $CRON_COUNT active CronTrigger(s)"
+
+          if [ "$CRON_COUNT" -gt 0 ]; then
+            echo "Aborting CronTriggers..."
+            cat cron-triggers.json | jq -r '.result.records[]?.Id // empty' | while read cronId; do
+              if [ -n "$cronId" ]; then
+                echo "Aborting CronTrigger: $cronId"
+                sf apex run --file <(echo "System.abortJob('$cronId');") || echo "Failed to abort $cronId (may already be complete)"
+              fi
+            done
+          fi
+
+          # Query for running AsyncApexJobs (Batch, Queueable, Schedulable, Future)
+          sf data query --query "SELECT Id, ApexClass.Name, JobType, Status FROM AsyncApexJob WHERE Status IN ('Processing', 'Preparing', 'Queued') AND JobType IN ('BatchApex', 'ScheduledApex', 'Queueable')" --json > async-jobs.json || true
+
+          ASYNC_COUNT=$(cat async-jobs.json | jq -r '.result.records | length // 0')
+          echo "Found $ASYNC_COUNT active AsyncApexJob(s)"
+
+          if [ "$ASYNC_COUNT" -gt 0 ]; then
+            echo "Aborting AsyncApexJobs..."
+            cat async-jobs.json | jq -r '.result.records[]?.Id // empty' | while read jobId; do
+              if [ -n "$jobId" ]; then
+                echo "Aborting AsyncApexJob: $jobId"
+                sf apex run --file <(echo "System.abortJob('$jobId');") || echo "Failed to abort $jobId (may already be complete)"
+              fi
+            done
+          fi
+
+          # Wait a moment for abort operations to complete
+          if [ "$CRON_COUNT" -gt 0 ] || [ "$ASYNC_COUNT" -gt 0 ]; then
+            echo "Waiting 10 seconds for job cleanup to complete..."
+            sleep 10
+          fi
+
+          echo "Scheduled job cleanup complete"
+
       - name: Detect Test Classes in Deployment
         id: detect-tests
         run: |
@@ -122,7 +169,7 @@ jobs:
             sort -u | \
             tr '\n' ' ' | \
             sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
-          
+
           if [ -z "$TEST_CLASSES" ]; then
             echo "No test classes found in deployment. Using RunLocalTests."
             echo "use-specified=false" >> $GITHUB_OUTPUT
@@ -157,13 +204,13 @@ jobs:
               --wait 10 \
               --json > validate-results.json || VALIDATE_EXIT_CODE=$?
           fi
-          
+
           if [ "${VALIDATE_EXIT_CODE:-0}" -ne 0 ]; then
             echo "Validation failed"
             cat validate-results.json
             exit 1
           fi
-          
+
           # Extract deployment ID for use in deploy job
           DEPLOYMENT_ID=$(cat validate-results.json | jq -r '.result.id // empty')
           echo "deployment-id=$DEPLOYMENT_ID" >> $GITHUB_OUTPUT
@@ -191,7 +238,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: '24'
+          node-version: "24"
 
       - name: Setup Salesforce CLI
         run: |
@@ -212,13 +259,13 @@ jobs:
             --target-org target-org \
             --wait 10 \
             --json > deploy-results.json || DEPLOY_EXIT_CODE=$?
-          
+
           if [ "${DEPLOY_EXIT_CODE:-0}" -ne 0 ]; then
             echo "Deployment failed"
             cat deploy-results.json
             exit 1
           fi
-          
+
           echo "Deployment completed successfully"
           cat deploy-results.json | jq -r '.result.id // empty' > deployment-id.txt
 
@@ -246,4 +293,3 @@ jobs:
             cat deploy-results.json | jq '.' >> $GITHUB_STEP_SUMMARY
             echo '```' >> $GITHUB_STEP_SUMMARY
           fi
-
