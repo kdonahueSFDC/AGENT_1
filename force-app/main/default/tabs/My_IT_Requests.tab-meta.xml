@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CustomTab xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>My IT Requests</label>
+    <description
+  >Employee self-service portal to view their IT request status</description>
+    <flexiPage>My_IT_Requests</flexiPage>
+    <motif>Custom70: Support</motif>
+    <hasSidebar>false</hasSidebar>
+</CustomTab>
