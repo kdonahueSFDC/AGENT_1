@@ -26,7 +26,6 @@ const COLUMNS = [
     fieldName: "Price__c",
     type: "currency",
     typeAttributes: {
-      currencyCode: "USD",
       minimumFractionDigits: 2
     },
     sortable: true
@@ -105,11 +104,11 @@ export default class RecentExperiences extends LightningElement {
   }
 
   get isPreviousDisabled() {
-    return !this.hasPreviousPage;
+    return !this.hasPreviousPage || this.isLoading;
   }
 
   get isNextDisabled() {
-    return !this.hasNextPage;
+    return !this.hasNextPage || this.isLoading;
   }
 
   get pageInfo() {
