@@ -15,6 +15,9 @@
             onchange={handleEmailChange}
             onkeydown={handleKeyDown}
             placeholder="you@example.com"
+            required
+            message-when-value-missing="Enter your work email to look up your requests."
+            message-when-type-mismatch="Enter a valid email address."
           ></lightning-input>
         </lightning-layout-item>
         <lightning-layout-item
@@ -41,7 +44,7 @@
             label="Look up"
             variant="brand"
             onclick={handleSearch}
-            class="slds-m-top_large"
+            class="lookup-button"
           ></lightning-button>
         </lightning-layout-item>
       </lightning-layout>
@@ -55,9 +58,15 @@
 
       <template if:false={isLoading}>
         <template if:true={hasSearched}>
-          <div class="slds-m-top_medium">
-            <p class="slds-text-body_small">{resultsSummary}</p>
-          </div>
+          <template if:false={error}>
+            <div
+              class="slds-m-top_medium"
+              aria-live="polite"
+              aria-atomic="true"
+            >
+              <p class="slds-text-body_small">{resultsSummary}</p>
+            </div>
+          </template>
 
           <template if:true={hasResults}>
             <div class="slds-m-top_small">

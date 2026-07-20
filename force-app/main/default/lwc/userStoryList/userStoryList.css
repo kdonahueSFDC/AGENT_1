@@ -1,2 +1,6 @@
 /* Additional styling can be added here if needed */
 /* Most styling is handled by SLDS classes and lightning-datatable */
+
+.loading-container {
+  min-height: 200px;
+}

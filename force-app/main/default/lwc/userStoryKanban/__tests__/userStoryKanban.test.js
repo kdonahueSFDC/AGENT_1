@@ -40,6 +40,15 @@ jest.mock(
   { virtual: true }
 );
 
+// Mock refreshApex
+jest.mock(
+  "@salesforce/apex",
+  () => ({
+    refreshApex: jest.fn(() => Promise.resolve())
+  }),
+  { virtual: true }
+);
+
 // Mock NavigationMixin
 jest.mock(
   "lightning/navigation",
@@ -257,5 +266,45 @@ describe("c-user-story-kanban", () => {
     expect(toastEvent).not.toBeNull();
     expect(toastEvent.detail.title).toBe("Error Loading User Stories");
     expect(toastEvent.detail.variant).toBe("error");
+  });
+
+  it("keyboard accessible move menu calls updateUserStoryStatus", async () => {
+    const element = createElement("c-user-story-kanban", {
+      is: UserStoryKanban
+    });
+    document.body.appendChild(element);
+
+    getFeatures.emit(mockGetFeatures);
+    getUserStoriesByStatus.emit(mockGetUserStoriesByStatus);
+    await flushPromises();
+
+    const mockUpdatedStory = {
+      id: "a031234567890AAAA",
+      name: "US-101",
+      status: "In_Progress"
+    };
+    updateUserStoryStatus.mockResolvedValue(mockUpdatedStory);
+
+    const buttonMenu = element.shadowRoot.querySelector(
+      'lightning-button-menu[data-story-id="a031234567890AAAA"]'
+    );
+    expect(buttonMenu).not.toBeNull();
+
+    const selectEvent = new CustomEvent("select", {
+      detail: { value: "In_Progress" },
+      bubbles: true
+    });
+    Object.defineProperty(selectEvent, "currentTarget", {
+      value: buttonMenu,
+      writable: false
+    });
+
+    buttonMenu.dispatchEvent(selectEvent);
+    await flushPromises();
+
+    expect(updateUserStoryStatus).toHaveBeenCalledWith({
+      storyId: "a031234567890AAAA",
+      newStatus: "In_Progress"
+    });
   });
 });

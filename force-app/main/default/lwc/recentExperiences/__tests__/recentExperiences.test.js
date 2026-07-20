@@ -130,4 +130,56 @@ describe("c-recent-experiences", () => {
     const pageInfo = element.shadowRoot.querySelector(".slds-text-body_small");
     expect(pageInfo.textContent).toContain("of 12 experiences");
   });
+
+  it("sorts datatable ascending by Name when sort event is dispatched", async () => {
+    const element = createElement("c-recent-experiences", {
+      is: RecentExperiences
+    });
+    document.body.appendChild(element);
+
+    getRecentExperiences.emit(mockGetRecentExperiences);
+    await flushPromises();
+
+    const datatable = element.shadowRoot.querySelector("lightning-datatable");
+    expect(datatable).not.toBeNull();
+
+    datatable.dispatchEvent(
+      new CustomEvent("sort", {
+        detail: { fieldName: "Name", sortDirection: "asc" }
+      })
+    );
+    await flushPromises();
+
+    expect(datatable.sortedBy).toBe("Name");
+    expect(datatable.sortedDirection).toBe("asc");
+    expect(datatable.data.length).toBe(2);
+    expect(datatable.data[0].Name).toBe("City Food Tour");
+    expect(datatable.data[1].Name).toBe("Grand Canyon Adventure");
+  });
+
+  it("sorts datatable descending by Name when sort direction is desc", async () => {
+    const element = createElement("c-recent-experiences", {
+      is: RecentExperiences
+    });
+    document.body.appendChild(element);
+
+    getRecentExperiences.emit(mockGetRecentExperiences);
+    await flushPromises();
+
+    const datatable = element.shadowRoot.querySelector("lightning-datatable");
+    expect(datatable).not.toBeNull();
+
+    datatable.dispatchEvent(
+      new CustomEvent("sort", {
+        detail: { fieldName: "Name", sortDirection: "desc" }
+      })
+    );
+    await flushPromises();
+
+    expect(datatable.sortedBy).toBe("Name");
+    expect(datatable.sortedDirection).toBe("desc");
+    expect(datatable.data.length).toBe(2);
+    expect(datatable.data[0].Name).toBe("Grand Canyon Adventure");
+    expect(datatable.data[1].Name).toBe("City Food Tour");
+  });
 });
