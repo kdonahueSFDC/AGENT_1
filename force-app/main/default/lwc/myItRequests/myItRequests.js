@@ -116,7 +116,7 @@ export default class MyItRequests extends LightningElement {
   }
 
   get resultsSummary() {
-    if (!this.hasSearched) {
+    if (!this.hasSearched || this.error) {
       return "";
     }
     const count = this.requests.length;
@@ -135,6 +135,12 @@ export default class MyItRequests extends LightningElement {
   }
 
   handleSearch() {
+    const emailInput = this.template.querySelector(
+      'lightning-input[type="email"]'
+    );
+    if (emailInput && !emailInput.reportValidity()) {
+      return;
+    }
     const trimmed = (this.emailInput || "").trim();
     if (!trimmed) {
       this.showErrorToast(

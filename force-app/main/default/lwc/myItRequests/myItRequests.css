@@ -1,3 +1,9 @@
 :host {
   display: block;
 }
+
+@media (min-width: 768px) {
+  .lookup-button {
+    margin-top: var(--lwc-varSpacingLarge, 1.5rem);
+  }
+}

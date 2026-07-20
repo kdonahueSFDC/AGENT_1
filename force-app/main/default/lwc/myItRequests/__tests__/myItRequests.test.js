@@ -110,4 +110,40 @@ describe("c-my-it-requests", () => {
     );
     expect(errorMsg).toBeDefined();
   });
+
+  it("blocks search when email input fails reportValidity", async () => {
+    const element = createElement("c-my-it-requests", {
+      is: MyItRequests
+    });
+    document.body.appendChild(element);
+
+    setInputValue(element, "lightning-input", "test@example.com");
+    await flushPromises();
+
+    const input = element.shadowRoot.querySelector("lightning-input");
+    const mockReportValidity = jest.fn(() => false);
+    input.reportValidity = mockReportValidity;
+
+    const originalQuerySelector = element.shadowRoot.querySelector.bind(
+      element.shadowRoot
+    );
+    element.shadowRoot.querySelector = jest.fn((selector) => {
+      if (selector === 'lightning-input[type="email"]') {
+        return input;
+      }
+      return originalQuerySelector(selector);
+    });
+
+    element.shadowRoot.querySelector("lightning-button").click();
+    await flushPromises();
+
+    expect(mockReportValidity).toHaveBeenCalled();
+
+    const datatable = originalQuerySelector("lightning-datatable");
+    expect(datatable).toBeNull();
+
+    const paragraphs = originalQuerySelector.call(element.shadowRoot, "p");
+    expect(paragraphs).not.toBeNull();
+    expect(paragraphs.textContent).toMatch(/Enter your work email/);
+  });
 });
